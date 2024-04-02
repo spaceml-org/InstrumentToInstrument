@@ -11,6 +11,7 @@ Welcome to Instrument-To-Instrument (ITI) tool documentation!
    :caption: Contents:
 
    pages/introduction
+   pages/installation
 
 
 Links
