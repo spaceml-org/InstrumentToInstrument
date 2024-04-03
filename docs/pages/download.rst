@@ -1,15 +1,15 @@
-*****
-Usage
-*****
+*************
+Data download
+*************
 
 Google Colab offers free GPU resources, which can be used for a fast translation of data. Note that you have to upload and download your data to the Notebook.
 For all case studies we provide a downloader that can be modified to translate custom observations.
 Data from SOHO and STEREO requires preprocessing routines, that are only available in SSW IDL. For larger amounts of data it is more
 efficient to translate the files on a local workstation (preferable with a GPU).
 
-====================
-Downloading the data
-====================
+========================
+Simple download tutorial
+========================
 
 All download routines are stored in the ``iti.download`` module. The following example shows how to download the data for the Solar Dynamics Observatory (SDO)
 Atmospheric Imaging Assembly (AIA) instrument. The default settings for the AIA instrument is given by downloading the data in the 131, 171, 193, 211, 304, 335 Å channels
