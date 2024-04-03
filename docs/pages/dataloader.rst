@@ -25,7 +25,7 @@ HMI magnetograms that:
 7. Reshapes the array to channel first notation
 
 The editors are listed in ``iti.data.editor``. Custom editor (e.g., preprocessing) can be implement by using ``iti.data.editor``
-Editor as base class and implementing the call function. Minor functionalities can be added by using ``iti.data,editor.LambdaEditor`` (e.g., ``LambdaEditor(lambda x: x * 2``).
+Editor as base class and implementing the call function. Minor functionalities can be added by using ``iti.data.editor.LambdaEditor`` (e.g., ``LambdaEditor(lambda x: x * 2``).
 
 .. code-block:: python
 
