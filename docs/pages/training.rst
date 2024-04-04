@@ -51,7 +51,7 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
 
 The training can then be run with the following command::
 
-        python -m iti.train.FSI_to_SDO --config 'path to config file'
+        python3 -m iti.train.FSI_to_SDO --config 'path to config file'
 
 The training script will create a new directory in the workspace directory, where the training results are stored.
 The training progress can be monitored in real-time with the weights and biases logging system.
