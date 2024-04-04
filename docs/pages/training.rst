@@ -25,7 +25,7 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
 
 .. code-block:: yaml
 
-    base_dir: /mnt/disks/data/FSI_to_SDO
+    base_dir: 'path to workspace directory'
     data:
         B_path: 'path to SDO data'
         converted_B_path: 'path to converted SDO data'
@@ -42,9 +42,9 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
         norm: in_rs_aff
         use_batch_statistic: False
     logging:
-        wandb_entity: christoph-schirninger
-        wandb_project: ITI
-        wandb_name: FSI_to_SDO
+        wandb_entity: 'wandb username'
+        wandb_project: 'wandb project name'
+        wandb_name: 'wandb run name'
         wandb_id: null
     training:
         epochs: 220000
