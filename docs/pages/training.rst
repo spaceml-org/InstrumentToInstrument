@@ -49,10 +49,9 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
     training:
         epochs: 220000
 
-The training can then be run with the following command::
+The following command can then be used to run the training::
 
-        python3 -m iti.train.FSI_to_SDO --config 'path to config file'
+    python3 -m iti.train.FSI_to_SDO --config 'path to config file'.
 
-The training script will create a new directory in the workspace directory, where the training results are stored.
-The training progress can be monitored in real-time with the weights and biases logging system.
-For more information on weights and biases see: https://wandb.ai/site
+Running the training script will create a new directory in the workspace directory where the training results will be stored. The progress
+of the training is monitored in real time using the weights and biases logging system. For more information about weights and biases, see: https://wandb.ai/site.
