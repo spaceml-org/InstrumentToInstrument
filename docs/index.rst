@@ -20,6 +20,7 @@ Welcome to Instrument-To-Instrument (ITI) tool documentation!
 Links
 ==================
 
+* ITI paper: https://doi.org/10.48550/arXiv.2401.08057
 * :ref:`genindex`
 * :ref:`search`
 * Install python: https://www.python.org/downloads/
