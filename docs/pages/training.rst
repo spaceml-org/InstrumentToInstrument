@@ -12,9 +12,9 @@ The trainer class is initialized with the config file and the workspace director
 Training example configuration
 ===============================
 
-The training scripts for the individual case studies are stored in the ``iti.train`` directory. For both instruments we use 2 channels (``input_dim_a/b=2``).
-In the example we translate Solar Orbiter Full Sun Imager (FSI) observations to SDO (AIA) quality. We do not increase
-the resolution, corresponding to a ``upsampling=0``. We expect mostly instrumental characteristics that cause degradations and set the diversity
+The training scripts for the individual case studies are stored in the ``iti.train`` directory.
+In the example we translate Solar Orbiter Full Sun Imager (FSI) observations to SDO (AIA) quality. For both instruments we use 2 channels (``input_dim_a/b=2``).
+We do not increase the resolution, corresponding to a ``upsampling=0``. We expect mostly instrumental characteristics that cause degradations and set the diversity
 factor to 0 (``lambda_diversity=0``). For the training we specify the SDO and Solar Orbiter datasets, where we use a fixed resolution of 1024 pix for
 Solar Orbiter and consequently for SDO. The training is performed with images patches, that we sample from the full-disk observations.
 According to our GPU memory we select a patch size of 128 pix for Solar Orbiter and SDO. We apply a temporal separation of our dataset, where we use
