@@ -31,29 +31,29 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
 
 .. code-block:: yaml
 
-    base_dir: *path to workspace directory*
+    base_dir: 'path to workspace directory'
     data:
-        B_path: `path to SDO data`
-        converted_B_path: `path to converted SDO data`
-        A_path: `path to FSI data`
-        converted_A_path: `path to converted FSI data`
-        num_workers: `6`
-        iterations_per_epoch: `1000`
+        B_path: 'path to SDO data'
+        converted_B_path: 'path to converted SDO data'
+        A_path: 'path to FSI data'
+        converted_A_path: 'path to converted FSI data'
+        num_workers: '6'
+        iterations_per_epoch: '1000'
     model:
-        input_dim_a: `2`
-        input_dim_b: `2`
-        upsampling: `0`
-        discriminator_mode: `CHANNELS`
-        lambda_diversity: `0`
-        norm: `in_rs_aff`
-        use_batch_statistic: `False`
+        input_dim_a: '2'
+        input_dim_b: '2'
+        upsampling: '0'
+        discriminator_mode: 'CHANNELS'
+        lambda_diversity: '0'
+        norm: 'in_rs_aff'
+        use_batch_statistic: 'False'
     logging:
-        wandb_entity: `wandb username`
-        wandb_project: `wandb project name`
-        wandb_name: `wandb run name`
-        wandb_id: `null`
+        wandb_entity: 'wandb username'
+        wandb_project: 'wandb project name'
+        wandb_name: 'wandb run name'
+        wandb_id: 'null'
     training:
-        epochs: `220000`
+        epochs: '220000'
 
 The following command can then be used to run the training::
 
