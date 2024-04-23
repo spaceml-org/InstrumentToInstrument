@@ -8,7 +8,7 @@ from torch.nn import LayerNorm, init
 
 class DiscriminatorMode(Enum):
     SINGLE = "SINGLE"  # use a single discriminator across all channels
-    CHANNELS = "CHANNELS"  # use a discriminator per channel and one for the the combined channels
+    CHANNELS = "CHANNELS"  # use a discriminator per channel and one for the combined channels
     SINGLE_PER_CHANNEL = "SINGLE_PER_CHANNEL"  # use a single discriminator for each channel and one for the combined channels
 
 
