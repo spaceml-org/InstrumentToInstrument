@@ -15,6 +15,7 @@ Welcome to Instrument-To-Instrument (ITI) tool documentation!
    pages/download
    pages/dataloader
    pages/training
+   pages/translation
 
 
 Links
