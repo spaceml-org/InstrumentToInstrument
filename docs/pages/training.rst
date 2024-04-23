@@ -17,9 +17,9 @@ In the example we translate Solar Orbiter Full Sun Imager (FSI) observations to 
 We do not increase the resolution, corresponding to a ``upsampling=0``. We expect mostly instrumental characteristics that cause degradations and set the diversity
 factor to 0 (``lambda_diversity=0``). For the discriminator we provide three settings::
 
-        - ``discriminator_mode=SINGLE``: use a single discriminator across all channels.
-        - ``discriminator_mode=CHANNELS``: use a discriminator per channel and one for the combined channels.
-        - ``discriminator_mode=SINGLE_PER_CHANNEL``: use a single discriminator for each channel.
+        - discriminator_mode=SINGLE: use a single discriminator across all channels.
+        - discriminator_mode=CHANNELS: use a discriminator per channel and one for the combined channels.
+        - discriminator_mode=SINGLE_PER_CHANNEL: use a single discriminator for each channel.
 
 For the training we specify the SDO and Solar Orbiter datasets, where we use a fixed resolution of 1024 pix for
 Solar Orbiter and consequently for SDO. The training is performed with images patches, that we sample from the full-disk observations.
@@ -33,27 +33,27 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
 
     base_dir: *path to workspace directory*
     data:
-        B_path: *path to SDO data*
-        converted_B_path: *path to converted SDO data*
-        A_path: *path to FSI data*
-        converted_A_path: *path to converted FSI data*
-        num_workers: *6*
-        iterations_per_epoch: *1000*
+        B_path: `path to SDO data`
+        converted_B_path: `path to converted SDO data`
+        A_path: `path to FSI data`
+        converted_A_path: `path to converted FSI data`
+        num_workers: `6`
+        iterations_per_epoch: `1000`
     model:
-        input_dim_a: *2*
-        input_dim_b: *2*
-        upsampling: *0*
-        discriminator_mode: *CHANNELS*
-        lambda_diversity: *0*
-        norm: *in_rs_aff*
-        use_batch_statistic: *False*
+        input_dim_a: `2`
+        input_dim_b: `2`
+        upsampling: `0`
+        discriminator_mode: `CHANNELS`
+        lambda_diversity: `0`
+        norm: `in_rs_aff`
+        use_batch_statistic: `False`
     logging:
-        wandb_entity: *wandb username*
-        wandb_project: *wandb project name*
-        wandb_name: *wandb run name*
-        wandb_id: *null*
+        wandb_entity: `wandb username`
+        wandb_project: `wandb project name`
+        wandb_name: `wandb run name`
+        wandb_id: `null`
     training:
-        epochs: *220000*
+        epochs: `220000`
 
 The following command can then be used to run the training::
 
