@@ -4,7 +4,7 @@ Translation
 
 After training the ITI model, we can translate between two image domains, which offers the three use cases of image enhancement,
 instrument intercalibration, and super-resolution observations. For the translation process we use the built-in translate function
-located in the ```iti.translate``` folder.
+located in the ``iti.translate`` folder.
 
 ===================
 Example translation
