@@ -36,3 +36,11 @@ Here, we initialize the translator and call the translate function with the sour
 This allows us to visually compare the results of the translation process with the original images and the ground truth by running::
 
     plotImageComparison(original=swap_data[0], ground_truth=aia_data[0], iti=iti_maps[0], norm_original=proba2_norm[174], norm_ground_truth=sdo_norms[171], name='SWAPToAIA', path='path_to_save')
+
+
+After the translation we can save the images as ``.fits`` files with::
+
+    saveToFITS(iti_maps, 'path_to_save')
+
+The translation process already includes an update and translation of the metadata. Saving to the ``.fits`` format therefore
+allows all the necessary information of a single observation to be stored in a single file, including image and metadata.
