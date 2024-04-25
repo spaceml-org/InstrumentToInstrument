@@ -65,4 +65,4 @@ After the translation we can save the images as ``.fits`` files with::
     saveToFITS(iti_maps, 'path_to_save')
 
 The translation process already includes an update and translation of the metadata. Saving to the ``.fits`` format therefore
-allows all the necessary information of a single observation to be stored in a single file, including image and metadata.
+allows all the necessary information of an observation to be stored in a single file, including image and metadata.
