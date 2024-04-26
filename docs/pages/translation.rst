@@ -4,7 +4,7 @@ Translation
 
 After training the ITI model, we can translate from one instrument to another, which offers the three use cases of image enhancement,
 instrument intercalibration, and super-resolution observations. For the translation process we use the built-in translate function
-located in the ``iti.translate`` directory. Here you find the the translation classes for the different use cases.
+located in the ``iti.translate`` directory. Here you find the the individual classes for the use cases.
 
 If you want to translate your own data you can create a new translation class using the base class ``InstrumentToInstrument`` and implement the ``translate`` method.
 
@@ -12,8 +12,7 @@ If you want to translate your own data you can create a new translation class us
 Create custom translation classes
 =================================
 
-We show here an example to build you own translation class. The translation class is a subclass of the base class ``InstrumentToInstrument``.
-We refer A to the source domain and B to the target domain.
+We show here an example to build you own translation class. We refer A to the source domain and B to the target domain.
 
 .. code-block:: python
 
