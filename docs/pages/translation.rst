@@ -5,7 +5,8 @@ Translation
 After training the ITI model, we can translate from one instrument to another, which offers the three use cases of image enhancement,
 instrument intercalibration, and super-resolution observations. For the translation process we use the built-in translate function
 located in the ``iti.translate`` directory. Here you find the the translation classes for the different use cases.
-| If you want to translate your own data you can create a new translation class using the base class ``InstrumentToInstrument`` and implement the ``translate`` method.
+
+If you want to translate your own data you can create a new translation class using the base class ``InstrumentToInstrument`` and implement the ``translate`` method.
 
 =================================
 Create custom translation classes
@@ -19,7 +20,7 @@ We refer A to the source domain and B to the target domain.
     class InstrumentAToInstrumentB(InstrumentToInstrument):
     def __init__(self, model_name='model name', **kwargs):
         super().__init__(model_name, **kwargs)
-        self.norms = ['norm1', 'norm2', '...']
+        self.norms = [['norm1'], ['norm2'], '...']
 
     def translate(self, path, basenames=None, **kwargs):
         A_dataset = ADataset(path, basenames=basenames, **kwargs)
