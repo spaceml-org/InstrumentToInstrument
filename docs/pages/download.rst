@@ -30,7 +30,7 @@ We also have some publicly available test data which will allow users to play ar
 This can be useful for testing the tool as well as exploration.
 To download the data to your local machine, you can run::
 
-    gsutil cp -r gs://iti-dataset/ [local_path]
+    gsutil cp -r gs://iti-dataset/ '[local_path]'
 
 in your terminal. This will download the test dataset to the selected path of your local machine. It consists of data from:
 
