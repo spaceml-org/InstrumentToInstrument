@@ -18,6 +18,8 @@ We obtain:
     - solar full-disk observations with unprecedented spatial resolution
     - real-time mitigation of atmospheric degradations in ground-based observations
     - a uniform series of ground-based H-alpha observations starting from 1973, that unifies solar observations recorded on photographic film and CCD
-    - magnetic field estimates from the solar far-side based on multi-band EUV imagery.
+    - magnetic field estimates from the solar far-side based on multi-band EUV imagery
+    - instrument intercalibration between space-based telescopes
+    - super-resolution solar observations.
 
 The direct comparison to simultaneous high-quality observations shows that our method produces images that are perceptually similar and match the reference image distribution.
