@@ -18,7 +18,7 @@ be specified individually.
 
 To download the data for the AIA instrument, you can run::
 
-    python3 -m iti.download.download_sdo --start_date `start_date` --end_date `end_date` --download_dir `/path/to/download_dir`
+    python3 -m iti.download.download_sdo --start_date 'start_date' --end_date 'end_date' --download_dir '/path/to/download_dir'
 
 If an ``end_date`` is not specified, the current date will be used as default. The download routine will create a subdirectory for each channel in the download directory.
 
