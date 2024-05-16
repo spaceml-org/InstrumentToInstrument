@@ -29,6 +29,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinxcontrib.napoleon',
     'sphinx_rtd_theme',
+    'sphinx_gallery.gen_gallery',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -66,6 +67,8 @@ pygments_style = 'sphinx'
 #
 #html_theme = 'alabaster'
 import sphinx_rtd_theme
+import os
+from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
@@ -116,6 +119,21 @@ latex_elements = {
     #
     # 'figure_align': 'htbp',
 }
+
+# -- Sphinx Gallery ------------------------------------------------------------
+# JSOC email os env
+# see https://github.com/sunpy/sunpy/wiki/Home:-JSOC
+os.environ["JSOC_EMAIL"] = "chri.schirni@hotmail.de"
+sphinx_gallery_conf = {
+    'examples_dirs': os.path.join('..', 'examples'),
+    'subsection_order': ExplicitOrder([
+        '../examples/exapmle_translations',
+    ]),
+    'within_subsection_order': ExampleTitleSortKey,
+    'gallery_dirs': os.path.join('generated', 'gallery'),
+    'matplotlib_animations': True,
+}
+
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
