@@ -122,16 +122,14 @@ latex_elements = {
 
 # -- Sphinx Gallery ------------------------------------------------------------
 # JSOC email os env
-# see https://github.com/sunpy/sunpy/wiki/Home:-JSOC
 os.environ["JSOC_EMAIL"] = "chri.schirni@hotmail.de"
 sphinx_gallery_conf = {
+    'backreferences_dir': os.path.join('generated', 'modules'),
+    'filename_pattern': '^((?!skip_).)*$',
     'examples_dirs': os.path.join('..', 'examples_docs'),
-    'subsection_order': ExplicitOrder([
-        '../examples_docs/example_translations',
-    ]),
-    'within_subsection_order': ExampleTitleSortKey,
     'gallery_dirs': os.path.join('generated', 'gallery'),
     'matplotlib_animations': True,
+    'plot_gallery': 'True',
 }
 
 

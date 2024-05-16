@@ -1,12 +1,4 @@
-********
-Training
-********
-
-The trainer class implements the pytorch lightning training function, that requires the workspace directory and the low- and high-quality dataset. The paths to
-the datasets are specified in the *config file*.
-An optional validation data set can be specified to verify the model results (plots and parallel validation). ITI is build on pytorch lightning and uses the weights and biases logging system.
-This simplifies the training process and allows to monitor the training progress in real-time.
-The trainer class is initialized with the *config file* and the workspace directory.
+.. _iti_training:
 
 ===============================
 Training example configuration
@@ -61,4 +53,4 @@ The following command can then be used to run the training::
     python3 -m iti.train.FSI_to_SDO --config 'path to config file'.
 
 Running the training script will create a new directory in the workspace directory where the training results will be stored. The progress
-of the training is monitored in real time using the weights and biases logging system. For more information about weights and biases, see: https://wandb.ai/site.
+of the training is monitored in real time using the weights and biases logging system. For more information see `weights and biases <https://wandb.ai/site>`__.
