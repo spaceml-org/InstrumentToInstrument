@@ -35,7 +35,7 @@ We obtain:
 
 The direct comparison to simultaneous high-quality observations shows that our method produces images that are perceptually similar and match the reference image distribution.
 
-.. grid:: 1 2 3 2
+.. grid:: 1 2 3 3
     :gutter: 2
 
     .. grid-item-card:: Installation
