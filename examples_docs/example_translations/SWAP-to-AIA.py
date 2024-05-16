@@ -5,10 +5,10 @@ Translation of SWAP to AIA
 This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWAP>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>'__ observations.
 """
 
-!pip install git+https://github.com/Schirni/InstrumentToInstrument.git@development
-!pip install lightning
-!pip install sunpy_soar
-!pip install sunpy
+#!pip install git+https://github.com/Schirni/InstrumentToInstrument.git@development
+#!pip install lightning
+#!pip install sunpy_soar
+#!pip install sunpy
 
 # We provide a publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 # This dataset contains ``.fits`` files from **PROBA2/SWAP**, **SDO/AIA** and **Solar Orbiter/EUI (FSI and HRI)**.
@@ -20,7 +20,7 @@ This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWA
 
 # to perform the translation.
 
-!gsutil cp -r gs://iti-dataset/ '/content/'
+#!gsutil cp -r gs://iti-dataset/ '/content/'
 
 from iti.evaluation.evaluation import *
 import glob
