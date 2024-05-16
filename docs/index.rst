@@ -44,6 +44,7 @@ The direct comparison to simultaneous high-quality observations shows that our m
         :text-align: center
 
         :material-outlined:`settings;8em;sd-text-secondary`
+
         Information on how to install the ITI tool with its requirements.
 
     .. grid-item-card:: Download
@@ -71,15 +72,17 @@ The direct comparison to simultaneous high-quality observations shows that our m
         :text-align: center
 
         :material-outlined:`school;8em;sd-text-secondary`
+
         Training.
 
-    .. grid-item-card:: Translation
-          :link: iti_translation_index
-          :link-type: ref
-          :text-align: center
+   .. grid-item-card:: Translation
+        :link: iti_translation_index
+        :link-type: ref
+        :text-align: center
 
-          :material-outlined:`translate;8em;sd-text-secondary`
-          Translation.
+        :material-outlined:`translate;8em;sd-text-secondary`
+
+        Translation.
 
 
 =====
