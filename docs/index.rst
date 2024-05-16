@@ -99,12 +99,12 @@ Links
 
 
 .. toctree::
-    :maxdepth: 1
-    :hidden:
+   :maxdepth: 1
+   :hidden:
 
-    /installation/index
-    /download/index
-    /generated/gallery/index
-    /dataloader/index
-    /training/index
-    /translation/index
+   /installation/index
+   /download/index
+   /generated/gallery/index
+   /dataloader/index
+   /training/index
+   /translation/index
