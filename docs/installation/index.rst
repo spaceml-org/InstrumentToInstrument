@@ -8,7 +8,7 @@ The ITI tool is build on python 3.6. To install the tool, you need to have pytho
 can download it from the following `Link: <https://www.python.org/downloads/>`__.
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
     tool_installation
     requirements
