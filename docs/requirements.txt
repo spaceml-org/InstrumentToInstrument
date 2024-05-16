@@ -2,6 +2,7 @@ numpy
 sphinxcontrib-napoleon
 sphinx_rtd_theme
 sphinx_gallery
+sphinx_design
 matplotlib
 git+https://github.com/Schirni/InstrumentToInstrument.git@development
 lightning
