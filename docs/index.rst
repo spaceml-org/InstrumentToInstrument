@@ -38,9 +38,6 @@ The direct comparison to simultaneous high-quality observations shows that our m
 .. grid:: 1 2 3 2
     :gutter: 2
 
-.. grid:: 1 2 3 3
-    :gutter: 2
-
     .. grid-item-card:: Installation
         :link: iti_installation_index
         :link-type: ref
