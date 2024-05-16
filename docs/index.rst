@@ -36,53 +36,53 @@ We obtain:
 The direct comparison to simultaneous high-quality observations shows that our method produces images that are perceptually similar and match the reference image distribution.
 
 .. grid:: 1 2 3 3
-    :gutter: 2
+   :gutter: 2
 
-    .. grid-item-card:: Installation
-        :link: iti_installation_index
-        :link-type: ref
-        :text-align: center
+      .. grid-item-card:: Installation
+         :link: iti_installation_index
+         :link-type: ref
+         :text-align: center
 
-        :material-outlined:`settings;8em;sd-text-secondary`
+         :material-outlined:`settings;8em;sd-text-secondary`
 
-        Information on how to install the ITI tool with its requirements.
+         Information on how to install the ITI tool with its requirements.
 
-    .. grid-item-card:: Download
-        :link: iti_download_index
-        :link-type: ref
-        :text-align: center
+      .. grid-item-card:: Download
+         :link: iti_download_index
+         :link-type: ref
+         :text-align: center
 
-        :material-outlined:`cloud_download;8em;sd-text-secondary`
+         :material-outlined:`cloud_download;8em;sd-text-secondary`
 
-        Data download.
+         Data download.
 
 
-   .. grid-item-card:: Dataloader
-        :link: iti_dataloader_index
-        :link-type: ref
-        :text-align: center
+      .. grid-item-card:: Dataloader
+         :link: iti_dataloader_index
+         :link-type: ref
+         :text-align: center
 
-        :material-outlined:`data_usage;8em;sd-text-secondary`
+         :material-outlined:`data_usage;8em;sd-text-secondary`
 
-        Dataloader.
+         Dataloader.
 
-   .. grid-item-card:: Training
-        :link: iti_training_index
-        :link-type: ref
-        :text-align: center
+      .. grid-item-card:: Training
+         :link: iti_training_index
+         :link-type: ref
+         :text-align: center
 
-        :material-outlined:`school;8em;sd-text-secondary`
+         :material-outlined:`school;8em;sd-text-secondary`
 
-        Training.
+         Training.
 
-   .. grid-item-card:: Translation
-        :link: iti_translation_index
-        :link-type: ref
-        :text-align: center
+      .. grid-item-card:: Translation
+         :link: iti_translation_index
+         :link-type: ref
+         :text-align: center
 
-        :material-outlined:`translate;8em;sd-text-secondary`
+         :material-outlined:`translate;8em;sd-text-secondary`
 
-        Translation.
+         Translation.
 
 
 =====
