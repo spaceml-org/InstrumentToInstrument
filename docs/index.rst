@@ -87,4 +87,5 @@ Links
    /download/index
    /dataloader/index
    /training/index
+   /translation/index
    /generated/gallery/index
