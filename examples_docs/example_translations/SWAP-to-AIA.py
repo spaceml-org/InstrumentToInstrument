@@ -58,22 +58,22 @@ aia_data = [getAIAdata(f) for f in tqdm(sdo_files)]
 ############################################################################################################################################################################
 # The translator classes are the core element of the ITI translation. They follow the notation: `InstrumentAToInstrumentB`. We initialize the translation class by giving it the path where the model is stored.
 
-translator = SWAPToAIA(model_name=base_path+'/iti-dataset/models/swap_to_aia_v0_4.pt')
+#translator = SWAPToAIA(model_name=base_path+'/iti-dataset/models/swap_to_aia_v0_4.pt')
 
 ############################################################################################################################################################################
 
 # The result of the ITI translation is a SunPy map that stores all necessary coordinate information.
 
-iti_maps = list(translator.translate(swap_files))
+#iti_maps = list(translator.translate(swap_files))
 
 ############################################################################################################################################################################
 # Now that we have the translated maps, we can plot them side by side with the original data and the ground truth.
 
-fig, axs = plt.subplots(1, 3, subplot_kw={'projection': aia_data[0]}, figsize=(40, 20), dpi=100)
-swap_data[0].plot(axes=axs[0], norm=proba2_norm[174])
-aia_data[0].plot(axes=axs[1], norm=sdo_norms[171])
-iti_maps[0].plot(axes=axs[2], norm=sdo_norms[171])
-axs[0].set_title('Original-SWAP', fontsize=30)
-axs[1].set_title('Ground Truth-AIA', fontsize=30)
-axs[2].set_title('ITI', fontsize=30)
-plt.show()
+#fig, axs = plt.subplots(1, 3, subplot_kw={'projection': aia_data[0]}, figsize=(40, 20), dpi=100)
+#swap_data[0].plot(axes=axs[0], norm=proba2_norm[174])
+#aia_data[0].plot(axes=axs[1], norm=sdo_norms[171])
+#iti_maps[0].plot(axes=axs[2], norm=sdo_norms[171])
+#axs[0].set_title('Original-SWAP', fontsize=30)
+#axs[1].set_title('Ground Truth-AIA', fontsize=30)
+#axs[2].set_title('ITI', fontsize=30)
+#plt.show()
