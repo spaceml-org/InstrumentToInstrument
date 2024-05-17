@@ -42,7 +42,7 @@ sdo_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date. Here we use the two channels in 171/174 Å and 304 Å.
 fsi_files = get_intersecting_files(base_path+'/iti-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
-aia_files = get_intersecting_files('/iti-testset/sdo', [171, 304])
+aia_files = get_intersecting_files(base_path+'/iti-testset/sdo', [171, 304])
 
 ############################################################################################################################################################################
 # In the next step we load the `.fits`files as SunPy maps. Here we crop the observations to 1.1 solar radii to cover the same Field-of-View (FOV).
