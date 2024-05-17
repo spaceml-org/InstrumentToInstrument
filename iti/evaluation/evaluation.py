@@ -13,6 +13,7 @@ from iti.translate import *
 from iti.data.editor import NormalizeRadiusEditor, AIAPrepEditor, NormalizeExposureEditor, MapToDataEditor, \
     SWAPPrepEditor, LoadMapEditor
 
+from google.cloud.storage import Client, transfer_manager
 from matplotlib import pyplot as plt
 import warnings
 
@@ -160,8 +161,6 @@ def download_bucket_with_transfer_manager(
         # system environment, or set it to None if you are sure the bucket is not
         # too large to hold in memory easily.
         # max_results=1000
-
-        from google.cloud.storage import Client, transfer_manager
 
         storage_client = Client()
         bucket = storage_client.bucket(bucket_name)
