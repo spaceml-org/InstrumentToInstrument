@@ -27,7 +27,7 @@ base_path = os.getcwd()
 #
 # to perform the translation.
 
-download_gcp_bucket('iti-dataset', base_path+'iti-testset')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
