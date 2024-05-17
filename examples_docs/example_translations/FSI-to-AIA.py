@@ -23,12 +23,14 @@ base_path = os.getcwd()
 
 download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
+############################################################################################################################################################################
 # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
-############################################################################################################################################################################
+# To download Solar Orbiter EUI data, we can distinguish between the two instruments FSI and HRI. By setting the flag `FSI` to `True` we download the FSI data, otherwise the HRI data is downloaded.
+#
 # Downloading FSI data
-swap_downloader = SOLODownloader(base_path=base_path+'/solo')
-swap_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
+solo_downloader = SOLODownloader(base_path=base_path+'/solo', FSI=True)
+solo_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
 
 ############################################################################################################################################################################
 # Downloading AIA data
@@ -39,7 +41,7 @@ sdo_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
 
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date. Here we use the two channels in 171/174 Å and 304 Å.
-fsi_files = get_intersecting_files(base_path+'/iti-testset/fsi', ['eui-fsi174-image', 'eui-fsi304-image'])
+fsi_files = get_intersecting_files(base_path+'/iti-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
 aia_files = get_intersecting_files('/iti-testset/sdo', [171, 304])
 
 ############################################################################################################################################################################
