@@ -82,7 +82,6 @@ Links
 
    /installation/index
    /download/index
-   /generated/gallery/index
    /dataloader/index
    /training/index
-   /translation/index
+   /generated/gallery/index

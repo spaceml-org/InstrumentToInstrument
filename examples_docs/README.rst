@@ -1,3 +1,5 @@
+.. _iti_translation_index:
+
 ***********
 Translation
 ***********
