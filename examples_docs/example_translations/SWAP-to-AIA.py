@@ -6,6 +6,7 @@ This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWA
 """
 
 from iti.evaluation.evaluation import *
+from iti.evaluation.evaluation import download_bucket_with_transfer_manager
 import glob
 from iti.download.download_proba2 import Proba2Downloader
 from iti.download.download_sdo import SDODownloader
@@ -27,8 +28,7 @@ base_path = os.getcwd()
 #
 # to perform the translation.
 
-download_bucket_with_transfer_manager('iti-dataset', base_path)
-
+download_bucket_with_transfer_manager('iti-dataset', base_path+'/iti-dataset')
 
 # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
