@@ -14,6 +14,7 @@ from iti.data.editor import NormalizeRadiusEditor, AIAPrepEditor, NormalizeExpos
     SWAPPrepEditor, LoadMapEditor
 
 from google.cloud.storage import Client, transfer_manager
+from google.cloud import storage
 from matplotlib import pyplot as plt
 import warnings
 
