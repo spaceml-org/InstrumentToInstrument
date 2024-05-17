@@ -15,6 +15,21 @@ from datetime import timedelta, datetime
 
 base_path = os.getcwd()
 
+############################################################################################################################################################################
+# We provide a publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
+#
+# This dataset contains `.fits` files from **PROBA2/SWAP**, **SDO/AIA** and **Solar Orbiter/EUI (FSI and HRI)**.
+#
+# In addition 3 trained models are stored with:
+# 1. PROBA2/SWAP to SDO/AIA
+# 2. Solar Orbiter/EUI FSI to SDO/AIA and
+# 3. SDO/AIA to Solar Orbiter/EUI HRI
+#
+# to perform the translation.
+
+download_bucket_with_transfer_manager('iti-dataset', base_path)
+
+
 # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
 ############################################################################################################################################################################
