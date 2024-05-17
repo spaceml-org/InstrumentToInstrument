@@ -13,6 +13,12 @@ Welcome to Instrument-To-Instrument (ITI) tool documentation!
    - Super-resolution
 for many science domains. The tool has been applied to heliophysics and earth science use cases.
 
+The framework is built on submodules that can be used independently. This allows to use the ITI tool end-to-end or to use only the parts that are needed, e.g. to obtain an ML-ready dataset.
+
+.. image:: /images/ITI_framework.jpg
+   :align: center
+
+
 .. grid:: 1 1 2 2
    :gutter: 1
 
@@ -68,9 +74,6 @@ Links
 =====
 
 * ITI paper: https://doi.org/10.48550/arXiv.2401.08057
-* :ref:`genindex`
-* :ref:`search`
-* Install python: https://www.python.org/downloads/
 * Translate your own data: https://colab.research.google.com/github/RobertJaro/InstrumentToInstrument/blob/master/examples/ITI_translation.ipynb
 * GPU support: https://pytorch.org/get-started/locally/
 * Weights and Biases: https://wandb.ai/site
