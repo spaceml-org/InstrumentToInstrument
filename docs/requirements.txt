@@ -8,3 +8,4 @@ git+https://github.com/Schirni/InstrumentToInstrument.git@development
 lightning
 sunpy_soar
 sunpy
+google-cloud-storage
