@@ -6,7 +6,6 @@ This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWA
 """
 
 from iti.evaluation.evaluation import *
-from iti.evaluation.evaluation import download_bucket_with_transfer_manager
 import glob
 from iti.download.download_proba2 import Proba2Downloader
 from iti.download.download_sdo import SDODownloader
