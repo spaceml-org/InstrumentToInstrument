@@ -1,3 +1,12 @@
+"""
+=========================
+Download PROBA2/SWAP data
+=========================
+This example shows how to download PROBA2/SWAP data from the `PROBAA2 Science center <https://proba2.sidc.be/swap/data/bsd/>`__ using the ITI tool.
+"""
+
+
+
 import glob
 import os
 from datetime import datetime
