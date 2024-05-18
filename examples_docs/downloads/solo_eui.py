@@ -27,8 +27,8 @@ downloader = SOLODownloader(base_path=base_path+'/eui')
 
 ###############################################################################
 # Download the data for a specific date
-downloader.downloadDate(date=datetime(2023, 5, 8, 15), FSI=True)
-downloader.downloadDate(date=datetime(2023, 5, 8, 15), FSI=False)
+downloader.downloadDate(date=datetime(2022, 4, 5, 2, 30), FSI=True)
+downloader.downloadDate(date=datetime(2022, 4, 5, 2, 30), FSI=False)
 
 ###############################################################################
 # Glob the downloaded files and sort them by date
