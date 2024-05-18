@@ -36,11 +36,7 @@ swap_files = sorted(glob.glob('swap/*/*.fits', recursive=True))
 swap_map = Map(swap_files[0])
 
 ###############################################################################
-# We can visualize the map with its metadata
-print(swap_map)
-
-###############################################################################
-# And plot the map
+# We can visualize the map using the SunPy plotting capabilities
 plt.figure(figsize=(10, 10))
 swap_map.plot()
 plt.show()
