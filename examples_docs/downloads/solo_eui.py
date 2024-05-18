@@ -42,7 +42,7 @@ hri_map = Map(eui_files[2])
 
 ###############################################################################
 # We can visualize the map of the two instruments using the SunPy plotting capabilities
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), projection=fsi174_map, dpi=100)
+fig, axs = plt.subplots(1, 3, subplot_kw={'projection': fsi174_map}, figsize=(15, 5), dpi=100)
 fsi174_map.plot(axes=axs[0])
 fsi304_map.plot(axes=axs[1])
 hri_map.plot(axes=axs[2])
