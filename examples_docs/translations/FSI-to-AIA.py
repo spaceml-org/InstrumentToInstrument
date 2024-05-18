@@ -20,24 +20,7 @@ base_path = os.getcwd()
 # We provide a publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 #
 # This dataset contains `.fits` files from **PROBA2/SWAP**, **SDO/AIA** and **Solar Orbiter/EUI (FSI and HRI)**.
-
 download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
-
-############################################################################################################################################################################
-# If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
-# In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
-# To download Solar Orbiter EUI data, we can distinguish between the two instruments FSI and HRI. By setting the flag `FSI` to `True` we download the FSI data, otherwise the HRI data is downloaded.
-#
-# Downloading FSI data
-solo_downloader = SOLODownloader(base_path=base_path+'/solo', FSI=True)
-solo_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
-
-############################################################################################################################################################################
-# Downloading AIA data
-jsoc_email = os.environ["JSOC_EMAIL"]
-
-sdo_downloader = SDODownloader(base_path=base_path+'/sdo', email=jsoc_email)
-sdo_downloader.downloadDate(date=datetime(2023, 5, 8, 15))
 
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date. Here we use the two channels in 171/174 Å and 304 Å.
