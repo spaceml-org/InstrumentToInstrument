@@ -69,7 +69,7 @@ pygments_style = 'sphinx'
 #html_theme = 'alabaster'
 import sphinx_rtd_theme
 import os
-from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
+from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder  # NOQA: E402
 import matplotlib
 from matplotlib import MatplotlibDeprecationWarning
 html_theme = 'sphinx_rtd_theme'
@@ -130,6 +130,12 @@ sphinx_gallery_conf = {
     'backreferences_dir': os.path.join('generated', 'modules'),
     'filename_pattern': '^((?!skip_).)*$',
     'examples_dirs': os.path.join('..', 'examples_docs'),
+    'subsection_order': ExplicitOrder([
+        '../examples_docs/downloads',
+        '../examples_docs/dataloaders',
+        '../examples_docs/translations',
+    ]),
+    'within_subsection_order': ExampleTitleSortKey,
     'gallery_dirs': os.path.join('generated', 'gallery'),
     'matplotlib_animations': True,
     'plot_gallery': 'True',
