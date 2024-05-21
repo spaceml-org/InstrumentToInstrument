@@ -6,13 +6,9 @@ This example shows how to intercalibrate `Solar Orbiter/EUI/FSI <https://sci.esa
 """
 
 from iti.evaluation.evaluation import *
-import glob
-from iti.download.download_solo import SOLODownloader
-from iti.download.download_sdo import SDODownloader
 from iti.data.editor import solo_norm
 from iti.translate import *
 from iti.data.dataset import get_intersecting_files
-from datetime import timedelta, datetime
 
 base_path = os.getcwd()
 
