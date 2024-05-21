@@ -9,3 +9,4 @@ lightning
 sunpy_soar
 sunpy
 google-cloud-storage
+wandb
