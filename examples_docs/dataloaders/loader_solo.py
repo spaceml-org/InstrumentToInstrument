@@ -9,7 +9,7 @@ import glob
 from iti.evaluation.evaluation import *
 from iti.data.editor import solo_norm
 from iti.translate import *
-from iti.data.dataset import get_intersecting_files, EUIDataset
+from iti.data.dataset import get_intersecting_files, EUIDataset, HRIDataset
 from sunpy.map import Map
 
 base_path = os.getcwd()
@@ -35,7 +35,7 @@ hri_files = sorted(glob.glob(base_path+'/iti-testset/solo/eui-hrieuv174-image/*.
 #   - reshape to channel first format [channel, height, width]
 
 fsi_dataset = EUIDataset(fsi_files)
-hri_dataset = EUIDataset(hri_files)
+hri_dataset = HRIDataset(hri_files)
 ############################################################################################################################################################################
 # We can now compare the original data with the preprocessed ML-ready ITI data. Here we load the FSI and HRI files as SunPy maps.
 
