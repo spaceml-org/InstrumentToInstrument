@@ -31,7 +31,7 @@ downloader.downloadDate(date=datetime(2022, 4, 5, 5))
 
 ###############################################################################
 # We can now glob the downloaded files and sort them by date
-aia_files = get_intersecting_files(base_path+'/sdo', [171, 193, 211, 304, 6173])
+aia_files = get_intersecting_files(base_path+'/sdo', [171, 193, 211, 304])
 
 ###############################################################################
 # In the next step we load the `.fits` files as SunPy maps.
@@ -39,14 +39,12 @@ aia_map171 = [Map(f) for f in aia_files[0]]
 aia_map193 = [Map(f) for f in aia_files[1]]
 aia_map211 = [Map(f) for f in aia_files[2]]
 aia_map304 = [Map(f) for f in aia_files[3]]
-aia_map6173 = [Map(f) for f in aia_files[4]]
 
 ###############################################################################
 # We can visualize the map of the two instruments using the SunPy plotting capabilities
-fig, axs = plt.subplots(1, 5, subplot_kw={'projection': aia_map171[0]}, figsize=(20, 10), dpi=100)
+fig, axs = plt.subplots(1, 4, subplot_kw={'projection': aia_map171[0]}, figsize=(20, 10), dpi=100)
 aia_map171[0].plot(axes=axs[0])
 aia_map193[0].plot(axes=axs[1])
 aia_map211[0].plot(axes=axs[2])
 aia_map304[0].plot(axes=axs[3])
-aia_map6173[0].plot(axes=axs[4])
 plt.show()
