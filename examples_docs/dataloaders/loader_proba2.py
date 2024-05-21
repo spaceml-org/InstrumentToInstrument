@@ -40,7 +40,7 @@ swap_maps = [Map(f) for f in swap_files]
 
 
 fig, axs = plt.subplots(1, 2, subplot_kw={'projection': swap_maps[0]}, figsize=(20, 10), dpi=100)
-swap_maps[0].plot(axes=axs[0, 0])
+swap_maps[0].plot(axes=axs[0])
 axs[1].imshow(swap_dataset[0][0], cmap='sdoaia171', vmin=-1, vmax=1, origin='lower')
 axs[0].set_axis_off()
 axs[1].set_axis_off()
