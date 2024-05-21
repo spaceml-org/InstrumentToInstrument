@@ -19,7 +19,7 @@ from iti.download.download_solo import SOLODownloader
 base_path = os.getcwd()
 
 ###############################################################################
-# Set up the downloader for Solar Orbiter/eUI with the path to download the data
+# Set up the downloader for Solar Orbiter/EUI with the path to download the data
 #
 # The EUI instrument on Solar Orbiter is equipped with two imagers, the Full Sun Imager (FSI) and the High Resolution Imager (HRI).
 # By setting the flag `FSI` to `True` we download the FSI data, otherwise the HRI data is downloaded.
@@ -35,7 +35,7 @@ downloader.downloadDate(date=datetime(2022, 4, 5, 2, 30), FSI=False)
 eui_files = sorted(glob.glob('eui/*/*.fits', recursive=True))
 
 ###############################################################################
-# In the next step we load the `.fits`files as SunPy maps.
+# In the next step we load the `.fits` files as SunPy maps.
 fsi174_map = Map(eui_files[0])
 fsi304_map = Map(eui_files[1])
 hri_map = Map(eui_files[2])
