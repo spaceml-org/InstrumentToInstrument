@@ -133,6 +133,7 @@ sphinx_gallery_conf = {
     'subsection_order': ExplicitOrder([
         '../examples_docs/downloads',
         '../examples_docs/dataloaders',
+        '../examples_docs/training',
         '../examples_docs/translations',
     ]),
     'within_subsection_order': ExampleTitleSortKey,
