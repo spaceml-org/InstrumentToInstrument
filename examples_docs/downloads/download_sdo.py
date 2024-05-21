@@ -43,7 +43,7 @@ aia_map6173 = [Map(f) for f in aia_files[4]]
 
 ###############################################################################
 # We can visualize the map of the two instruments using the SunPy plotting capabilities
-fig, axs = plt.subplots(1, 5, subplot_kw={'projection': aia_map171}, figsize=(20, 10), dpi=100)
+fig, axs = plt.subplots(1, 5, subplot_kw={'projection': aia_map171[0]}, figsize=(20, 10), dpi=100)
 aia_map171[0].plot(axes=axs[0])
 aia_map193[0].plot(axes=axs[1])
 aia_map211[0].plot(axes=axs[2])
