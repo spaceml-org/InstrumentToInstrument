@@ -1,3 +1,12 @@
+"""
+=======================
+Example training script
+=======================
+
+This script demonstrates how to train a model using the ITI framework. The example shows the translation between PROBA2/SWAP and SDO/AIA.
+"""
+
+
 import os
 import collections.abc
 import shutil
