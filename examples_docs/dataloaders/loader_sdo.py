@@ -23,6 +23,7 @@ download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 aia_files = get_intersecting_files(base_path+'/iti-testset/sdo', [171, 304])
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
+#
 # The sensitivity of the AIA instrument decreases over time. To correct for this, the SDO/AIA team is providing a degradation correction (`Boerner et al., 2012 <https://link.springer.com/article/10.1007/s11207-011-9804-8>`__) which is publicly available.
 # For SDO/AIA we:
 #   - load the `.fits` files as SunPy maps
