@@ -45,5 +45,5 @@ axs[1].imshow(swap_dataset[0][0], cmap='sdoaia171', vmin=-1, vmax=1, origin='low
 axs[0].set_axis_off()
 axs[1].set_axis_off()
 axs[0].set_title('Original SWAP 174 Å', fontsize=50)
-axs[1].set_title('ITI 171 Å', fontsize=50)
+axs[1].set_title('ITI 174 Å', fontsize=50)
 plt.show()
