@@ -145,15 +145,13 @@ plot_callbacks = []
 
 n_gpus = torch.cuda.device_count()
 n_cpus = os.cpu_count()
-print(f"Number of GPUs: {n_gpus}")
-print(f"Number of CPUs: {n_cpus}")
 
-#trainer = Trainer(max_epochs=int(config['training']['epochs']),
+trainer = Trainer(max_epochs=int(config['training']['epochs']),
 #                  #logger=wandb_logger,
-#                  devices=n_gpus if n_gpus > 0 else None,
-#                  accelerator="gpu" if n_gpus >= 1 else 'auto',
-#                  strategy='dp' if n_gpus > 1 else 'auto',  # ddp breaks memory and wandb
-#                  num_sanity_val_steps=0,
-#                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
+                  devices=n_cpus if n_cpus > 0 else None,
+                  accelerator="cpu" if n_cpus >= 1 else 'auto',
+                  strategy='dp' if n_cpus > 1 else 'auto',  # ddp breaks memory and wandb
+                  num_sanity_val_steps=0,
+                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
 
-#trainer.fit(module, data_module, ckpt_path='last')
+trainer.fit(module, data_module, ckpt_path='last')
