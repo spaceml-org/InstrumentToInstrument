@@ -107,14 +107,12 @@ plot_settings_B = [
 
 ########################################################################################
 # Setup the logging for weights and biases (wandb)
-api_key = os.environ["WANDB_API_KEY"]
-wandb.login(api_key)
-logging_config = config['logging']
-wandb_id = logging_config['wandb_id'] if 'wandb_id' in logging_config else None
-log_model = logging_config['wandb_log_model'] if 'wandb_log_model' in logging_config else False
-wandb_logger = WandbLogger(project=logging_config['wandb_project'], name=logging_config['wandb_name'], offline=False,
-                           entity=logging_config['wandb_entity'], id=wandb_id, dir=config['base_dir'], log_model=log_model)
-wandb_logger.experiment.config.update(config, allow_val_change=True)
+#logging_config = config['logging']
+#wandb_id = logging_config['wandb_id'] if 'wandb_id' in logging_config else None
+#log_model = logging_config['wandb_log_model'] if 'wandb_log_model' in logging_config else False
+#wandb_logger = WandbLogger(project=logging_config['wandb_project'], name=logging_config['wandb_name'], offline=False,
+#                           entity=logging_config['wandb_entity'], id=wandb_id, dir=config['base_dir'], log_model=log_model)
+#wandb_logger.experiment.config.update(config, allow_val_change=True)
 
 
 ########################################################################################
@@ -141,7 +139,7 @@ plot_callbacks += [PlotABA(swap_valid.sample(2), module, plot_settings_A=plot_se
 
 n_gpus = torch.cuda.device_count()
 trainer = Trainer(max_epochs=int(config['training']['epochs']),
-                  logger=wandb_logger,
+                  #logger=wandb_logger,
                   devices=n_gpus if n_gpus > 0 else None,
                   accelerator="gpu" if n_gpus >= 1 else None,
                   strategy='dp' if n_gpus > 1 else None,  # ddp breaks memory and wandb
