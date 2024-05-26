@@ -90,6 +90,12 @@ swap_valid = StorageDataset(SWAPDataset(swap_path, months=test_months),
                               swap_converted_path, ext_editors=[RandomPatchEditor((128, 128))])
 
 
+# print the number of samples in the training and validation sets
+print(f"Number of training samples: {len(swap_dataset)}")
+print(f"Number of validation samples: {len(swap_valid)}")
+print(f"Number of SDO training samples: {len(sdo_dataset)}"
+        f"Number of SDO validation samples: {len(sdo_valid)}")
+
 ########################################################################################
 # Initialize the data module
 
@@ -131,19 +137,19 @@ save_callback = SaveCallback(base_dir)
 # This will plot the predictions of the model on the validation data every epoch.
 
 plot_callbacks = []
-plot_callbacks += [PlotBAB(sdo_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
-plot_callbacks += [PlotABA(swap_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+#plot_callbacks += [PlotBAB(sdo_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+#plot_callbacks += [PlotABA(swap_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 
 ########################################################################################
 # Start the training
 
-n_gpus = torch.cuda.device_count()
-trainer = Trainer(max_epochs=int(config['training']['epochs']),
+#n_gpus = torch.cuda.device_count()
+#trainer = Trainer(max_epochs=int(config['training']['epochs']),
                   #logger=wandb_logger,
-                  devices=n_gpus if n_gpus > 0 else None,
-                  accelerator="gpu" if n_gpus >= 1 else None,
-                  strategy='dp' if n_gpus > 1 else None,  # ddp breaks memory and wandb
-                  num_sanity_val_steps=0,
-                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
+#                  devices=n_gpus if n_gpus > 0 else None,
+#                  accelerator="gpu" if n_gpus >= 1 else None,
+#                  strategy='dp' if n_gpus > 1 else None,  # ddp breaks memory and wandb
+#                  num_sanity_val_steps=0,
+#                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
 
-trainer.fit(module, data_module, ckpt_path='last')
+#trainer.fit(module, data_module, ckpt_path='last')
