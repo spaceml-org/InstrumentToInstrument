@@ -39,7 +39,7 @@ download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 ########################################################################################
 # Open the config file
-with open('config/proba2_to_sdo_colab.yaml', "r") as stream:
+with open('iti-testset/configs/proba2_to_sdo_colab.yaml', "r") as stream:
     try:
         config = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
