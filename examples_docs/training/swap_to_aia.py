@@ -130,8 +130,8 @@ save_callback = SaveCallback(base_dir)
 # This will plot the predictions of the model on the validation data every epoch.
 
 plot_callbacks = []
-plot_callbacks += [PlotBAB(sdo_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
-plot_callbacks += [PlotABA(swap_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+plot_callbacks += [PlotBAB(sdo_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+plot_callbacks += [PlotABA(swap_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 
 ########################################################################################
 # Start the training
