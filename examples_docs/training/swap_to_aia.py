@@ -83,9 +83,9 @@ swap_dataset = SWAPDataset(swap_path, months=train_months)
 swap_dataset = StorageDataset(swap_dataset, swap_converted_path,
                                 ext_editors=[RandomPatchEditor((128, 128))])
 
-sdo_valid = StorageDataset(AIADataset(sdo_path, wavelength=171, months=test_months, limit=100),
+sdo_valid = StorageDataset(AIADataset(sdo_path, wavelength=171, months=test_months),
                            sdo_converted_path, ext_editors=[RandomPatchEditor((256, 256))])
-swap_valid = StorageDataset(SWAPDataset(swap_path, months=test_months, limit=100),
+swap_valid = StorageDataset(SWAPDataset(swap_path, months=test_months),
                               swap_converted_path, ext_editors=[RandomPatchEditor((128, 128))])
 
 
