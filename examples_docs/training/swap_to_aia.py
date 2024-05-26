@@ -11,6 +11,8 @@ import os
 import collections.abc
 import shutil
 
+from iti.evaluation.evaluation import download_gcp_bucket
+
 #hyper needs the four following aliases to be done manually.
 collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
@@ -22,13 +24,18 @@ import yaml
 from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
-from lightning.pytorch.strategies import DataParallelStrategy
 from sunpy.visualization.colormaps import cm
 
 from iti.callback import SaveCallback, PlotBAB, PlotABA
 from iti.data.dataset import AIADataset, StorageDataset, SWAPDataset, ITIDataModule
 from iti.data.editor import RandomPatchEditor, BrightestPixelPatchEditor
 from iti.iti import ITIModule
+
+########################################################################################
+# Download iti testset for training
+#
+base_path = os.getcwd()
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 ########################################################################################
 # Open the config file
