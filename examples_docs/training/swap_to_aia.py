@@ -53,10 +53,10 @@ os.makedirs(base_dir, exist_ok=True)
 ########################################################################################
 # Initialize the paths from the config file
 data_config = config['data']
-swap_path = data_config['A_path']
+swap_path = base_path + data_config['A_path']
 swap_converted_path = data_config['converted_A_path']
 os.makedirs(swap_converted_path, exist_ok=True)
-sdo_path = data_config['B_path']
+sdo_path = base_path + data_config['B_path']
 sdo_converted_path = data_config['converted_B_path']
 os.makedirs(sdo_converted_path, exist_ok=True)
 
@@ -143,13 +143,13 @@ plot_callbacks = []
 ########################################################################################
 # Start the training
 
-#n_gpus = torch.cuda.device_count()
-#trainer = Trainer(max_epochs=int(config['training']['epochs']),
+n_gpus = torch.cuda.device_count()
+trainer = Trainer(max_epochs=int(config['training']['epochs']),
                   #logger=wandb_logger,
-#                  devices=n_gpus if n_gpus > 0 else None,
-#                  accelerator="gpu" if n_gpus >= 1 else None,
-#                  strategy='dp' if n_gpus > 1 else None,  # ddp breaks memory and wandb
-#                  num_sanity_val_steps=0,
-#                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
+                  devices=n_gpus if n_gpus > 0 else None,
+                  accelerator="gpu" if n_gpus >= 1 else None,
+                  strategy='dp' if n_gpus > 1 else None,  # ddp breaks memory and wandb
+                  num_sanity_val_steps=0,
+                  callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
 
-#trainer.fit(module, data_module, ckpt_path='last')
+trainer.fit(module, data_module, ckpt_path='last')
