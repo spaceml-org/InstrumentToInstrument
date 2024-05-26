@@ -147,7 +147,7 @@ n_gpus = torch.cuda.device_count()
 trainer = Trainer(max_epochs=int(config['training']['epochs']),
                   #logger=wandb_logger,
                   devices=n_gpus if n_gpus > 0 else None,
-                  accelerator="gpu" if n_gpus >= 1 else None,
+                  accelerator="gpu" if n_gpus >= 1 else 'cpu',
                   strategy='dp' if n_gpus > 1 else 'auto',  # ddp breaks memory and wandb
                   num_sanity_val_steps=0,
                   callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
