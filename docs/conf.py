@@ -8,7 +8,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Instrument-To-Instrument (ITI) documentation'
-copyright = '2024, *Trillium Technologies Inc*, Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Cormac Purcell, Noah Kasmanoff, Anne Spalding'
+copyright = '2024, Trillium Technologies Inc, Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Cormac Purcell, Noah Kasmanoff, Anne Spalding'
 author = 'Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Cormac Purcell, Noah Kasmanoff, Anne Spalding'
 release = '0.1.1'
 
