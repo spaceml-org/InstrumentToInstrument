@@ -144,7 +144,7 @@ trainer = Trainer(max_epochs=int(config['training']['epochs']),
 #                  #logger=wandb_logger,
                   devices=n_cpus if n_cpus > 0 else None,
                   accelerator="cpu" if n_cpus >= 1 else 'auto',
-                  strategy='dp' if n_cpus > 1 else 'auto',  # ddp breaks memory and wandb
+                  strategy='auto',  # ddp breaks memory and wandb
                   num_sanity_val_steps=0,
                   callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
 
