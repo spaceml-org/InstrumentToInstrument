@@ -8,8 +8,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Instrument-To-Instrument (ITI) documentation'
-copyright = '2024, Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Anne Spalding'
-author = 'Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Anne Spalding'
+copyright = '2024, *Trillium Technologies Inc*, Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Cormac Purcell, Noah Kasmanoff, Anne Spalding'
+author = 'Christoph Schirninger, Robert Jarolim, J. Emmanuel Johnson, Anna Jungbluth, Lilli Freischem, Cormac Purcell, Noah Kasmanoff, Anne Spalding'
 release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
@@ -85,7 +85,11 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
+html_logo = 'ITI_logo.png'
+html_theme_options = {
+    'logo_only': True,
+    'display_version': False,
+}
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
