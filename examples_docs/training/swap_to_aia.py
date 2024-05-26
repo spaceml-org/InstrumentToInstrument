@@ -90,12 +90,6 @@ swap_valid = StorageDataset(SWAPDataset(swap_path, months=test_months),
                               swap_converted_path, ext_editors=[RandomPatchEditor((128, 128))])
 
 
-# print the number of samples in the training and validation sets
-print(f"Number of training samples: {len(swap_dataset)}")
-print(f"Number of validation samples: {len(swap_valid)}")
-print(f"Number of SDO training samples: {len(sdo_dataset)}"
-        f"Number of SDO validation samples: {len(sdo_valid)}")
-
 ########################################################################################
 # Initialize the data module
 
