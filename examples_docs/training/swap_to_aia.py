@@ -7,37 +7,38 @@ This script demonstrates how to train a model using the ITI framework. The examp
 """
 
 
-#import os
-#import collections.abc
-#import shutil
+import os
+import collections.abc
+import shutil
 
 #hyper needs the four following aliases to be done manually.
-#collections.Iterable = collections.abc.Iterable
-#collections.Mapping = collections.abc.Mapping
-#collections.MutableSet = collections.abc.MutableSet
-#collections.MutableMapping = collections.abc.MutableMapping
+collections.Iterable = collections.abc.Iterable
+collections.Mapping = collections.abc.Mapping
+collections.MutableSet = collections.abc.MutableSet
+collections.MutableMapping = collections.abc.MutableMapping
 #Now import hyper
-#import torch
-#import yaml
-#from lightning import Trainer
-#from lightning.pytorch.callbacks import ModelCheckpoint
-#from lightning.pytorch.loggers import WandbLogger
-#from lightning.pytorch.strategies import DataParallelStrategy
-#from sunpy.visualization.colormaps import cm
+import torch
+import yaml
+from lightning import Trainer
+from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch.strategies import DataParallelStrategy
+from sunpy.visualization.colormaps import cm
 
-#from iti.callback import SaveCallback, PlotBAB, PlotABA
-#from iti.data.dataset import AIADataset, StorageDataset, SWAPDataset, ITIDataModule
-#from iti.data.editor import RandomPatchEditor, BrightestPixelPatchEditor
-#from iti.iti import ITIModule
+from iti.callback import SaveCallback, PlotBAB, PlotABA
+from iti.data.dataset import AIADataset, StorageDataset, SWAPDataset, ITIDataModule
+from iti.data.editor import RandomPatchEditor, BrightestPixelPatchEditor
+from iti.iti import ITIModule
 
 ########################################################################################
 # Open the config file
-#with open('config/proba2_to_sdo_colab.yaml', "r") as stream:
-#    try:
-#        config = yaml.safe_load(stream)
-#    except yaml.YAMLError as exc:
-#        print(exc)
+with open('config/proba2_to_sdo_colab.yaml', "r") as stream:
+    try:
+        config = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
+print(config)
 #base_dir = config['base_dir']
 #os.makedirs(base_dir, exist_ok=True)
 
