@@ -135,7 +135,7 @@ plot_callbacks = []
 #plot_callbacks += [PlotABA(swap_valid.sample(2), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 
 ########################################################################################
-# Start the training
+# Set up training parameters
 
 n_gpus = torch.cuda.device_count()
 n_cpus = os.cpu_count()
@@ -148,4 +148,7 @@ trainer = Trainer(max_epochs=int(config['training']['epochs']),
                   num_sanity_val_steps=0,
                   callbacks=[checkpoint_callback, save_callback, *plot_callbacks],)
 
-trainer.fit(module, data_module, ckpt_path='last')
+#######################################################################################
+# Start the training
+
+#trainer.fit(module, data_module, ckpt_path='last')
