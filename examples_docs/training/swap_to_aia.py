@@ -21,6 +21,7 @@ collections.MutableMapping = collections.abc.MutableMapping
 #Now import hyper
 import torch
 import yaml
+import wandb
 from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
@@ -106,6 +107,8 @@ plot_settings_B = [
 
 ########################################################################################
 # Setup the logging for weights and biases (wandb)
+api_key = os.environ["WANDB_API_KEY"]
+wandb.login(api_key)
 logging_config = config['logging']
 wandb_id = logging_config['wandb_id'] if 'wandb_id' in logging_config else None
 log_model = logging_config['wandb_log_model'] if 'wandb_log_model' in logging_config else False
