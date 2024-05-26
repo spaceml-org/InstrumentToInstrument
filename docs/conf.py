@@ -127,9 +127,6 @@ latex_elements = {
     # 'figure_align': 'htbp',
 }
 
-# -- WANDB logging ------------------------------------------------------------
-# Wandb logging
-os.environ["WANDB_API_KEY"] = "d205a259e0cc5340190f858b2b6e8a5f14d379f4"
 
 # -- Sphinx Gallery ------------------------------------------------------------
 # JSOC email os env
