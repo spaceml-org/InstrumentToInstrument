@@ -107,6 +107,9 @@ plot_settings_B = [
 
 ########################################################################################
 # Setup the logging for weights and biases (wandb)
+#
+# The logging is disabled by default. To enable it, please uncomment the following lines and provide your wandb project and entity name.
+#
 #logging_config = config['logging']
 #wandb_id = logging_config['wandb_id'] if 'wandb_id' in logging_config else None
 #log_model = logging_config['wandb_log_model'] if 'wandb_log_model' in logging_config else False
@@ -150,5 +153,7 @@ trainer = Trainer(max_epochs=int(config['training']['epochs']),
 
 #######################################################################################
 # Start the training
+#
+# This line is commented out, as the training requires a certain amount of storage space which is not available for a jupyter notebook.
 
 #trainer.fit(module, data_module, ckpt_path='last')
