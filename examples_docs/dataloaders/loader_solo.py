@@ -6,7 +6,7 @@ This example shows how to preprocess Solar Orbiter EUI data to obtain ML-ready d
 """
 
 import glob
-from iti.evaluation.evaluation import *
+from iti.evaluation.util import *
 from iti.data.editor import solo_norm
 from iti.translate import *
 from iti.data.dataset import get_intersecting_files, EUIDataset, HRIDataset

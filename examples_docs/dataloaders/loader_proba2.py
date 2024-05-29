@@ -6,7 +6,7 @@ This example shows how to preprocess PROBA2 data to obtain ML-ready data using t
 """
 import glob
 
-from iti.evaluation.evaluation import *
+from iti.evaluation.util import *
 from iti.data.editor import solo_norm
 from iti.translate import *
 from iti.data.dataset import get_intersecting_files, SWAPDataset

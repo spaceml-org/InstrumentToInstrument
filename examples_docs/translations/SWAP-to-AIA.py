@@ -5,7 +5,7 @@ Translation of SWAP to AIA
 This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWAP>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
 """
 
-from iti.evaluation.evaluation import *
+from iti.evaluation.util import *
 import glob
 from iti.download.download_proba2 import Proba2Downloader
 from iti.download.download_sdo import SDODownloader

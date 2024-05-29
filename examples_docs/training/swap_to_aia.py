@@ -11,7 +11,7 @@ import os
 import collections.abc
 import shutil
 
-from iti.evaluation.evaluation import download_gcp_bucket
+from iti.evaluation.util import download_gcp_bucket
 
 #hyper needs the four following aliases to be done manually.
 collections.Iterable = collections.abc.Iterable

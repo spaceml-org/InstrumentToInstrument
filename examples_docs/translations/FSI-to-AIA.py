@@ -5,7 +5,7 @@ Translation of Solar Orbiter/EUI/FSI to SDO/AIA
 This example shows how to intercalibrate `Solar Orbiter/EUI/FSI <https://sci.esa.int/web/solar-orbiter/-/51217-instruments>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
 """
 
-from iti.evaluation.evaluation import *
+from iti.evaluation.util import *
 from iti.data.editor import solo_norm
 from iti.translate import *
 from iti.data.dataset import get_intersecting_files

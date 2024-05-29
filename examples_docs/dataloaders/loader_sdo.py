@@ -5,7 +5,7 @@ Dataloaders: SDO
 This example shows how to preprocess SDO AIA data to obtain ML-ready data using the ITI tool.
 """
 
-from iti.evaluation.evaluation import *
+from iti.evaluation.util import *
 from iti.data.editor import solo_norm
 from iti.translate import *
 from iti.data.dataset import get_intersecting_files, SDODataset
