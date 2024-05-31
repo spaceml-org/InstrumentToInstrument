@@ -6,7 +6,7 @@ Simple download tutorial
 ========================
 
 All download routines are stored in the ``iti.download`` module. The following example shows how to download the data for the Solar Dynamics Observatory (SDO)
-Atmospheric Imaging Assembly (AIA) instrument from the terminal. Here we make use of the ``iti.download.download_sdo.SDODownloader()`` class:
+Atmospheric Imaging Assembly (AIA) instrument from the terminal. Here we make use of the ``iti.download.download_sdo.SDODownloader`` class:
 
 .. autoclass:: iti.download.download_sdo.SDODownloader
 
