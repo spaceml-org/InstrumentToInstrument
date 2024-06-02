@@ -28,9 +28,9 @@ The next step is to transform the SunPy map to a numpy array. This is done by th
 
 .. autoclass:: iti.data.editor.MapToDataEditor
 
-Depending on the instruments and the activation function of the neural network we need to normalize the data. This is done by the ``iti.data.editor.NormalizeDataEditor``.
+Depending on the instruments and the activation function of the neural network we need to normalize the data. This is done by the ``iti.data.editor.NormalizeEditor``.
 
-.. autoclass:: iti.data.editor.NormalizeDataEditor
+.. autoclass:: iti.data.editor.NormalizeEditor
 
 The normalization depends on the instruments used and can be adjusted accordingly.
 
