@@ -19,7 +19,7 @@ from sunpy.net import Fido, attrs as a
 import sunpy_soar
 from tqdm import tqdm
 
-class Proba2Downloader:
+class PROBA2Downloader:
 
     def __init__(self, base_path):
         self.base_path = base_path
