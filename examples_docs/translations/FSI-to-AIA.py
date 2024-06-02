@@ -36,7 +36,7 @@ aia_data_304 = [getAIAdata(f) for f in tqdm(aia_files[1])]
 ############################################################################################################################################################################
 # The translator classes are the core element of the ITI translation. They follow the notation: `InstrumentAToInstrumentB`. We initialize the translation class by giving it the path where the model is stored.
 
-translator = FSIToAIA(model_name=base_path+'/iti-testset/models/fsi_to_aia_v0_3.pt')
+translator = SolarOrbiterToSDO(model_name=base_path+'/iti-testset/models/fsi_to_aia_v0_3.pt')
 
 ############################################################################################################################################################################
 

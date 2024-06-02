@@ -302,7 +302,7 @@ class KSOFlatConverter(InstrumentConverter):
         ds = KSOFlatDataset(paths, self.resolution)
         return self._convertDataset(ds)
 
-class SWAPToAIA(InstrumentToInstrument):
+class PROBA2ToSDO(InstrumentToInstrument):
 
     def __init__(self, model_name='swap_to_aia_v0_1.pt', **kwargs):
         super().__init__(model_name, **kwargs)
@@ -323,3 +323,37 @@ class SWAPToAIA(InstrumentToInstrument):
         new_meta['WAVELNTH'] = wl_map[meta.get('WAVELNTH', 0)]
         new_meta['waveunit'] = 'angstrom'
         return new_meta
+
+
+class SolarOrbiterToSDO(InstrumentToInstrument):
+    def __init__(self, model_name='fsi_to_aia_v0_3.pt', **kwargs):
+        super().__init__(model_name, **kwargs)
+        self.norms = [sdo_norms[171], sdo_norms[304]]
+
+    def translate(self, path, basenames=None, **kwargs):
+        eui_dataset = EUIDataset(path, basenames=basenames, **kwargs)
+        for maps, img, iti_img in self._translateDataset(eui_dataset):
+            yield [Map(norm.inverse((s_map.data + 1) / 2), self.toSDOMeta(s_map.meta, instr))
+                   for s_map, norm, instr in zip(maps, self.norms, ['AIA'] * 2)]
+
+    def toSDOMeta(self, meta, instrument):
+        wl_map = {174: 171, 304: 304}
+        new_meta = meta.copy()
+        new_meta['obsrvtry'] = 'FSI-to-AIA'
+        new_meta['telescop'] = 'sdo'
+        new_meta['instrume'] = instrument
+        new_meta['WAVELNTH'] = wl_map[meta.get('WAVELNTH', 0)]
+        new_meta['waveunit'] = 'angstrom'
+        return new_meta
+
+
+class SDOToSolarOrbiter(InstrumentToInstrument):
+    def __init__(self, model_name='aia_to_hri_v0_1.pt', **kwargs):
+        super().__init__(model_name, **kwargs)
+
+    def translate(self, paths):
+        ds = AIADataset(paths, wavelength=171)
+        for s_map, input, output in self._translateDataset(ds):
+            norm = hri_norm[174]
+            s_map = Map(norm.inverse((s_map.data + 1) / 2), s_map.meta)
+            yield s_map
