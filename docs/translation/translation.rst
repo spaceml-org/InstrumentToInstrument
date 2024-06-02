@@ -1,8 +1,8 @@
 .. _iti_translation:
 
-===========
-Translation
-===========
+===================
+Translation classes
+===================
 
 The heart of ITI is the translation class performing the domain translations after training. This enables the user to obtain:
 
