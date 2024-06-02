@@ -8,9 +8,7 @@ The heart of ITI is the translation class performing the domain translations aft
 
     - Image enhancement,
     - Instrument intercalibration and
-    - super resolution observations
-
-with ``ITI``.
+    - super resolution observations.
 
 The translation process is based on the core class ``iti.translate.InstrumentToInstrument``.
 
