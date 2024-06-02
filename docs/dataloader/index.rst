@@ -11,4 +11,5 @@ the creation of new data sets, while also new custom editors can be added.
 .. toctree::
     :maxdepth: 1
 
+    preprocessing
     custom_dataloader
