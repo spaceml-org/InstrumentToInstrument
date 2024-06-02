@@ -10,7 +10,7 @@ located in the ``iti.translate`` directory. Here you find the the individual cla
 
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
     translation
     custom_translation
