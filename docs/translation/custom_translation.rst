@@ -1,8 +1,8 @@
 .. _translation:
 
-=================================
+*********************************
 Create custom translation classes
-=================================
+*********************************
 
 We show here an example to build you own translation class. We refer A to the source domain and B to the target domain.
 
