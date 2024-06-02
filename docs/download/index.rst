@@ -11,9 +11,9 @@ efficient to translate the files on a local workstation (preferable with a GPU).
 We provide downloaders for the following space missions/instruments:
 
     - Solar Dynamics Observatory (SDO), AIA and HMI
-    - PROBA2, SWAP
     - Solar and Heliospheric Observatory (SOHO), EIT and MDI
     - Solar TErrestrial RElations Observatory (STEREO), SECCHI
+    - PROBA2, SWAP
     - Solar Orbiter (SolO), EUI (FSI and HRI)
     - Kanzelhoehe Solar Observatory (KSO), H-alpha
 
