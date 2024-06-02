@@ -7,7 +7,7 @@ This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWA
 
 from iti.evaluation.util import *
 import glob
-from iti.download.download_proba2 import Proba2Downloader
+from iti.download.download_proba2 import PROBA2Downloader
 from iti.download.download_sdo import SDODownloader
 from iti.data.editor import proba2_norm
 from iti.translate import *
@@ -33,7 +33,7 @@ download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
 ############################################################################################################################################################################
 # Downloading SWAP data
-swap_downloader = Proba2Downloader(base_path=base_path+'/swap')
+swap_downloader = PROBA2Downloader(base_path=base_path+'/swap')
 swap_downloader.downloadDate(date=datetime(2024, 5, 8, 15))
 
 ############################################################################################################################################################################

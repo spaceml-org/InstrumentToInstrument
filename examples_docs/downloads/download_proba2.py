@@ -21,7 +21,7 @@ base_path = os.getcwd()
 
 ###############################################################################
 # Set up the downloader for PROBA2/SWAP with the path to download the data
-downloader = Proba2Downloader(base_path=base_path+'/swap')
+downloader = PROBA2Downloader(base_path=base_path+'/swap')
 
 ###############################################################################
 # Download the data for a specific date
