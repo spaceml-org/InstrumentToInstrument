@@ -9,9 +9,9 @@ In the example we intercalibrate Solar Orbiter Full Sun Imager (FSI) observation
 We do not increase the resolution, corresponding to a ``upsampling=0``. We expect mostly instrumental characteristics that cause degradations and set the diversity
 factor to 0 (``lambda_diversity=0``). For the discriminator we provide three settings:
 
-    - discriminator_mode=SINGLE: 'use a single discriminator across all channels.'
-    - discriminator_mode=CHANNELS: 'use a discriminator per channel and one for the combined channels.'
-    - discriminator_mode=SINGLE_PER_CHANNEL: 'use a single discriminator for each channel.'
+    - discriminator_mode= **SINGLE**: *use a single discriminator across all channels.*
+    - discriminator_mode= **CHANNELS**: *use a discriminator per channel and one for the combined channels.*
+    - discriminator_mode= **SINGLE_PER_CHANNEL**: *use a single discriminator for each channel.*
 
 For the training we specify the SDO and Solar Orbiter datasets, where we use a fixed resolution of 1024 pix for
 Solar Orbiter and consequently for SDO. The training is performed with images patches, that we sample from the full-disk observations.
