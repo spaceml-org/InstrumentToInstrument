@@ -22,51 +22,57 @@ The framework is built on submodules that can be used independently. This allows
 .. grid:: 1 1 2 2
    :gutter: 1
 
-      .. grid-item-card:: Installation
-         :link: iti_installation_index
-         :link-type: ref
-         :text-align: center
+      .. grid-item:: 1 1 1 1
+         :gutter: 1
 
-         :material-outlined:`settings;8em;sd-text-secondary`
+         .. grid-item-card:: Installation
+            :link: iti_installation_index
+            :link-type: ref
+            :text-align: center
 
-         Information on how to install the ITI tool with its requirements.
+            :material-outlined:`settings;8em;sd-text-secondary`
 
-      .. grid-item-card:: Download
-         :link: iti_download_index
-         :link-type: ref
-         :text-align: center
+            Information on how to install the ITI tool with its requirements.
 
-         :material-outlined:`cloud_download;8em;sd-text-secondary`
+         .. grid-item-card:: Download
+            :link: iti_download_index
+            :link-type: ref
+            :text-align: center
 
-         Data download.
+            :material-outlined:`cloud_download;8em;sd-text-secondary`
+
+            Data download.
 
 
-      .. grid-item-card:: Dataloader
-         :link: iti_dataloader_index
-         :link-type: ref
-         :text-align: center
+         .. grid-item-card:: Dataloader
+            :link: iti_dataloader_index
+            :link-type: ref
+            :text-align: center
 
-         :material-outlined:`data_usage;8em;sd-text-secondary`
+            :material-outlined:`data_usage;8em;sd-text-secondary`
 
-         Dataloader.
+            Dataloader.
 
-      .. grid-item-card:: Training
-         :link: iti_training_index
-         :link-type: ref
-         :text-align: center
+      .. grid-item:: 1 1 1 1
+         :gutter: 1
 
-         :material-outlined:`school;8em;sd-text-secondary`
+         .. grid-item-card:: Training
+            :link: iti_training_index
+            :link-type: ref
+            :text-align: center
 
-         Training.
+            :material-outlined:`school;8em;sd-text-secondary`
 
-      .. grid-item-card:: Translation
-         :link: iti_translation_index
-         :link-type: ref
-         :text-align: center
+            Training.
 
-         :material-outlined:`translate;8em;sd-text-secondary`
+         .. grid-item-card:: Translation
+            :link: iti_translation_index
+            :link-type: ref
+            :text-align: center
 
-         Translation.
+            :material-outlined:`translate;8em;sd-text-secondary`
+
+            Translation.
 
 
 =====
