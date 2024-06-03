@@ -17,7 +17,8 @@ For SDO we use the ``iti.download.download_sdo.SDODownloader`` class:
 .. autoclass:: iti.download.download_sdo.SDODownloader
 
 The default settings for the AIA instrument is given by downloading the data in the 131, 171, 193, 211, 304, 335 Å channels
-including HMI magnetograms. The ``iti.download.download_sdo.SDODownloader`` class contains a function to download the data for specific dates with the ``downloadDate`` function.
+without the HMI magnetograms. However, we can include them by adding the ``6173`` Å in the wavelength initialization of the ``iti.download.download_sdo.SDODownloader``.
+The ``iti.download.download_sdo.SDODownloader`` class contains a function to download the data for specific dates with the ``downloadDate`` function.
 
 .. autofunction:: iti.download.download_sdo.SDODownloader.downloadDate
 
