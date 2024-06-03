@@ -36,7 +36,7 @@ simultaneously. The translation from STEREO to SDO is performed by the ``iti.tra
 
 .. autoclass:: iti.translate.STEREOToSDO
 
-The STEREO mission unfortunately does not provide full-disk magnetograms. However, ITI can be used to estimate the missing information based on proxy data.
+The STEREO mission does not provide full-disk magnetograms. However, ITI can be used to estimate the missing information based on proxy data.
 ITI can be used to complement the STEREO observations, by generating LOS magnetograms based on STEREO EUV filtergrams. This is performed by the ``iti.translate.STEREOToSDOMagnetogram`` class.
 
 .. autoclass:: iti.translate.STEREOToSDOMagnetogram
