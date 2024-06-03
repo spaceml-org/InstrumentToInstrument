@@ -22,4 +22,4 @@ The testset also contains pre-trained models for the following tasks:
     - Instrument intercalibration (SolO/EUI/FSI to SDO/AIA)
     - Super resolution (SolO/EUI/HRI to SDO/AIA)
 
-Downloading the testset with the pre-trained models is necessary to run the :ref:`translation notebooks <iti_example_translations>` in the :ref:`example gallery <iti_example_gallery>.
+Downloading the testset with the pre-trained models is necessary to run the :ref:`translation notebooks <iti_example_translations>`.
