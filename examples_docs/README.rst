@@ -1,3 +1,5 @@
+.. _iti_example_gallery:
+
 ***************
 Example Gallery
 ***************

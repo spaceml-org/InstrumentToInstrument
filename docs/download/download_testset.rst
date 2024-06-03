@@ -15,3 +15,11 @@ in your terminal. This will download the test dataset to the selected path of yo
     - Solar Dynamics Observatory (SDO) Atmospheric Imaging Assembly (AIA) instrument
     - PROBA2 Sun Watcher using Active Pixel System detector and Image Processing (SWAP) instrument
     - Solar Orbiter (SolO) EUI instrument including the Full Sun Imager (FSI) and the High Resolution Imager (HRI)
+
+The testset also contains pre-trained models for the following tasks:
+
+    - Image enhancement (PROBA2/SWAP to SDO/AIA)
+    - Instrument intercalibration (SolO/EUI/FSI to SDO/AIA)
+    - Super resolution (SolO/EUI/HRI to SDO/AIA)
+
+Downloading the testset with the pre-trained models is necessary to run the :ref:`translation notebooks <iti_example_translations>` in the :ref:`example gallery <iti_example_gallery>.
