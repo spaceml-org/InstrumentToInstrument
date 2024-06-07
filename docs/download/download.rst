@@ -6,7 +6,7 @@ Downloaders
 ===========
 
 All download routines are stored in the ``iti.download`` module. The following examples shows how to download the data using
-the ``ITI``downloader classes.
+the ``ITI`` downloader classes.
 
 ---
 SDO

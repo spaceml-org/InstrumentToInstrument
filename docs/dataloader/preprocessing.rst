@@ -20,7 +20,7 @@ Before we start with the preprocessing, let's first load the data as a 'SunPy' m
 .. autoclass:: iti.data.editor.LoadMapEditor
 
 After loading the data, we can start with the preprocessing. In order to scale all observations to the same size, we use the ``iti.data.editor.NormalizeRadiusEditor``. This
-crops the observations 1.1 solar radii and scales them to a fixed resolution.
+crops the observations 1.1 solar radii and scales them to a fixed resolution. To change the cropped radius to a different value, the ``padding_factor`` needs to be adjusted.
 
 .. autoclass:: iti.data.editor.NormalizeRadiusEditor
 
