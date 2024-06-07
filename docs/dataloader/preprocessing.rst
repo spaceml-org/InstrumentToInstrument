@@ -15,7 +15,7 @@ Editors
 
 All preprocessing editors are stored in `iti.data.editor`. To give you and idea of the available editors, here are the most common ones:
 
-Before we start with the preprocessing, let's first load the data as a 'SunPy' map.
+Before we start with the preprocessing, let's first load the data as a ``SunPy`` map.
 
 .. autoclass:: iti.data.editor.LoadMapEditor
 
