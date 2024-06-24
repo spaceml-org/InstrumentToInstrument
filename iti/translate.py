@@ -302,7 +302,7 @@ class KSOFlatConverter(InstrumentConverter):
         ds = KSOFlatDataset(paths, self.resolution)
         return self._convertDataset(ds)
 
-class PROBA2ToSDO(InstrumentToInstrument):
+class SWAPToAIA(InstrumentToInstrument):
 
     def __init__(self, model_name='swap_to_aia_v0_1.pt', **kwargs):
         super().__init__(model_name, **kwargs)
