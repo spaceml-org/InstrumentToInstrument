@@ -19,3 +19,16 @@ We provide an [example gallery](https://iti-documentation.readthedocs.io/en/late
 
 ## Information
 For more information and a detailed description about the `ITI` tool please visit the [documentation](https://iti-documentation.readthedocs.io/en/latest/index.html) page.
+
+## Acknowledgement
+This work is the research product of the 22-MDRAIT22-0018, ITI (Instrument to Instrument) tool - unlocking
+collaborative sensor webs research. This has been funded and supported by NASA through a Grant and we
+would like to express our sincere gratitude. The research and its outputs have been designed, managed and
+delivered by [Trillium Technologies Inc](https://trillium.tech/). Trillium is a research and development Trillium
+with a focus on intelligent systems and collaborative communities for planetary stewardship, space
+exploration and human health.
+The material is based upon work supported by NASA under Grant award No 80NSSC23K1045. Any
+opinions, findings, and conclusions or recommendations expressed in this material are those of the authors
+and do not necessarily reflect the views of the National Aeronautics and Space Administration (NASA).
+Trillium aspires to ensure that the latest tools and techniques in Artificial Intelligence (AI) and Machine
+Learning (ML) are applied to developing open science for all Humankind
