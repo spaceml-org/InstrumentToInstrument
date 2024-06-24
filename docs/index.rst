@@ -13,7 +13,7 @@ Welcome to Instrument-To-Instrument (ITI) tool documentation!
    - Super-resolution
 for many science domains. The tool has been applied to heliophysics and earth science use cases.
 
-The framework is built on submodules that can be used independently. This allows to use the ITI tool end-to-end or to use only the parts that are needed, e.g. to obtain an ML-ready dataset.
+The framework is built on submodules that can be used independently. This allows to use the ITI tool end-to-end or the individual modules that are needed, e.g. to obtain an ML-ready dataset.
 
 .. image:: /images/ITI_framework.jpg
    :align: center
@@ -89,3 +89,4 @@ Links
    /training/index
    /translation/index
    /generated/gallery/index
+   /contact/index
