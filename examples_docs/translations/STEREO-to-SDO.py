@@ -33,7 +33,7 @@ download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 stereo_files = sorted(glob.glob(base_path+'/iti-testset/stereo/*/*.fits', recursive=True))
 stereo_maps = [Map(f).rotate() for f in stereo_files] # rotate north up
 
-translator = STEREOToSDO(patch_factor=3)
+translator = STEREOToSDO(patch_factor=2)
 iti_stereo_maps = list(translator.translate([[f] for f in stereo_files]))[0]
 
 ############################################################################################################################################################################

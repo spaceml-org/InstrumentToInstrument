@@ -35,7 +35,7 @@ download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 soho_files = sorted(glob.glob(base_path+'/iti-testset/soho/*/*.fits', recursive=True))
 soho_maps = [Map(f).rotate() for f in soho_files] # rotate north up
 
-translator = SOHOToSDO(patch_factor=3)
+translator = SOHOToSDO(patch_factor=2)
 iti_soho_maps = list(translator.translate([[f] for f in soho_files]))[0]
 
 ############################################################################################################################################################################
