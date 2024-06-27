@@ -56,7 +56,7 @@ aia_data = [getAIAdata(f) for f in tqdm(sdo_files)]
 
 
 ############################################################################################################################################################################
-# The translator classes are the core element of the ITI translation. They follow the notation: `InstrumentAToInstrumentB`. We initialize the translation class by giving it the path where the model is stored.
+# The translator classes are the core element of the ITI translation. They follow the notation: `InstrumentAToInstrumentB`. We initialize the translation class by giving it the path where the model is stored. We use a patch factor of 2 to save memory.
 
 translator = SWAPToAIA(model_name=base_path+'/iti-testset/models/swap_to_aia_v0_4.pt', patch_factor=2)
 

@@ -28,7 +28,7 @@ base_path = os.getcwd()
 download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 ############################################################################################################################################################################
-# We load the previously downloaded STEREO files. The translator requires a list of the four aligned FITS files for each translation.
+# We load the previously downloaded STEREO files. The translator requires a list of the four aligned FITS files for each translation. We use a patch factor of 2 to save memory.
 
 stereo_files = sorted(glob.glob(base_path+'/iti-testset/stereo/*/*.fits', recursive=True))
 stereo_maps = [Map(f).rotate() for f in stereo_files] # rotate north up
