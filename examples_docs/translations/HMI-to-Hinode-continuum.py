@@ -33,7 +33,7 @@ hmi_map.data[np.isnan(hmi_map.data)] = 0
 ############################################################################################################################################################################
 # For HMI files we need to translate the image in patches (patch_factor=3), otherwise we would exceed the memory. The first initialization of each translator triggers the download of the pre-trained model and stores it locally for later use.
 
-#translator = HMIToHinode(patch_factor=3)
+translator = HMIToHinode(patch_factor=5)
 
 ############################################################################################################################################################################
 # The translate function starts the translation process of the HMI FITS files and returns a genartor object. This can be used to sequentially process the results. Here we only translate a single file and convert the generator object to a list.
@@ -55,13 +55,13 @@ hmi_map.data[np.isnan(hmi_map.data)] = 0
 # For a comparison at smaller scales we can specify a subframe and plot the images side-by-side.
 
 
-bl = SkyCoord(-5 * u.arcsec, -440 * u.arcsec, frame=hmi_map.coordinate_frame)
-tr = SkyCoord(55 * u.arcsec, -380 * u.arcsec, frame=hmi_map.coordinate_frame)
+#bl = SkyCoord(-5 * u.arcsec, -440 * u.arcsec, frame=hmi_map.coordinate_frame)
+#tr = SkyCoord(55 * u.arcsec, -380 * u.arcsec, frame=hmi_map.coordinate_frame)
 
-fig, axs = plt.subplots(1, 2, figsize=(20, 10), sharex=True, sharey=True)
-hmi_map.submap(bl, top_right=tr).plot(axes=axs[0])
-axs[0].set_title('Original - HMI')
-iti_hmi_map.submap(bl, top_right=tr).plot(axes=axs[1])
-axs[1].set_title('ITI')
-plt.show()
-plt.close()
+#fig, axs = plt.subplots(1, 2, figsize=(20, 10), sharex=True, sharey=True)
+#hmi_map.submap(bl, top_right=tr).plot(axes=axs[0])
+#axs[0].set_title('Original - HMI')
+#iti_hmi_map.submap(bl, top_right=tr).plot(axes=axs[1])
+#axs[1].set_title('ITI')
+#plt.show()
+#plt.close()
