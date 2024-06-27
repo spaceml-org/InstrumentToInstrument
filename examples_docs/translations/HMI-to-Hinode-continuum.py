@@ -33,7 +33,7 @@ hmi_map.data[np.isnan(hmi_map.data)] = 0
 ############################################################################################################################################################################
 # For HMI files we need to translate the image in patches (patch_factor=3), otherwise we would exceed the memory. The first initialization of each translator triggers the download of the pre-trained model and stores it locally for later use.
 
-translator = HMIToHinode(patch_factor=2)
+#translator = HMIToHinode(patch_factor=2)
 
 ############################################################################################################################################################################
 # The translate function starts the translation process of the HMI FITS files and returns a genartor object. This can be used to sequentially process the results. Here we only translate a single file and convert the generator object to a list.
