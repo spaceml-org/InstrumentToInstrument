@@ -38,7 +38,13 @@ translator = HMIToHinode(patch_factor=2)
 ############################################################################################################################################################################
 # The translate function starts the translation process of the HMI FITS files and returns a genartor object. This can be used to sequentially process the results. Here we only translate a single file and convert the generator object to a list.
 
-iti_hmi_map = list(translator.translate(hmi_files))[0]
+#iti_hmi_map = list(translator.translate(hmi_files))[0]
+
+############################################################################################################################################################################
+plt.figure(figsize=(10, 10), dpi=100)
+hmi_map.plot()
+plt.show()
+
 
 ############################################################################################################################################################################
 # The result of the ITI translation is a SunPy map that stores all necessary coordinate information. We can compare this map to the original HMI observation.
