@@ -19,8 +19,8 @@ import warnings
 ############################################################################################################################################################################
 # We start by downloading FITS files from SDO/HMI continuum. ITI provides a download routines for multiple data sets, here we utilize the HMIContinuumDownloader. We download an observation from 2021-09-09.
 
-
-fetcher = HMIContinuumDownloader(ds_path='hmi', email='chri.schirni@hotmail.de', num_worker_threads=4)
+jsoc_email = os.environ["JSOC_EMAIL"]
+fetcher = HMIContinuumDownloader(ds_path='hmi', email=jsoc_email, num_worker_threads=4)
 hmi_files = fetcher.fetchDates([datetime(2021, 9, 9, 15)])
 print('downloaded:', hmi_files)
 
@@ -33,7 +33,7 @@ hmi_map.data[np.isnan(hmi_map.data)] = 0
 ############################################################################################################################################################################
 # For HMI files we need to translate the image in patches (patch_factor=3), otherwise we would exceed the memory. The first initialization of each translator triggers the download of the pre-trained model and stores it locally for later use.
 
-#translator = HMIToHinode(patch_factor=5)
+translator = HMIToHinode(patch_factor=2)
 
 ############################################################################################################################################################################
 # The translate function starts the translation process of the HMI FITS files and returns a genartor object. This can be used to sequentially process the results. Here we only translate a single file and convert the generator object to a list.
