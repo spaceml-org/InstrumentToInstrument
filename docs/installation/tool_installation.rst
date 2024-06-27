@@ -14,6 +14,6 @@ Another option is to clone the repository from GitHub and install the tool using
 
     git clone https://github.com/spaceml-org/InstrumentToInstrument.git
 
-For the currently working version, please run this command in the terminal::
+For the currently working version, please run use the development branch::
 
-    pip install git+https://github.com/spaceml-org/InstrumentToInstrument.git@development
+    git checkout development
