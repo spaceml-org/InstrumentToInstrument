@@ -20,7 +20,7 @@ import warnings
 # We start by downloading FITS files from SDO/HMI continuum. ITI provides a download routines for multiple data sets, here we utilize the HMIContinuumDownloader. We download an observation from 2021-09-09.
 
 
-fetcher = HMIContinuumDownloader(ds_path='hmi', num_worker_threads=4)
+fetcher = HMIContinuumDownloader(ds_path='hmi', email='chri.schirni@hotmail.de', num_worker_threads=4)
 hmi_files = fetcher.fetchDates([datetime(2021, 9, 9, 15)])
 print('downloaded:', hmi_files)
 
