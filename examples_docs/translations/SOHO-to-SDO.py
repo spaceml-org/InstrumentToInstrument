@@ -54,4 +54,3 @@ for i, (soho_map, iti_map) in enumerate(zip(soho_maps, iti_soho_maps)):
     axs[0, i].set_title('SOHO/EIT', fontsize=30)
     axs[1, i].set_title('ITI', fontsize=30)
 plt.show()
-plt.close()
