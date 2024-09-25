@@ -1,7 +1,7 @@
 """
-===============================================
+=================================================
 Translation of STEREO/EIT-to-SDO/AIA observations
-===============================================
+=================================================
 This example shows how to intercalibrate `STEREO/EUVI <https://stereo.gsfc.nasa.gov/classroom/EUVsun.shtml>`__ observations to `SDO <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
 """
 
