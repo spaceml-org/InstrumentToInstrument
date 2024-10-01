@@ -17,12 +17,12 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 ############################################################################################################################################################################
 # The EUI instrument is equipped with the Full Sun Imager (FSI) and the High-resolution Imager (HRI). We can glob the files for each instrument separately.
 
-fsi_files = get_intersecting_files(base_path+'/itipy-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
-hri_files = sorted(glob.glob(base_path+'/itipy-testset/solo/eui-hrieuv174-image/*.fits', recursive=True))
+fsi_files = get_intersecting_files(base_path+'/iti-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
+hri_files = sorted(glob.glob(base_path+'/iti-testset/solo/eui-hrieuv174-image/*.fits', recursive=True))
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #

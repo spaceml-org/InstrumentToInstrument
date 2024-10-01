@@ -16,11 +16,11 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date. Here we use the two channels in 171 Å and 304 Å.
 
-aia_files = get_intersecting_files(base_path+'/itipy-testset/sdo', [171, 304])
+aia_files = get_intersecting_files(base_path+'/iti-testset/sdo', [171, 304])
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #

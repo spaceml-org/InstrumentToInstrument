@@ -17,11 +17,11 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date.
 
-swap_files = sorted(glob.glob(base_path+'/itipy-testset/proba2/*/*.fits', recursive=True))
+swap_files = sorted(glob.glob(base_path+'/iti-testset/proba2/*/*.fits', recursive=True))
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #
