@@ -7,7 +7,7 @@ from torch import nn
 from torch.autograd import Variable
 from torch.nn.functional import pad
 
-from iti.train.model import DiscriminatorMode, GeneratorAB, GeneratorBA, Discriminator, NoiseEstimator
+from itipy.train.model import DiscriminatorMode, GeneratorAB, GeneratorBA, Discriminator, NoiseEstimator
 
 
 class ITIModule(LightningModule):

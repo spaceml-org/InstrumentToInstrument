@@ -9,8 +9,8 @@ collections.Mapping = collections.abc.Mapping
 collections.MutableSet = collections.abc.MutableSet
 collections.MutableMapping = collections.abc.MutableMapping
 
-from iti.translate import *
-from iti.data.editor import NormalizeRadiusEditor, AIAPrepEditor, NormalizeExposureEditor, MapToDataEditor, \
+from itipy.translate import *
+from itipy.data.editor import NormalizeRadiusEditor, AIAPrepEditor, NormalizeExposureEditor, MapToDataEditor, \
     SWAPPrepEditor, LoadMapEditor
 
 from google.cloud.storage import Client, transfer_manager

@@ -8,10 +8,10 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
 from sunpy.visualization.colormaps import cm
 
-from iti.callback import SaveCallback, PlotBAB, PlotABA
-from iti.data.dataset import SDODataset, StorageDataset, STEREODataset, ITIDataModule
-from iti.data.editor import RandomPatchEditor, SliceEditor, BrightestPixelPatchEditor
-from iti.iti import ITIModule
+from itipy.callback import SaveCallback, PlotBAB, PlotABA
+from itipy.data.dataset import SDODataset, StorageDataset, STEREODataset, ITIDataModule
+from itipy.data.editor import RandomPatchEditor, SliceEditor, BrightestPixelPatchEditor
+from itipy.iti import ITIModule
 
 parser = argparse.ArgumentParser(description='Train STEREO-To-SDO translations')
 parser.add_argument('--config', type=str, help='path to the config file.')

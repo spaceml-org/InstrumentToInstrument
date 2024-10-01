@@ -5,9 +5,9 @@ Translation of STEREO/EIT-to-SDO/AIA observations
 This example shows how to intercalibrate `STEREO/EUVI <https://stereo.gsfc.nasa.gov/classroom/EUVsun.shtml>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
 """
 
-from iti.evaluation.util import *
+from itipy.evaluation.util import *
 import glob
-from iti.translate import *
+from itipy.translate import *
 from matplotlib.colors import Normalize
 from datetime import timedelta, datetime
 
@@ -25,12 +25,12 @@ base_path = os.getcwd()
 #
 # to perform the translation.
 
-download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
+download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
 
 ############################################################################################################################################################################
 # We load the previously downloaded STEREO files. The translator requires a list of the four aligned FITS files for each translation. We use a patch factor of 2 to save memory.
 
-stereo_files = sorted(glob.glob(base_path+'/iti-testset/stereo/*/*.fits', recursive=True))
+stereo_files = sorted(glob.glob(base_path+'/itipy-testset/stereo/*/*.fits', recursive=True))
 stereo_maps = [Map(f).rotate() for f in stereo_files] # rotate north up
 
 translator = STEREOToSDO(patch_factor=2)

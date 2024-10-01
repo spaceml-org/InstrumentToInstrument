@@ -11,8 +11,8 @@ from datetime import datetime
 from sunpy.map import Map
 import matplotlib.pyplot as plt
 
-from iti.data.dataset import get_intersecting_files
-from iti.download.download_sdo import SDODownloader
+from itipy.data.dataset import get_intersecting_files
+from itipy.download.download_sdo import SDODownloader
 
 ###############################################################################
 # Initialize path where to download the data

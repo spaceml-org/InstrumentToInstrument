@@ -12,9 +12,9 @@ import torch
 from skimage.util import view_as_blocks
 from sunpy.map import Map, make_fitswcs_header, all_coordinates_from_map
 
-from iti.data.dataset import SOHODataset, HMIContinuumDataset, STEREODataset, KSOFlatDataset, KSOFilmDataset, \
+from itipy.data.dataset import SOHODataset, HMIContinuumDataset, STEREODataset, KSOFlatDataset, KSOFilmDataset, \
     SWAPDataset
-from iti.data.editor import PaddingEditor, sdo_norms, hinode_norms, UnpaddingEditor
+from itipy.data.editor import PaddingEditor, sdo_norms, hinode_norms, UnpaddingEditor
 
 
 class InstrumentToInstrument:
@@ -110,8 +110,8 @@ class InstrumentToInstrument:
         return iti_img
 
     def _getModelPath(self, model_name):
-        model_path = os.path.join(Path.home(), '.iti', model_name)
-        os.makedirs(os.path.join(Path.home(), '.iti'), exist_ok=True)
+        model_path = os.path.join(Path.home(), '.itipy', model_name)
+        os.makedirs(os.path.join(Path.home(), '.itipy'), exist_ok=True)
         if not os.path.exists(model_path):
             request.urlretrieve('http://kanzelhohe.uni-graz.at/iti/' + model_name, filename=model_path)
         return model_path

@@ -12,7 +12,7 @@ from datetime import datetime
 from sunpy.map import Map
 import matplotlib.pyplot as plt
 
-from iti.download.download_solo import SOLODownloader
+from itipy.download.download_solo import SOLODownloader
 
 ###############################################################################
 # Initialize path where to download the data

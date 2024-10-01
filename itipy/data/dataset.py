@@ -15,7 +15,7 @@ from lightning import LightningDataModule
 from torch.utils.data import Dataset, DataLoader, RandomSampler
 from tqdm import tqdm
 
-from iti.data.editor import Editor, LoadMapEditor, KSOPrepEditor, NormalizeRadiusEditor, \
+from itipy.data.editor import Editor, LoadMapEditor, KSOPrepEditor, NormalizeRadiusEditor, \
     MapToDataEditor, ImageNormalizeEditor, ReshapeEditor, sdo_norms, NormalizeEditor, \
     AIAPrepEditor, RemoveOffLimbEditor, StackEditor, soho_norms, NanEditor, LoadFITSEditor, \
     KSOFilmPrepEditor, ScaleEditor, ExpandDimsEditor, FeaturePatchEditor, EITCheckEditor, NormalizeExposureEditor, \

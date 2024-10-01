@@ -6,10 +6,10 @@ This example shows how to preprocess Solar Orbiter EUI data to obtain ML-ready d
 """
 
 import glob
-from iti.evaluation.util import *
-from iti.data.editor import solo_norm
-from iti.translate import *
-from iti.data.dataset import get_intersecting_files, EUIDataset, HRIDataset
+from itipy.evaluation.util import *
+from itipy.data.editor import solo_norm
+from itipy.translate import *
+from itipy.data.dataset import get_intersecting_files, EUIDataset, HRIDataset
 from sunpy.map import Map
 
 base_path = os.getcwd()
@@ -17,12 +17,12 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
+download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
 ############################################################################################################################################################################
 # The EUI instrument is equipped with the Full Sun Imager (FSI) and the High-resolution Imager (HRI). We can glob the files for each instrument separately.
 
-fsi_files = get_intersecting_files(base_path+'/iti-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
-hri_files = sorted(glob.glob(base_path+'/iti-testset/solo/eui-hrieuv174-image/*.fits', recursive=True))
+fsi_files = get_intersecting_files(base_path+'/itipy-testset/solo', ['eui-fsi174-image', 'eui-fsi304-image'])
+hri_files = sorted(glob.glob(base_path+'/itipy-testset/solo/eui-hrieuv174-image/*.fits', recursive=True))
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #

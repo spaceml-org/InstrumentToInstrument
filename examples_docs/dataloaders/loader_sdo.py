@@ -5,10 +5,10 @@ Dataloaders: SDO
 This example shows how to preprocess SDO AIA data to obtain ML-ready data using the ITI tool.
 """
 
-from iti.evaluation.util import *
-from iti.data.editor import solo_norm
-from iti.translate import *
-from iti.data.dataset import get_intersecting_files, SDODataset
+from itipy.evaluation.util import *
+from itipy.data.editor import solo_norm
+from itipy.translate import *
+from itipy.data.dataset import get_intersecting_files, SDODataset
 from sunpy.map import Map
 
 base_path = os.getcwd()
@@ -16,11 +16,11 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
+download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date. Here we use the two channels in 171 Å and 304 Å.
 
-aia_files = get_intersecting_files(base_path+'/iti-testset/sdo', [171, 304])
+aia_files = get_intersecting_files(base_path+'/itipy-testset/sdo', [171, 304])
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #

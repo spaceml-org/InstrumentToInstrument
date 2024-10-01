@@ -10,8 +10,8 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from iti.train.model import GeneratorAB
-from iti.trainer import skip_invalid
+from itipy.train.model import GeneratorAB
+from itipy.trainer import skip_invalid
 
 def calculate_fid_given_paths(paths, batch_size, device, dims):
     """Calculates the FID of two paths"""

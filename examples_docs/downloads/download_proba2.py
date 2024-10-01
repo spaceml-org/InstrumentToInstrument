@@ -13,7 +13,7 @@ from datetime import datetime
 from sunpy.map import Map
 import matplotlib.pyplot as plt
 
-from iti.download.download_proba2 import PROBA2Downloader
+from itipy.download.download_proba2 import PROBA2Downloader
 
 ###############################################################################
 # Initialize path where to download the data

@@ -738,8 +738,8 @@ def get_local_correction_table():
 
 
 def get_auto_calibration_table():
-    table_path = os.path.join(Path.home(), '.iti', 'sdo_autocal_table.csv')
-    os.makedirs(os.path.join(Path.home(), '.iti'), exist_ok=True)
+    table_path = os.path.join(Path.home(), '.itipy', 'sdo_autocal_table.csv')
+    os.makedirs(os.path.join(Path.home(), '.itipy'), exist_ok=True)
     if not os.path.exists(table_path):
         request.urlretrieve('http://kanzelhohe.uni-graz.at/iti/sdo_autocal_table.csv', filename=table_path)
     return pd.read_csv(table_path, parse_dates=['DATE'], index_col=0)

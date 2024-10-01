@@ -1,8 +1,8 @@
 base_dir: Proba2_to_SDO
 data:
-  B_path: /iti-testset/proba2/174
+  B_path: /itipy-testset/proba2/174
   converted_B_path: converted_sdo
-  A_path: /iti-testset/sdo/171
+  A_path: /itipy-testset/sdo/171
   converted_A_path: converted_swap
   num_workers: 4
   iterations_per_epoch: 10

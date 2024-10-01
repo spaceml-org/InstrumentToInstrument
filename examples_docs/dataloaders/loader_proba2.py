@@ -6,10 +6,10 @@ This example shows how to preprocess PROBA2 data to obtain ML-ready data using t
 """
 import glob
 
-from iti.evaluation.util import *
-from iti.data.editor import solo_norm
-from iti.translate import *
-from iti.data.dataset import get_intersecting_files, SWAPDataset
+from itipy.evaluation.util import *
+from itipy.data.editor import solo_norm
+from itipy.translate import *
+from itipy.data.dataset import get_intersecting_files, SWAPDataset
 from sunpy.map import Map
 
 base_path = os.getcwd()
@@ -17,11 +17,11 @@ base_path = os.getcwd()
 ############################################################################################################################################################################
 # As the first step, we need to download the data. We make use of our publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 
-download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
+download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
 ############################################################################################################################################################################
 # Glob the downloaded files and sort them by date.
 
-swap_files = sorted(glob.glob(base_path+'/iti-testset/proba2/*/*.fits', recursive=True))
+swap_files = sorted(glob.glob(base_path+'/itipy-testset/proba2/*/*.fits', recursive=True))
 ############################################################################################################################################################################
 # To preprocess the data, we use Editor classes. These classes allow to apply different operations on the data, such as normalization, cropping etc. The Editor classes are stacked and applied sequentially to the data.
 #

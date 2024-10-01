@@ -7,7 +7,7 @@ import wandb
 from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader
 
-from iti.iti import ITIModule
+from itipy.iti import ITIModule
 
 
 class BasicPlot(pl.Callback):
