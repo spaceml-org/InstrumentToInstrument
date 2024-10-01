@@ -110,8 +110,8 @@ class InstrumentToInstrument:
         return iti_img
 
     def _getModelPath(self, model_name):
-        model_path = os.path.join(Path.home(), '.itipy', model_name)
-        os.makedirs(os.path.join(Path.home(), '.itipy'), exist_ok=True)
+        model_path = os.path.join(Path.home(), '.iti', model_name)
+        os.makedirs(os.path.join(Path.home(), '.iti'), exist_ok=True)
         if not os.path.exists(model_path):
             request.urlretrieve('http://kanzelhohe.uni-graz.at/iti/' + model_name, filename=model_path)
         return model_path
