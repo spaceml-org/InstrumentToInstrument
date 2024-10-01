@@ -27,12 +27,12 @@ base_path = os.getcwd()
 #
 # to perform the translation.
 
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 ############################################################################################################################################################################
 # We load the previously downloaded SOHO files. The translator requires a list of the four aligned FITS files for each translation. We use a patch factor of 2 to save memory.
 
-soho_files = sorted(glob.glob(base_path+'/itipy-testset/soho/*/*.fits', recursive=True))
+soho_files = sorted(glob.glob(base_path+'/iti-testset/soho/*/*.fits', recursive=True))
 soho_maps = [Map(f).rotate() for f in soho_files] # rotate north up
 
 translator = SOHOToSDO(patch_factor=2)

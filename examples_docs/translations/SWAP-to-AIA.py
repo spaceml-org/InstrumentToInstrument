@@ -27,7 +27,7 @@ base_path = os.getcwd()
 #
 # to perform the translation.
 
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.
@@ -58,7 +58,7 @@ aia_data = [getAIAdata(f) for f in tqdm(sdo_files)]
 ############################################################################################################################################################################
 # The translator classes are the core element of the ITI translation. They follow the notation: `InstrumentAToInstrumentB`. We initialize the translation class by giving it the path where the model is stored. We use a patch factor of 2 to save memory.
 
-translator = SWAPToAIA(model_name=base_path+'/itipy-testset/models/swap_to_aia_v0_4.pt', patch_factor=2)
+translator = SWAPToAIA(model_name=base_path+'/iti-testset/models/swap_to_aia_v0_4.pt', patch_factor=2)
 
 ############################################################################################################################################################################
 
