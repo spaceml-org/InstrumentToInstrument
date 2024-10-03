@@ -1,0 +1,30 @@
+base_dir: /home/anna.jungbluth/outputs/testing
+data:
+  A_path: /mnt/disks/msg-data/msg/
+  # converted_A_path:
+  B_path: /mnt/disks/goes-data/goes/
+  # converted_B_path: 
+  num_workers: 4
+  # iterations_per_epoch: 1000
+  iterations_per_epoch: 10
+model:
+  input_dim_a: 5 #11
+  input_dim_b: 5 #16
+  upsampling: 0
+  discriminator_mode: CHANNELS
+  lambda_diversity: 0
+  norm: 'none'
+  use_batch_statistic: False
+logging:
+  # wandb_entity: annajungbluth
+  # wandb_project: ITI
+  # wandb_name: MSG-to-GOES
+  # wandb_id: null
+  wandb_entity: itieo
+  wandb_project: msg-to-goes-debug
+  wandb_name: debug
+  # wandb_id: 
+training:
+  epochs: 1
+normalization: 
+  norm_dir: /home/anna.jungbluth/normalization

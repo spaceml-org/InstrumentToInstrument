@@ -135,7 +135,6 @@ class ITIModule(LightningModule):
 
 
     def validation_step(self, batch, batch_nb, dataloader_idx):
-
         if dataloader_idx == 0:
             x_a = batch
             n_a = self.estimator_noise(x_a)
@@ -157,7 +156,6 @@ class ITIModule(LightningModule):
         elif dataloader_idx == 1:
             x_b = batch
             n_gen = self.generateNoise(x_b)
-            x_b_identity = self.gen_ab(self.downsample(x_b))
             x_ba = self.gen_ba(x_b, n_gen)
             x_bab = self.gen_ab(x_ba)
             valid_loss_gen_b_translate = self.recon_criterion(x_bab, x_b)
