@@ -65,8 +65,16 @@ goes_path = data_config['B_path']
 
 # TODO: Update this
 splits_dict = { 
-    "train": {"years": [2020], "months": [10], "days": list(range(1,2))},
-    "val": {"years": [2020], "months": [10], "days": list(range(20,21))},
+    "train": {
+        "years": [2020], 
+        "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
+        "days": list(range(1, 20))
+        },
+    "val": {
+        "years": [2020],
+        "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
+        "days": list(range(21, 31))
+        },
 }
 
 # TODO: Update this
@@ -200,17 +208,15 @@ os.makedirs(checkpoint_dir, exist_ok=True)
 checkpoint_callback = ModelCheckpoint(dirpath=checkpoint_dir, save_last=True, every_n_epochs=1, save_weights_only=False)
 save_callback = SaveCallback(checkpoint_dir)
 
-logger.debug(f"Setting up plot callbacks...")
 # setup plot callbacks
 plot_callbacks = []
 
-plot_settings_A = {"cmap": "viridis", "title": "MSG"} #, 'vmin': -1, 'vmax': 1}
-plot_settings_B = {"cmap": "viridis", "title": "GOES-16"} #, 'vmin': -1, 'vmax': 1}
+plot_settings_A = {"cmap": "Blues_r", "title": "MSG"} #, 'vmin': -1, 'vmax': 1}
+plot_settings_B = {"cmap": "Greys_r", "title": "GOES"} #, 'vmin': -1, 'vmax': 1}
 
 plot_callbacks += [PlotBAB(goes_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 plot_callbacks += [PlotABA(msg_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 
-logger.debug("counting devices...")
 n_gpus = torch.cuda.device_count()
 n_cpus = os.cpu_count()
 
