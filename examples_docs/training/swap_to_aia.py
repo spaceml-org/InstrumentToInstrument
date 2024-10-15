@@ -37,11 +37,11 @@ from itipy.iti import ITIModule
 # Download itipy testset for training
 #
 base_path = os.getcwd()
-download_gcp_bucket('itipy-dataset', base_path+'/itipy-testset/')
+download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 
 ########################################################################################
 # Open the config file
-with open('itipy-testset/configs/proba2_to_sdo_colab.yaml', "r") as stream:
+with open('iti-testset/configs/proba2_to_sdo_colab.yaml', "r") as stream:
     try:
         config = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
