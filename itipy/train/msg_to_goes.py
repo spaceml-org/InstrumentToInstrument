@@ -68,12 +68,12 @@ splits_dict = {
     "train": {
         "years": [2020], 
         "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
-        "days": list(range(1, 20))
+        "days": list(range(1, 25))
         },
     "val": {
         "years": [2020],
         "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
-        "days": list(range(20, 32))
+        "days": list(range(25, 32))
         },
 }
 
