@@ -4,6 +4,7 @@ import collections.abc
 import shutil
 
 import sys
+import json 
 #hyper needs the four following aliases to be done manually.
 collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
@@ -22,7 +23,7 @@ import autoroot
 from itipy.data.geo_datasets import GeoDataset
 from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor
 from itipy.data.editor import RandomPatchEditor
-from itipy.data.geo_utils import get_split, get_list_filenames, normalize
+from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -63,7 +64,6 @@ data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
 
-# TODO: Update this
 splits_dict = { 
     "train": {
         "years": [2020], 
@@ -73,68 +73,65 @@ splits_dict = {
     "val": {
         "years": [2020],
         "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
-        "days": list(range(21, 31))
+        "days": list(range(20, 32))
         },
 }
 
-# TODO: Update this
 norm_config = config['normalization']
-norm_ok = False
-if 'norm_dir' in norm_config:
-    logger.info(f"Loading normalization datasets saved in: {norm_config['norm_dir']}")
-    try:
-        goes_norm = xr.open_dataset(os.path.join(norm_config['norm_dir'], 'goes_norm.nc'))
-        msg_norm = xr.open_dataset(os.path.join(norm_config['norm_dir'], 'msg_norm.nc'))
-        norm_ok = True
-    except:
-        logger.warning(f"Unable to load normalization datasets from: {norm_config['norm_dir']}")
+if 'A_norm_dir' and 'B_norm_dir' in norm_config:
+    logger.info(f"Loading normalization files from: {norm_config['A_norm_dir']} and {norm_config['B_norm_dir']}")
+    msg_norm = calculate_norm_from_metrics(norm_config['A_norm_dir'], split_dict=splits_dict['train'])
+    goes_norm = calculate_norm_from_metrics(norm_config['B_norm_dir'], split_dict=splits_dict['train'])
+else:
+    raise ValueError("No normalization files found. Please specify paths.")
+    # TODO: Update implementation of normalization from scratch
+    # # get list of files in training set
+    # goes_filenames = get_list_filenames(goes_path, ext='nc')
+    # msg_filenames = get_list_filenames(msg_path, ext='nc')
 
-if not norm_ok:
-    logger.info(f"Computing  means and stds for normalization...")
+    # goes_training_filenames = get_split(goes_filenames, splits_dict['train'])
+    # msg_training_filenames = get_split(msg_filenames, splits_dict['train'])
 
-    # get list of files in training set
-    goes_filenames = get_list_filenames(goes_path, ext='nc')
-    msg_filenames = get_list_filenames(msg_path, ext='nc')
-
-    goes_training_filenames = get_split(goes_filenames, splits_dict['train'])
-    msg_training_filenames = get_split(msg_filenames, splits_dict['train'])
-
-    # compute mean and std for list of training files
-    goes_norm = normalize(goes_training_filenames)
-    msg_norm = normalize(msg_training_filenames)
+    # # compute mean and std for list of training files
+    # goes_norm = normalize(goes_training_filenames)
+    # msg_norm = normalize(msg_training_filenames)
 
 # save normalisations in current save directory
 norm_dir = os.path.join(save_dir, 'normalization')
 os.makedirs(norm_dir, exist_ok=True)
-goes_norm.to_netcdf(os.path.join(norm_dir, 'goes_norm.nc'))
-msg_norm.to_netcdf(os.path.join(norm_dir, 'msg_norm.nc'))
+# Convert and write JSON object to file
+with open(os.path.join(norm_dir, 'goes_norm.json'), "w") as outfile: 
+    json.dump(goes_norm, outfile)
+with open(os.path.join(norm_dir, 'msg_norm.json'), "w") as outfile:
+    json.dump(msg_norm, outfile)
 
-logger.info(f"Saved means and stds for normalization in {norm_dir}...")
-
+logger.info(f"Saved normalization file in {norm_dir}...")
 
 goes_editors = [
-    BandSelectionEditor(target_bands=[0.64, 3.89, 7.34, 9.61, 13.27]),
+    BandSelectionEditor(target_bands=[0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
+    # BandSelectionEditor(target_bands=[0.64, 3.89, 7.34, 9.61, 13.27]),
     # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
     # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
     # NanDictEditor(key="coords", fill_value=0), # Replaces NaNs in coordinates
     # NanDictEditor(key="cloud_mask", fill_value=0), # Replaces NaNs in cloud_mask
     # RadUnitEditor(key="data"), TODO take into account for normalization if needed
-    MeanStdNormEditor(norm_ds=goes_norm, key="data"),
+    MeanStdNormEditor(norm_dict=goes_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     RandomPatchEditor(patch_shape=(256, 256)),
 ]
 
 msg_editors = [
-    BandSelectionEditor(target_bands=[0.64, 3.92, 7.35, 9.66, 13.4]),
+    BandSelectionEditor(target_bands=[0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
+    # BandSelectionEditor(target_bands=[0.64, 3.92, 7.35, 9.66, 13.4]),
     # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
     # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
     # NanDictEditor(key="coords", fill_value=0), # Replaces NaNs in coordinates
     # NanDictEsditor(key="cloud_mask", fill_value=0), # Replaces NaNs in cloud_mask
     # RadUnitEditor(key="data"), TODO take into account for normalization if needed
-    MeanStdNormEditor(norm_ds=msg_norm, key="data"),
+    MeanStdNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     RandomPatchEditor(patch_shape=(256, 256)),

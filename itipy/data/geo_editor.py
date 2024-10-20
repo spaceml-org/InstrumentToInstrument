@@ -153,9 +153,9 @@ class ToTensorEditor(Editor):
         tensor = torch.as_tensor(data, dtype=self.dtype)
         return tensor
 
-class MeanStdNormEditor(Editor):
+class MeanStdNormEditor_ds(Editor):
     """
-    Normalise each band in the data using the mean and std from the norm_ds.
+    Normalise each band using the mean and std from a normalization dataset.
     """
     def __init__(self, norm_ds, key="data"):
         """
@@ -185,6 +185,44 @@ class MeanStdNormEditor(Editor):
         data = (data - means[:, None, None]) / stds[:, None, None]
         
         # Update dictionary
+        data_dict[self.key] = data
+        return data_dict
+
+class MeanStdNormEditor(Editor):
+    """
+    Normalises data to have zero mean and unit variance.
+    """
+
+    def __init__(self, norm_dict, key="data", band_info_key="wavelengths"):
+        """
+        Args:
+            norm_dict (dict): Dictionary with mean and std for each band
+            key (str): Key in dictionary to apply transformation
+            band_info_key (str): Key in dictionary to get band information
+        """
+        self.band_info = norm_dict
+        self.key = key
+        self.band_info_key = band_info_key
+
+    def call(self, data_dict, **kwargs):
+        # get data to be normalised
+        data = data_dict[self.key]  
+        # get the mean and std for each band - type conversion needed as json keys and values are strings
+        means = np.array(
+            [
+                float(self.band_info[key]["mean"])
+                for key in data_dict[self.band_info_key]
+            ]
+        )
+        stds = np.array(
+            [
+                float(self.band_info[key]["std"])
+                for key in data_dict[self.band_info_key]
+            ]
+        )
+        # normalise each band using mean and std
+        data = (data - means[:, None, None]) / stds[:, None, None]
+        # update dictionary
         data_dict[self.key] = data
         return data_dict
 
