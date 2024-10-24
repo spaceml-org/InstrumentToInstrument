@@ -1,8 +1,25 @@
 import torch
 import numpy as np
+from random import randint
 
 from itipy.data.editor import Editor
 from itipy.data.geo_utils import convert_units
+
+class RandomCropDatasetEditor():
+    def __init__(self, patch_shape, x='x', y='y', data_key='Rad'):
+        self.patch_shape = patch_shape
+        self.x = x
+        self.y = y
+        self.data_key = data_key
+    def __call__(self, ds):
+        assert ds[self.x].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(dataset[self.x].shape)
+        assert ds[self.y].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(dataset[self.y].shape)
+        xmin = randint(0, ds[self.x].shape[0] - self.patch_shape[0])
+        ymin = randint(0, ds[self.y].shape[0] - self.patch_shape[1])
+        patch_ds = ds.sel({self.x: slice(ds[self.x][xmin], ds[self.x][xmin + self.patch_shape[0] - 1]), # 0-based index
+                             self.y: slice(ds[self.y][ymin], ds[self.y][ymin + self.patch_shape[1] - 1])}) # 0-based index
+        assert patch_ds[self.data_key].std() != 0, 'Invalid patch found (all values %f)' % patch_ds[self.data_key].mean()
+        return patch_ds
 
 class BandOrderEditor(Editor):
     """

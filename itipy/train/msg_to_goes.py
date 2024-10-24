@@ -1,5 +1,6 @@
 import argparse
 import os
+import ast
 import collections.abc
 import shutil
 
@@ -38,7 +39,7 @@ from loguru import logger
 
 import xarray as xr
 
-
+# TODO: Remove default arguments
 parser = argparse.ArgumentParser(description='Train MSG to GOES translations')
 parser.add_argument('--config', 
                     default="/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes.yaml",
@@ -63,6 +64,7 @@ os.makedirs(save_dir, exist_ok=True)
 data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
+patch_size = ast.literal_eval(data_config['patch_size'])
 
 splits_dict = { 
     "train": {
@@ -119,7 +121,7 @@ goes_editors = [
     MeanStdNormEditor(norm_dict=goes_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
-    RandomPatchEditor(patch_shape=(256, 256)),
+    # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
 ]
 
 msg_editors = [
@@ -134,7 +136,7 @@ msg_editors = [
     MeanStdNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
-    RandomPatchEditor(patch_shape=(256, 256)),
+    # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
 ]
 
 logger.info(f"Instantiating datasets.")
@@ -145,6 +147,7 @@ msg_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
+    patch_size=patch_size,
 )
 
 msg_valid = GeoDataset(
@@ -153,6 +156,7 @@ msg_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
+    patch_size=patch_size,
 )
 
 goes_dataset = GeoDataset(
@@ -161,6 +165,7 @@ goes_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
+    patch_size=patch_size,
 )
 
 goes_valid = GeoDataset(
@@ -169,6 +174,7 @@ goes_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
+    patch_size=patch_size,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])

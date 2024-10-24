@@ -14,6 +14,7 @@ import xarray as xr
 from typing import List, Union, Dict
 
 from itipy.data.editor import Editor
+from itipy.data.geo_editor import RandomCropDatasetEditor
 from itipy.data.dataset import BaseDataset
 from itipy.data.geo_utils import get_split, get_list_filenames
 
@@ -27,6 +28,7 @@ class GeoDataset(BaseDataset):
         limit: int=None,
         load_coords: bool=True,
         load_cloudmask: bool=True, 
+        patch_size: tuple[int, int] = (256, 256),
         **kwargs
     ):
         """
@@ -40,6 +42,7 @@ class GeoDataset(BaseDataset):
             limit (int, optional): The maximum number of files to load. Defaults to None.
             load_coords (bool, optional): Whether to load the coordinates. Defaults to True.
             load_cloudmask (bool, optional): Whether to load the cloud mask. Defaults to True.
+            patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to (256, 256).
             **kwargs: Additional keyword arguments.
 
         """
@@ -50,8 +53,11 @@ class GeoDataset(BaseDataset):
         self.limit = limit
         self.load_coords = load_coords
         self.load_cloudmask = load_cloudmask
+        self.patch_size = patch_size
 
         self.files = self.get_files()
+
+        self.crop = RandomCropDatasetEditor(patch_shape=self.patch_size)
 
         super().__init__(
             data=self.files,
@@ -84,12 +90,17 @@ class GeoDataset(BaseDataset):
         # Load dataset
         ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
 
+        # Crop data before computing
+        ds = self.crop(ds)
+
         # Extract data
         data = ds.Rad.compute().to_numpy()
         data_dict["data"] = data
+        del data # Delete data to reduce memory usage
         # Extract wavelengths
         wavelengths = ds.band_wavelength.compute().to_numpy()
         data_dict["wavelengths"] = wavelengths
+        del wavelengths # Delete data to reduce memory usage
 
         # Extract coordinates
         if self.load_coords:
@@ -97,11 +108,17 @@ class GeoDataset(BaseDataset):
             longitude = ds.longitude.compute().to_numpy()
             coords = np.stack([latitude, longitude], axis=0)
             data_dict["coords"] = coords
+            del latitude, longitude # Delete data to reduce memory usage
+            del coords # Delete data to reduce memory usage
 
         # Extract cloud mask
         if self.load_cloudmask:
             cloud_mask = ds.cloud_mask.compute().to_numpy()
             data_dict["cloud_mask"] = cloud_mask
+            del cloud_mask # Delete data to reduce memory usage
+
+        # Delete dataset to reduce memory usage
+        del ds
 
         # Apply editors
         data, _ = self.getIndex(data_dict, idx)
