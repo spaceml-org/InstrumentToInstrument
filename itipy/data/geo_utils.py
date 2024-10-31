@@ -11,6 +11,18 @@ import ast
 import xarray as xr
 from functools import partial
 
+def _check_any_constant_channels(data: np.array) -> bool:
+    """
+    Check if any channel in the data is constant.
+    """
+    return np.any(np.nanstd(data, axis=(1, 2)) == 0)
+
+def _check_all_constant_channels(data: np.array) -> bool:
+    """
+    Check if all channels in the data are constant.
+    """
+    return np.all(np.nanstd(data, axis=(1, 2)) == 0)
+
 
 def split_train_val(files: List, split_spec: DictConfig) -> Tuple[List, List]:
     """

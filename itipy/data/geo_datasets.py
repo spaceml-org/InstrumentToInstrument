@@ -12,11 +12,12 @@ import logging
 import numpy as np
 import xarray as xr
 from typing import List, Union, Dict
+from loguru import logger
 
 from itipy.data.editor import Editor
 from itipy.data.geo_editor import RandomCropDatasetEditor
 from itipy.data.dataset import BaseDataset
-from itipy.data.geo_utils import get_split, get_list_filenames
+from itipy.data.geo_utils import get_split, get_list_filenames, _check_any_constant_channels, _check_all_constant_channels
 
 class GeoDataset(BaseDataset):
     def __init__(
@@ -29,6 +30,7 @@ class GeoDataset(BaseDataset):
         load_coords: bool=True,
         load_cloudmask: bool=True, 
         patch_size: tuple[int, int] = (256, 256),
+        skip_constant_channels: bool = False, # Could be used for filtering out night time observations
         **kwargs
     ):
         """
@@ -43,6 +45,7 @@ class GeoDataset(BaseDataset):
             load_coords (bool, optional): Whether to load the coordinates. Defaults to True.
             load_cloudmask (bool, optional): Whether to load the cloud mask. Defaults to True.
             patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to (256, 256).
+            skip_constant_channels (bool, optional): Whether to skip a patch is any channel is constant. Defaults to False.
             **kwargs: Additional keyword arguments.
 
         """
@@ -54,6 +57,7 @@ class GeoDataset(BaseDataset):
         self.load_coords = load_coords
         self.load_cloudmask = load_cloudmask
         self.patch_size = patch_size
+        self.skip_constant_channels = skip_constant_channels
 
         self.files = self.get_files()
 
@@ -87,14 +91,31 @@ class GeoDataset(BaseDataset):
 
     def __getitem__(self, idx):
         data_dict = {}
-        # Load dataset
-        ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
 
-        # Crop data before computing
-        ds = self.crop(ds)
+        max_attempts = 20
+        attempts = 1
 
-        # Extract data
-        data = ds.Rad.compute().to_numpy()
+        while attempts <= max_attempts:
+            if attempts == max_attempts:
+                raise Exception("Could not load data after %d attempts." % max_attempts)
+            # Load dataset
+            ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
+            # Crop data before computing
+            ds = self.crop(ds)
+            # Extract data
+            data = ds.Rad.compute().to_numpy()
+            # Check if all channels are constant -> Always performed
+            all_constant = _check_all_constant_channels(data)
+            # Check if any channel is constant -> Only relevant if skip_constant_channels is True
+            any_constant = _check_any_constant_channels(data)
+            if all_constant or (self.skip_constant_channels and any_constant):
+                # Retry loading data
+                logger.info("Found constant channels in %s. Attempting with other files." % self.files[idx])
+                idx = np.random.randint(0, len(self.files))
+                attempts += 1
+            else:
+                break
+
         data_dict["data"] = data
         del data # Delete data to reduce memory usage
         # Extract wavelengths

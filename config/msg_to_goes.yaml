@@ -5,11 +5,12 @@ data:
   B_path: /mnt/disks/goes-data/goes/
   # converted_B_path: 
   num_workers: 4
-  iterations_per_epoch: 1000
+  iterations_per_epoch: 100
   patch_size: (256, 256)
+  skip_constant_channels: False # If True, patches with constant channels will be skipped. Note, this massively slows down training.
 model:
-  input_dim_a: 11
-  input_dim_b: 16
+  input_dim_a: 7 # 11
+  input_dim_b: 9 # 16
   upsampling: 0
   discriminator_mode: CHANNELS
   lambda_diversity: 0
@@ -18,7 +19,7 @@ model:
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: msg-to-goes-all-channels
+  wandb_name: msg-to-goes-infrared-channels
 training:
   epochs: 100
 normalization: # TODO: Change to avoid absolute paths

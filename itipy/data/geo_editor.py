@@ -18,7 +18,6 @@ class RandomCropDatasetEditor():
         ymin = randint(0, ds[self.y].shape[0] - self.patch_shape[1])
         patch_ds = ds.sel({self.x: slice(ds[self.x][xmin], ds[self.x][xmin + self.patch_shape[0] - 1]), # 0-based index
                              self.y: slice(ds[self.y][ymin], ds[self.y][ymin + self.patch_shape[1] - 1])}) # 0-based index
-        assert patch_ds[self.data_key].std() != 0, 'Invalid patch found (all values %f)' % patch_ds[self.data_key].mean()
         return patch_ds
 
 class BandOrderEditor(Editor):

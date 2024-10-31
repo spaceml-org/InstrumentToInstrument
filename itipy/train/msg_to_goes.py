@@ -65,6 +65,7 @@ data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
 patch_size = ast.literal_eval(data_config['patch_size'])
+skip_constant_channels = data_config['skip_constant_channels']
 
 splits_dict = { 
     "train": {
@@ -110,8 +111,8 @@ with open(os.path.join(norm_dir, 'msg_norm.json'), "w") as outfile:
 logger.info(f"Saved normalization file in {norm_dir}...")
 
 goes_editors = [
-    BandSelectionEditor(target_bands=[0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
-    # BandSelectionEditor(target_bands=[0.64, 3.89, 7.34, 9.61, 13.27]),
+    # BandSelectionEditor(target_bands=[0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
+    BandSelectionEditor(target_bands=[6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
     # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
     # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
@@ -125,8 +126,8 @@ goes_editors = [
 ]
 
 msg_editors = [
-    BandSelectionEditor(target_bands=[0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
-    # BandSelectionEditor(target_bands=[0.64, 3.92, 7.35, 9.66, 13.4]),
+    # BandSelectionEditor(target_bands=[0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
+    BandSelectionEditor(target_bands=[6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
     # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
     # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
@@ -148,6 +149,7 @@ msg_dataset = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
+    skip_constant_channels=skip_constant_channels,
 )
 
 msg_valid = GeoDataset(
@@ -157,6 +159,7 @@ msg_valid = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
+    skip_constant_channels=skip_constant_channels,
 )
 
 goes_dataset = GeoDataset(
@@ -166,6 +169,7 @@ goes_dataset = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
+    skip_constant_channels=skip_constant_channels,
 )
 
 goes_valid = GeoDataset(
@@ -175,6 +179,7 @@ goes_valid = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
+    skip_constant_channels=skip_constant_channels,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])
