@@ -1,8 +1,8 @@
 base_dir: /home/anna.jungbluth/outputs/msg-to-goes/
 data:
-  A_path: /mnt/disks/msg-data/msg/
+  A_path: /mnt/disks/eo-data/msg/
   # converted_A_path:
-  B_path: /mnt/disks/goes-data/goes/
+  B_path: /mnt/disks/eo-data/goes/
   # converted_B_path: 
   num_workers: 4
   iterations_per_epoch: 100
@@ -23,5 +23,5 @@ logging:
 training:
   epochs: 100
 normalization: # TODO: Change to avoid absolute paths
-  A_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/msg_2020_hourly.csv
-  B_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/goes_2020_hourly.csv
+  A_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/msg_2020_hourly_subset.csv
+  B_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/goes_2020_hourly_subset.csv

@@ -9,6 +9,7 @@ collections.MutableSet = collections.abc.MutableSet
 collections.MutableMapping = collections.abc.MutableMapping
 
 import logging
+import torch
 import numpy as np
 import xarray as xr
 from typing import List, Union, Dict
