@@ -5,7 +5,7 @@ data:
   B_path: /mnt/disks/eo-data/goes/
   # converted_B_path: 
   num_workers: 4
-  iterations_per_epoch: 100
+  iterations_per_epoch: 10
   patch_size: (256, 256)
   skip_constant_channels: False # If True, patches with constant channels will be skipped. Note, this massively slows down training.
 model:

@@ -15,6 +15,35 @@ def _patch_valid(patch_ds):
     else:
         return True
 
+class CenterWeightedCropDatasetEditor():
+    def __init__(self, patch_shape, data_key='Rad'):
+        self.patch_shape = patch_shape
+        self.data_key = data_key
+    def __call__(self, ds):
+        assert ds['x'].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(dataset[self.x].shape)
+        assert ds['y'].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(dataset[self.y].shape)
+
+        # get x/y grid
+        x_grid, y_grid = np.meshgrid(np.arange(0, ds.x.shape[0], 1), np.arange(0, ds.y.shape[0], 1))
+
+        # get x/y indices of non-NaN lat/lon values
+        x_on_disk = x_grid[~np.isnan(ds.longitude.values)]
+        y_on_disk = y_grid[~np.isnan(ds.latitude.values)]
+        del x_grid, y_grid
+
+        # clip to accommodate patch size
+        x_on_disk = np.clip(x_on_disk, a_min=0, a_max=(max(x_on_disk) - self.patch_shape[0]))
+        y_on_disk = np.clip(y_on_disk, a_min=0, a_max=(max(y_on_disk) - self.patch_shape[1]))
+
+        # pick random x/y index
+        xmin = np.random.choice(x_on_disk, 1)[0]
+        ymin = np.random.choice(y_on_disk, 1)[0]
+
+        # crop patch
+        patch_ds = ds.sel({'x': slice(ds['x'][xmin], ds['x'][xmin + self.patch_shape[0] - 1]),
+                            'y': slice(ds['y'][ymin], ds['y'][ymin + self.patch_shape[1] - 1])})
+        return patch_ds
+
 class RandomCropDatasetEditor():
     def __init__(self, patch_shape, x='x', y='y', data_key='Rad'):
         self.patch_shape = patch_shape

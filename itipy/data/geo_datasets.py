@@ -16,7 +16,7 @@ from typing import List, Union, Dict
 from loguru import logger
 
 from itipy.data.editor import Editor
-from itipy.data.geo_editor import RandomCropDatasetEditor
+from itipy.data.geo_editor import CenterWeightedCropDatasetEditor
 from itipy.data.dataset import BaseDataset
 from itipy.data.geo_utils import get_split, get_list_filenames, _check_any_constant_channels, _check_all_constant_channels
 
@@ -62,7 +62,7 @@ class GeoDataset(BaseDataset):
 
         self.files = self.get_files()
 
-        self.crop = RandomCropDatasetEditor(patch_shape=self.patch_size)
+        self.crop = CenterWeightedCropDatasetEditor(patch_shape=self.patch_size)
 
         super().__init__(
             data=self.files,

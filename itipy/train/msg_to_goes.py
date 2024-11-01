@@ -18,12 +18,12 @@ import wandb
 from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch import seed_everything
 #from lightning.pytorch.strategies import DataParallelStrategy
 
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
 from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor
-from itipy.data.editor import RandomPatchEditor
 from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
 import warnings
@@ -53,6 +53,11 @@ with open(args.config, "r") as stream:
         config = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
+
+# extract and set model and data seeds
+seed = config.seed if "seed" in config else 42
+logger.info(f"training with seed {seed}")
+seed_everything(seed, workers=True)
 
 # Create timestamped directory within base_dir where normalisation, checkpoints (and prediction) are saved
 base_dir = config['base_dir']
@@ -238,6 +243,7 @@ trainer = Trainer(
     strategy='dp' if n_gpus > 1 else "auto",  # ddp breaks memory and wandb
     num_sanity_val_steps=0,
     callbacks=[checkpoint_callback, save_callback, *plot_callbacks],
+    limit_val_batches=20, # for testing & debugging
 )
 
 logger.info(f"Starting training...")
