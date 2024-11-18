@@ -93,29 +93,33 @@ class GeoDataset(BaseDataset):
     def __getitem__(self, idx):
         data_dict = {}
 
-        max_attempts = 20
-        attempts = 1
+        ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
+        ds = self.crop(ds)
+        data = ds.Rad.compute().to_numpy()
 
-        while attempts <= max_attempts:
-            if attempts == max_attempts:
-                raise Exception("Could not load data after %d attempts." % max_attempts)
-            # Load dataset
-            ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
-            # Crop data before computing
-            ds = self.crop(ds)
-            # Extract data
-            data = ds.Rad.compute().to_numpy()
-            # Check if all channels are constant -> Always performed
-            all_constant = _check_all_constant_channels(data)
-            # Check if any channel is constant -> Only relevant if skip_constant_channels is True
-            any_constant = _check_any_constant_channels(data)
-            if all_constant or (self.skip_constant_channels and any_constant):
-                # Retry loading data
-                logger.info("Found constant channels in %s. Attempting with other files." % self.files[idx])
-                idx = np.random.randint(0, len(self.files))
-                attempts += 1
-            else:
-                break
+        # max_attempts = 20
+        # attempts = 1
+
+        # while attempts <= max_attempts:
+        #     if attempts == max_attempts:
+        #         raise Exception("Could not load data after %d attempts." % max_attempts)
+        #     # Load dataset
+        #     ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
+        #     # Crop data before computing
+        #     ds = self.crop(ds)
+        #     # Extract data
+        #     data = ds.Rad.compute().to_numpy()
+        #     # Check if all channels are constant -> Always performed
+        #     all_constant = _check_all_constant_channels(data)
+        #     # Check if any channel is constant -> Only relevant if skip_constant_channels is True
+        #     any_constant = _check_any_constant_channels(data)
+        #     if all_constant or (self.skip_constant_channels and any_constant):
+        #         # Retry loading data
+        #         logger.info("Found constant channels in %s. Attempting with other files." % self.files[idx])
+        #         idx = np.random.randint(0, len(self.files))
+        #         attempts += 1
+        #     else:
+        #         break
 
         data_dict["data"] = data
         del data # Delete data to reduce memory usage

@@ -293,5 +293,43 @@ class MeanStdNormEditor(Editor):
         data_dict[self.key] = data
         return data_dict
 
+class MinMaxNormEditor(Editor):
+    """
+    Normalises data to have values between -1 and 1.
+    """
+
+    def __init__(self, norm_dict, key="data", band_info_key="wavelengths"):
+        """
+        Args:
+            norm_dict (dict): Dictionary with min and max for each band
+            key (str): Key in dictionary to apply transformation
+            band_info_key (str): Key in dictionary to get band information
+        """
+        self.band_info = norm_dict
+        self.key = key
+        self.band_info_key = band_info_key
+
+    def call(self, data_dict, **kwargs):
+        # get data to be normalised
+        data = data_dict[self.key]
+        # get the min and max for each band - type conversion needed as json keys and values are strings
+        mins = np.array(
+            [
+                float(self.band_info[key]["min"])
+                for key in data_dict[self.band_info_key]
+            ]
+        )
+        maxs = np.array(
+            [
+                float(self.band_info[key]["max"])
+                for key in data_dict[self.band_info_key]
+            ]
+        )
+        # normalise each band using min and max
+        data = (data - mins[:, None, None]) / (maxs - mins)[:, None, None]*2 - 1
+        # update dictionary
+        data_dict[self.key] = data
+        return data_dict
+
 
 

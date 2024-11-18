@@ -23,7 +23,7 @@ from lightning.pytorch import seed_everything
 
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
-from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor
+from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor
 from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
 import warnings
@@ -39,10 +39,8 @@ from loguru import logger
 
 import xarray as xr
 
-# TODO: Remove default arguments
 parser = argparse.ArgumentParser(description='Train MSG to GOES translations')
 parser.add_argument('--config', 
-                    default="/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes.yaml",
                     type=str, 
                     help='path to the config file.')
 
@@ -118,13 +116,9 @@ logger.info(f"Saved normalization file in {norm_dir}...")
 goes_editors = [
     # BandSelectionEditor(target_bands=[0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
     BandSelectionEditor(target_bands=[6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
-    # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
-    # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
-    # NanDictEditor(key="coords", fill_value=0), # Replaces NaNs in coordinates
-    # NanDictEditor(key="cloud_mask", fill_value=0), # Replaces NaNs in cloud_mask
-    # RadUnitEditor(key="data"), TODO take into account for normalization if needed
-    MeanStdNormEditor(norm_dict=goes_norm, key="data"),
+    # MeanStdNormEditor(norm_dict=goes_norm, key="data"),
+    MinMaxNormEditor(norm_dict=goes_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
@@ -133,13 +127,9 @@ goes_editors = [
 msg_editors = [
     # BandSelectionEditor(target_bands=[0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
     BandSelectionEditor(target_bands=[6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
-    # NanMaskEditor(key="data"), # Attaches nan_mask to the data dict
-    # CoordNormEditor(key="coords"), # Normalizes lats/lons to [-1, 1]
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
-    # NanDictEditor(key="coords", fill_value=0), # Replaces NaNs in coordinates
-    # NanDictEsditor(key="cloud_mask", fill_value=0), # Replaces NaNs in cloud_mask
-    # RadUnitEditor(key="data"), TODO take into account for normalization if needed
-    MeanStdNormEditor(norm_dict=msg_norm, key="data"),
+    # MeanStdNormEditor(norm_dict=msg_norm, key="data"),
+    MinMaxNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
@@ -206,8 +196,6 @@ run = wandb.init(project=logging_config['wandb_project'],
                  dir=save_dir)
 wandb_logger = WandbLogger(project=logging_config['wandb_project'], name=logging_config['wandb_name'], offline=False,
                            entity=logging_config['wandb_entity'], id=wandb_id, dir=save_dir, log_model=log_model)
-# wandb_logger.experiment.config.update(config, allow_val_change=True)
-
 
 logger.info(f"Initializing training steps...")
 
@@ -243,7 +231,6 @@ trainer = Trainer(
     strategy='dp' if n_gpus > 1 else "auto",  # ddp breaks memory and wandb
     num_sanity_val_steps=0,
     callbacks=[checkpoint_callback, save_callback, *plot_callbacks],
-    limit_val_batches=20, # for testing & debugging
 )
 
 logger.info(f"Starting training...")

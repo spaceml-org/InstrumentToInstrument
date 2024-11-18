@@ -211,8 +211,8 @@ def get_dict_norm(norm_df, column):
     Get a dictionary of normalization statistics from a DataFrame.
     """
     norm_df = norm_df.reset_index(drop=True)
-    if column not in ['mean', 'std']:
-        raise ValueError("Column must be either 'mean' or 'std'.")
+    if column not in ['mean', 'std', 'min', 'max']:
+        raise ValueError("Column must be either 'mean', 'std', 'min' or 'max'.")
     wavelengths = sorted(ast.literal_eval(norm_df['wavelengths'][0]))
     wavelengths = [round(wvl, 2) for wvl in wavelengths]
 
@@ -229,7 +229,7 @@ def calculate_overall_mean(means):
     wavelengths = list(means.keys())
     dict_means = {}
     for wvl in wavelengths:
-        dict_means[wvl] = np.mean(means[wvl])
+        dict_means[wvl] = np.nanmean(means[wvl])
     return dict_means
 
 def calculate_overall_std(means, stds):
@@ -240,12 +240,32 @@ def calculate_overall_std(means, stds):
     dict_stds = {}
     for wvl in wavelengths:
         vars_wvl = [stds[wvl][i]**2 for i in range(len(stds[wvl]))]
-        mean_var = np.mean(vars_wvl)
-        var_means = np.std(means[wvl])**2
+        mean_var = np.nanmean(vars_wvl)
+        var_means = np.nanstd(means[wvl])**2
         dict_stds[wvl] = np.sqrt(mean_var + var_means)
     return dict_stds
 
-def compile_norm_dict(mean_dict, std_dict):
+def calculate_overall_min(mins):
+    """
+    Calculate the overall minimum from a list of minimums.
+    """
+    wavelengths = list(mins.keys())
+    dict_mins = {}
+    for wvl in wavelengths:
+        dict_mins[wvl] = np.nanmin(mins[wvl])
+    return dict_mins
+
+def calculate_overall_max(maxs):
+    """
+    Calculate the overall maximum from a list of maximums.
+    """
+    wavelengths = list(maxs.keys())
+    dict_maxs = {}
+    for wvl in wavelengths:
+        dict_maxs[wvl] = np.nanmax(maxs[wvl])
+    return dict_maxs
+
+def compile_norm_dict(mean_dict, std_dict, min_dict, max_dict):
     """
     Compiles the normalization statistics into a dictionary.
     """
@@ -254,7 +274,9 @@ def compile_norm_dict(mean_dict, std_dict):
     for wvl in wavelengths:
         norm_dict[wvl] = {
             "mean": round(mean_dict[wvl], 6),
-            "std": round(std_dict[wvl], 6)
+            "std": round(std_dict[wvl], 6),
+            "min": round(min_dict[wvl], 6),
+            "max": round(max_dict[wvl], 6)
         }
     return norm_dict
 
@@ -276,14 +298,19 @@ def calculate_norm_from_metrics(file, split_dict):
     split_idx = get_split_norm(df, split_dict)
     # Extract relevant entries in df
     split_df = df.loc[split_idx]
-    # Extract dictionary of means and stds
+    # Extract dictionary of means, stds, mins, and maxs
     means = get_dict_norm(split_df, 'mean')
     stds = get_dict_norm(split_df, 'std')
+    maxs = get_dict_norm(split_df, 'max')
+    mins = get_dict_norm(split_df, 'min')
     # Calculate overall mean & std from list of means & stds
     overall_mean = calculate_overall_mean(means=means)
     overall_std = calculate_overall_std(means=means, stds=stds)
+    # Get absolute min and max
+    overall_min = calculate_overall_min(mins=mins)
+    overall_max = calculate_overall_max(maxs=maxs)
     # Compile json file
-    norm_dict = compile_norm_dict(overall_mean, overall_std)
+    norm_dict = compile_norm_dict(overall_mean, overall_std, overall_min, overall_max)
     return norm_dict
 
 def spatial_mean(ds: xr.Dataset, spatial_variables: List[str]) -> xr.Dataset:
