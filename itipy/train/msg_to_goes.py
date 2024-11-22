@@ -3,6 +3,7 @@ import os
 import ast
 import collections.abc
 import shutil
+import autoroot
 
 import sys
 import json 
@@ -19,7 +20,6 @@ from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch import seed_everything
-#from lightning.pytorch.strategies import DataParallelStrategy
 
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
@@ -34,13 +34,12 @@ from itipy.data.data_module import ITIDataModule
 from itipy.iti import ITIModule
 
 from datetime import datetime
-
 from loguru import logger
-
 import xarray as xr
 
 parser = argparse.ArgumentParser(description='Train MSG to GOES translations')
 parser.add_argument('--config', 
+                    default='/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes.yaml',
                     type=str, 
                     help='path to the config file.')
 
@@ -52,23 +51,22 @@ with open(args.config, "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
-# extract and set model and data seeds
+# Extract and set model and data seeds
 seed = config.seed if "seed" in config else 42
 logger.info(f"training with seed {seed}")
 seed_everything(seed, workers=True)
 
-# Create timestamped directory within base_dir where normalisation, checkpoints (and prediction) are saved
+# Create timestamped directory within base_dir where normalisation, and checkpoints are saved
 base_dir = config['base_dir']
 time_str = datetime.now().strftime("%Y%m%d-%H%M")
 save_dir = os.path.join(base_dir, time_str)
 os.makedirs(save_dir, exist_ok=True)
 
-# Init Dataset
+# Initialize Dataset
 data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
 patch_size = ast.literal_eval(data_config['patch_size'])
-skip_constant_channels = data_config['skip_constant_channels']
 
 splits_dict = { 
     "train": {
@@ -85,24 +83,13 @@ splits_dict = {
 
 norm_config = config['normalization']
 if 'A_norm_dir' and 'B_norm_dir' in norm_config:
-    logger.info(f"Loading normalization files from: {norm_config['A_norm_dir']} and {norm_config['B_norm_dir']}")
+    logger.info(f"Loading normalization from: {norm_config['A_norm_dir']} and {norm_config['B_norm_dir']}")
     msg_norm = calculate_norm_from_metrics(norm_config['A_norm_dir'], split_dict=splits_dict['train'])
     goes_norm = calculate_norm_from_metrics(norm_config['B_norm_dir'], split_dict=splits_dict['train'])
 else:
-    raise ValueError("No normalization files found. Please specify paths.")
-    # TODO: Update implementation of normalization from scratch
-    # # get list of files in training set
-    # goes_filenames = get_list_filenames(goes_path, ext='nc')
-    # msg_filenames = get_list_filenames(msg_path, ext='nc')
+    raise ValueError("No normalization found. Please specify paths.")
 
-    # goes_training_filenames = get_split(goes_filenames, splits_dict['train'])
-    # msg_training_filenames = get_split(msg_filenames, splits_dict['train'])
-
-    # # compute mean and std for list of training files
-    # goes_norm = normalize(goes_training_filenames)
-    # msg_norm = normalize(msg_training_filenames)
-
-# save normalisations in current save directory
+# Save normalisations to save directory
 norm_dir = os.path.join(save_dir, 'normalization')
 os.makedirs(norm_dir, exist_ok=True)
 # Convert and write JSON object to file
@@ -111,25 +98,23 @@ with open(os.path.join(norm_dir, 'goes_norm.json'), "w") as outfile:
 with open(os.path.join(norm_dir, 'msg_norm.json'), "w") as outfile:
     json.dump(msg_norm, outfile)
 
-logger.info(f"Saved normalization file in {norm_dir}...")
+logger.info(f"Saved normalization to {norm_dir}...")
 
-goes_editors = [
-    # BandSelectionEditor(target_bands=[0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
-    BandSelectionEditor(target_bands=[6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]),
+msg_bands = config['data']['A_bands']
+msg_editors = [
+    BandSelectionEditor(target_bands=msg_bands),
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
-    # MeanStdNormEditor(norm_dict=goes_norm, key="data"),
-    MinMaxNormEditor(norm_dict=goes_norm, key="data"),
+    MinMaxNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
 ]
 
-msg_editors = [
-    # BandSelectionEditor(target_bands=[0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
-    BandSelectionEditor(target_bands=[6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]),
+goes_bands = config['data']['B_bands']
+goes_editors = [
+    BandSelectionEditor(target_bands=goes_bands),
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
-    # MeanStdNormEditor(norm_dict=msg_norm, key="data"),
-    MinMaxNormEditor(norm_dict=msg_norm, key="data"),
+    MinMaxNormEditor(norm_dict=goes_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
     # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
@@ -144,7 +129,6 @@ msg_dataset = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
-    skip_constant_channels=skip_constant_channels,
 )
 
 msg_valid = GeoDataset(
@@ -154,7 +138,6 @@ msg_valid = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
-    skip_constant_channels=skip_constant_channels,
 )
 
 goes_dataset = GeoDataset(
@@ -164,7 +147,6 @@ goes_dataset = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
-    skip_constant_channels=skip_constant_channels,
 )
 
 goes_valid = GeoDataset(
@@ -174,15 +156,12 @@ goes_valid = GeoDataset(
     load_coords=False,
     load_cloudmask=False,
     patch_size=patch_size,
-    skip_constant_channels=skip_constant_channels,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])
 
-# setup logging
-
+# Setup logging
 logger.info(f"Setting up WandB logging...")
-
 
 logging_config = config['logging']
 wandb_id = logging_config['wandb_id'] if 'wandb_id' in logging_config else None
@@ -197,9 +176,13 @@ run = wandb.init(project=logging_config['wandb_project'],
 wandb_logger = WandbLogger(project=logging_config['wandb_project'], name=logging_config['wandb_name'], offline=False,
                            entity=logging_config['wandb_entity'], id=wandb_id, dir=save_dir, log_model=log_model)
 
-logger.info(f"Initializing training steps...")
+
+# log config to wandb
+logger.debug(f"Config: {config}")
 
 # Start training
+logger.info(f"Initializing training steps...")
+
 module = ITIModule(**config['model'])
 
 # setup save callbacks
@@ -212,8 +195,13 @@ save_callback = SaveCallback(checkpoint_dir)
 # setup plot callbacks
 plot_callbacks = []
 
-plot_settings_A = {"cmap": "Blues_r", "title": "MSG"} #, 'vmin': -1, 'vmax': 1}
-plot_settings_B = {"cmap": "Greys_r", "title": "GOES"} #, 'vmin': -1, 'vmax': 1}
+plot_settings_A = []
+plot_settings_B = []
+
+for wvl in config['data']['A_bands']:
+    plot_settings_A.append({"cmap": 'Blues', "title": f"MSG {wvl}"})
+for wvl in config['data']['B_bands']:
+    plot_settings_B.append({"cmap": 'Greys', "title": f"GOES {wvl}"})
 
 plot_callbacks += [PlotBAB(goes_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 plot_callbacks += [PlotABA(msg_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
@@ -231,6 +219,8 @@ trainer = Trainer(
     strategy='dp' if n_gpus > 1 else "auto",  # ddp breaks memory and wandb
     num_sanity_val_steps=0,
     callbacks=[checkpoint_callback, save_callback, *plot_callbacks],
+    limit_train_batches=config['training']['limit_train_batches'],
+    limit_val_batches=config['training']['limit_val_batches'],
 )
 
 logger.info(f"Starting training...")

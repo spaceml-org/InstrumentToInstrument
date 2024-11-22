@@ -15,10 +15,28 @@ def _patch_valid(patch_ds):
     else:
         return True
 
+def create_fov_mask(shape, fov_radius):
+    """
+    Function to create mask for specified field of view.
+    """
+    # Create coordinate grids
+    y, x = np.ogrid[:shape[0], :shape[1]]
+    # Calculate center points
+    center_y, center_x = shape[0] // 2, shape[1] // 2
+    # Calculate distance from center for each point
+    dist_from_center = np.sqrt((x - center_x)**2 + (y - center_y)**2)
+    # Normalize distances by max possible distance (corner to center)
+    max_dist = np.sqrt((center_x)**2 + (center_y)**2)
+    normalized_dist = dist_from_center / max_dist
+    # Create mask for specified field of view
+    mask = normalized_dist <= fov_radius
+    return mask
+
 class CenterWeightedCropDatasetEditor():
-    def __init__(self, patch_shape, data_key='Rad'):
+    def __init__(self, patch_shape, data_key='Rad', fov_radius=0.6):
         self.patch_shape = patch_shape
         self.data_key = data_key
+        self.fov_radius = fov_radius
     def __call__(self, ds):
         assert ds['x'].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(dataset[self.x].shape)
         assert ds['y'].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(dataset[self.y].shape)
@@ -26,23 +44,28 @@ class CenterWeightedCropDatasetEditor():
         # get x/y grid
         x_grid, y_grid = np.meshgrid(np.arange(0, ds.x.shape[0], 1), np.arange(0, ds.y.shape[0], 1))
 
-        # get x/y indices of non-NaN lat/lon values
-        x_on_disk = x_grid[~np.isnan(ds.longitude.values)]
-        y_on_disk = y_grid[~np.isnan(ds.latitude.values)]
+        # create mask for valid coordinates within desired field of view
+        # NOTE: This masks from the center to the image edge, rather than disk edge
+        valid_mask = create_fov_mask(shape=(ds.x.shape[0], ds.y.shape[0]), fov_radius=self.fov_radius)
+
+        # get coordinate pairs for valid points
+        coords_on_disk = np.column_stack((x_grid[valid_mask], y_grid[valid_mask]))
         del x_grid, y_grid
 
-        # clip to accommodate patch size
-        x_on_disk = np.clip(x_on_disk, a_min=0, a_max=(max(x_on_disk) - self.patch_shape[0]))
-        y_on_disk = np.clip(y_on_disk, a_min=0, a_max=(max(y_on_disk) - self.patch_shape[1]))
-
         # pick random x/y index
-        xmin = np.random.choice(x_on_disk, 1)[0]
-        ymin = np.random.choice(y_on_disk, 1)[0]
+        random_idx = np.random.randint(0, len(coords_on_disk))
+        x, y = tuple(coords_on_disk[random_idx])
+        del coords_on_disk
+        # define patch boundaries
+        xmin = x - self.patch_shape[0] // 2
+        ymin = y - self.patch_shape[1] // 2
+        xmax = x + self.patch_shape[0] // 2
+        ymax = y + self.patch_shape[1] // 2
 
         # crop patch
-        patch_ds = ds.sel({'x': slice(ds['x'][xmin], ds['x'][xmin + self.patch_shape[0] - 1]),
-                            'y': slice(ds['y'][ymin], ds['y'][ymin + self.patch_shape[1] - 1])})
-        return patch_ds
+        patch_ds = ds.sel({'x': slice(ds['x'][xmin], ds['x'][xmax - 1]),
+                            'y': slice(ds['y'][ymin], ds['y'][ymax - 1])})
+        return patch_ds, xmin, ymin
 
 class RandomCropDatasetEditor():
     def __init__(self, patch_shape, x='x', y='y', data_key='Rad'):
