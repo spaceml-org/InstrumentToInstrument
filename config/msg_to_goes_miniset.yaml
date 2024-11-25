@@ -1,9 +1,9 @@
-base_dir: /home/anna.jungbluth/outputs/msg-to-goes/
+base_dir: /home/anna.jungbluth/outputs/msg-to-goes-miniset/
 data:
-  A_path: /mnt/disks/eo-data/msg/
-  B_path: /mnt/disks/eo-data/goes/
+  A_path: /mnt/disks/eo-miniset/msg/
+  B_path: /mnt/disks/eo-miniset/goes/
   num_workers: 4
-  iterations_per_epoch: 1000
+  iterations_per_epoch: 40
   patch_size: (256, 256)
   A_bands: [10.8] # [0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]
   B_bands: [10.33] # [0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]
@@ -18,11 +18,11 @@ model:
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: MSG_to_GOES-infrared
+  wandb_name: "[miniset]-MSG_to_GOES-infrared"
 training:
-  epochs: 100
+  epochs: 200
   limit_train_batches: null
   limit_val_batches: null
 normalization: # TODO: Change to avoid absolute paths
-  A_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/msg_2020_hourly_subset.csv
-  B_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/goes_2020_hourly_subset.csv
+  A_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/tmp/msg_2020_miniset.csv
+  B_norm_dir: /home/anna.jungbluth/InstrumentToInstrument/dataset/tmp/goes_2020_miniset.csv

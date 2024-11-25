@@ -37,6 +37,7 @@ class CenterWeightedCropDatasetEditor():
         self.patch_shape = patch_shape
         self.data_key = data_key
         self.fov_radius = fov_radius
+        self.max_attempts = 5
     def __call__(self, ds):
         assert ds['x'].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(dataset[self.x].shape)
         assert ds['y'].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(dataset[self.y].shape)
@@ -52,20 +53,29 @@ class CenterWeightedCropDatasetEditor():
         coords_on_disk = np.column_stack((x_grid[valid_mask], y_grid[valid_mask]))
         del x_grid, y_grid
 
+        # TODO: Add while loop to ensure valid patch is found?
         # pick random x/y index
-        random_idx = np.random.randint(0, len(coords_on_disk))
-        x, y = tuple(coords_on_disk[random_idx])
-        del coords_on_disk
-        # define patch boundaries
-        xmin = x - self.patch_shape[0] // 2
-        ymin = y - self.patch_shape[1] // 2
-        xmax = x + self.patch_shape[0] // 2
-        ymax = y + self.patch_shape[1] // 2
 
-        # crop patch
-        patch_ds = ds.sel({'x': slice(ds['x'][xmin], ds['x'][xmax - 1]),
-                            'y': slice(ds['y'][ymin], ds['y'][ymax - 1])})
+        attempts = 0
+        while attempts <= self.max_attempts:
+            random_idx = np.random.randint(0, len(coords_on_disk))
+            x, y = tuple(coords_on_disk[random_idx])
+            # define patch boundaries
+            xmin = x - self.patch_shape[0] // 2
+            ymin = y - self.patch_shape[1] // 2
+            xmax = x + self.patch_shape[0] // 2
+            ymax = y + self.patch_shape[1] // 2
+
+            # crop patch
+            patch_ds = ds.sel({'x': slice(ds['x'][xmin], ds['x'][xmax - 1]),
+                                'y': slice(ds['y'][ymin], ds['y'][ymax - 1])})
+            # check that there are no constant channels
+            if not np.any(np.nanstd(ds.Rad.values, axis=(1, 2)) == 0):
+                return patch_ds, xmin, ymin
+            attempts += 1
+        logger.info('Could not find valid patch after 5 cropping attempts')
         return patch_ds, xmin, ymin
+        
 
 class RandomCropDatasetEditor():
     def __init__(self, patch_shape, x='x', y='y', data_key='Rad'):

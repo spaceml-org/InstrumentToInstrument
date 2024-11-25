@@ -203,8 +203,8 @@ for wvl in config['data']['A_bands']:
 for wvl in config['data']['B_bands']:
     plot_settings_B.append({"cmap": 'Greys', "title": f"GOES {wvl}"})
 
-plot_callbacks += [PlotBAB(goes_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
-plot_callbacks += [PlotABA(msg_valid.sample(1), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+plot_callbacks += [PlotBAB(goes_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
+plot_callbacks += [PlotABA(msg_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 
 n_gpus = torch.cuda.device_count()
 n_cpus = os.cpu_count()
