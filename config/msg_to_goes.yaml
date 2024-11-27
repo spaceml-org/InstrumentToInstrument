@@ -20,7 +20,7 @@ logging:
   wandb_project: msg-to-goes
   wandb_name: MSG_to_GOES-infrared
 training:
-  epochs: 100
+  epochs: 200
   limit_train_batches: null
   limit_val_batches: null
 normalization: # TODO: Change to avoid absolute paths
