@@ -66,7 +66,8 @@ os.makedirs(save_dir, exist_ok=True)
 data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
-patch_size = ast.literal_eval(data_config['patch_size'])
+msg_patch_size = ast.literal_eval(data_config['A_patch_size'])
+goes_patch_size = ast.literal_eval(data_config['B_patch_size'])
 
 splits_dict = { 
     "train": {
@@ -128,7 +129,7 @@ msg_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=A_patch_size,
 )
 
 msg_valid = GeoDataset(
@@ -137,7 +138,7 @@ msg_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=A_patch_size,
 )
 
 goes_dataset = GeoDataset(
@@ -146,7 +147,7 @@ goes_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=B_patch_size,
 )
 
 goes_valid = GeoDataset(
@@ -155,7 +156,7 @@ goes_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=B_patch_size,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])
