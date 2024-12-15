@@ -25,8 +25,8 @@ class GeoDataset(BaseDataset):
     def __init__(
         self,
         data_dir: List[str],
-        editors: List[Editor],
         splits_dict: Dict,
+        editors: List[Editor]=None,
         ext: str="nc",
         limit: int=None,
         load_coords: bool=True,
@@ -120,13 +120,18 @@ class GeoDataset(BaseDataset):
         # Delete dataset to reduce memory usage
         del ds
 
-        # Apply editors
-        data, _ = self.getIndex(data_dict, idx)
+        if self.editors is not None:
+            # Apply editors
+            data, _ = self.getIndex(data_dict, idx)
 
-        if np.any(np.nanstd(data, axis=(1, 2)) == 0):
-            print(f"Constant channel in patch")
-            print(f"File: {self.files[idx]}")
-            print(f"Patch x/y: {xmin}/{ymin}")
-        return data
+            if np.any(np.nanstd(data, axis=(1, 2)) == 0):
+                print(f"Constant channel in patch")
+                print(f"File: {self.files[idx]}")
+                print(f"Patch x/y: {xmin}/{ymin}")
+            return data
+        else:
+            # Return data dictionary directly. Needed when calling StorageDataset.
+            return data_dict
+
 
         

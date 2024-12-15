@@ -23,6 +23,7 @@ from lightning.pytorch import seed_everything
 
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
+from itipy.data.dataset import StorageDataset 
 from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor
 from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
