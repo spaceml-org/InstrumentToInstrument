@@ -199,10 +199,10 @@ plot_settings_A = []
 plot_settings_B = []
 
 for wvl in config['data']['A_bands']:
-    plot_settings_B.append({"cmap": 'Greys', "title": f"GOES {wvl}"})
+    plot_settings_A.append({"cmap": 'Greys', "title": f"GOES {wvl}"})
 
 for wvl in config['data']['B_bands']:
-    plot_settings_A.append({"cmap": 'Blues', "title": f"MSG {wvl}"})
+    plot_settings_B.append({"cmap": 'Blues', "title": f"MSG {wvl}"})
 
 plot_callbacks += [PlotABA(goes_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
 plot_callbacks += [PlotBAB(msg_valid.sample(4), module, plot_settings_A=plot_settings_A, plot_settings_B=plot_settings_B)]
