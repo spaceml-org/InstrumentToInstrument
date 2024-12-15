@@ -1,25 +1,25 @@
 base_dir: /home/anna.jungbluth/outputs/msg-to-goes-miniset/
 data:
-  A_path: /mnt/disks/eo-miniset/msg/
-  B_path: /mnt/disks/eo-miniset/goes/
+  A_path: /mnt/disks/eo-miniset/geoprocessed/msg/
+  B_path: /mnt/disks/eo-miniset/geoprocessed/goes/
   num_workers: 4
-  iterations_per_epoch: 40
-  A_patch_size: (256, 256)
-  B_patch_size: (256, 256)
+  iterations_per_epoch: 50
+  A_patch_size: (150, 150)
+  B_patch_size: (450, 450)
   A_bands: [10.8] # [0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]
   B_bands: [10.33] # [0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]
 model:
   input_dim_a: 1 
   input_dim_b: 1 
-  upsampling: 0
+  upsampling: 3
   discriminator_mode: SINGLE
   lambda_diversity: 0
-  norm: 'in_rs_aff'
+  norm: 'in_aff'
   use_batch_statistic: False
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: "[miniset]-MSG_to_GOES-infrared"
+  wandb_name: "[miniset]-MSG_to_GOES-infrared-upsampled (10.8 um) ["in_aff" norm]"
 training:
   epochs: 200
   limit_train_batches: null

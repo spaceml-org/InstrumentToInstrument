@@ -23,7 +23,7 @@ from lightning.pytorch import seed_everything
 
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
-from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor
+from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor, Rotate180Editor
 from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
 import warnings
@@ -105,6 +105,7 @@ msg_bands = config['data']['A_bands']
 msg_editors = [
     BandSelectionEditor(target_bands=msg_bands),
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
+    Rotate180Editor(key="data"), # Rotate 180 degrees to align north to top of image
     MinMaxNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),

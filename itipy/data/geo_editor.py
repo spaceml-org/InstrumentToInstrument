@@ -219,6 +219,20 @@ class RadUnitEditor(Editor):
         # Update dictionary
         data_dict[self.key] = data
         return data_dict
+
+class Rotate180Editor(Editor):
+    """
+    Rotate data by 180 degrees
+    """
+    def __init__(self, key="data"):
+        self.key = key
+    def call(self, data_dict, **kwargs):
+        data = data_dict[self.key]
+        # Rotate data
+        data = np.rot90(data, k=2, axes=(1, 2))
+        # Update dictionary
+        data_dict[self.key] = data
+        return data_dict
     
 class StackDictEditor(Editor):
     """
