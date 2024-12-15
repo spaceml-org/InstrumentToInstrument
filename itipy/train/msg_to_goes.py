@@ -24,7 +24,7 @@ from lightning.pytorch import seed_everything
 import autoroot
 from itipy.data.geo_datasets import GeoDataset
 from itipy.data.dataset import StorageDataset 
-from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor
+from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor, Rotate180Editor
 from itipy.data.geo_utils import get_split, get_list_filenames, normalize, calculate_norm_from_metrics
 
 import warnings
@@ -67,7 +67,8 @@ os.makedirs(save_dir, exist_ok=True)
 data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
-patch_size = ast.literal_eval(data_config['patch_size'])
+msg_patch_size = ast.literal_eval(data_config['A_patch_size'])
+goes_patch_size = ast.literal_eval(data_config['B_patch_size'])
 
 splits_dict = { 
     "train": {
@@ -105,6 +106,7 @@ msg_bands = config['data']['A_bands']
 msg_editors = [
     BandSelectionEditor(target_bands=msg_bands),
     NanDictEditor(key="data", fill_value=0), # Replaces NaNs in data
+    Rotate180Editor(key="data"), # Rotate 180 degrees to align north to top of image
     MinMaxNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
@@ -129,7 +131,7 @@ msg_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=A_patch_size,
 )
 
 msg_valid = GeoDataset(
@@ -138,7 +140,7 @@ msg_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=A_patch_size,
 )
 
 goes_dataset = GeoDataset(
@@ -147,7 +149,7 @@ goes_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=B_patch_size,
 )
 
 goes_valid = GeoDataset(
@@ -156,7 +158,7 @@ goes_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=patch_size,
+    patch_size=B_patch_size,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])
