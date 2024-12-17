@@ -92,7 +92,10 @@ class GeoDataset(BaseDataset):
         data_dict = {}
 
         ds: xr.Dataset = xr.load_dataset(self.files[idx], engine="netcdf4")
-        ds, xmin, ymin = self.crop(ds)
+        if self.patch_size is not None:
+            ds, xmin, ymin = self.crop(ds)
+        else:
+            xmin, ymin = 0, 0 # Set to 0 if no cropping is done
         data = ds.Rad.compute().to_numpy()
         
         data_dict["data"] = data
