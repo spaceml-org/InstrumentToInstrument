@@ -40,7 +40,7 @@ import xarray as xr
 
 parser = argparse.ArgumentParser(description='Train MSG to GOES translations')
 parser.add_argument('--config', 
-                    default='/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes.yaml',
+                    default='/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes_miniset.yaml',
                     type=str, 
                     help='path to the config file.')
 
@@ -67,8 +67,8 @@ os.makedirs(save_dir, exist_ok=True)
 data_config = config['data']
 msg_path = data_config['A_path']
 goes_path = data_config['B_path']
-msg_patch_size = ast.literal_eval(data_config['A_patch_size'])
-goes_patch_size = ast.literal_eval(data_config['B_patch_size'])
+msg_patch_size = ast.literal_eval(data_config['A_patch_size']) if data_config['A_patch_size'] is not None else None
+goes_patch_size = ast.literal_eval(data_config['B_patch_size']) if data_config['B_patch_size'] is not None else None
 
 splits_dict = { 
     "train": {
@@ -131,7 +131,7 @@ msg_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=A_patch_size,
+    patch_size=msg_patch_size,
 )
 
 msg_valid = GeoDataset(
@@ -140,7 +140,7 @@ msg_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=A_patch_size,
+    patch_size=msg_patch_size,
 )
 
 goes_dataset = GeoDataset(
@@ -149,7 +149,7 @@ goes_dataset = GeoDataset(
     splits_dict=splits_dict['train'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=B_patch_size,
+    patch_size=goes_patch_size,
 )
 
 goes_valid = GeoDataset(
@@ -158,7 +158,7 @@ goes_valid = GeoDataset(
     splits_dict=splits_dict['val'],
     load_coords=False,
     load_cloudmask=False,
-    patch_size=B_patch_size,
+    patch_size=goes_patch_size,
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])
