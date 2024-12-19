@@ -22,6 +22,7 @@ from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch import seed_everything
 
 import autoroot
+from itipy.data.editor import RandomPatchEditor
 from itipy.data.geo_datasets import GeoDataset
 from itipy.data.dataset import StorageDataset 
 from itipy.data.geo_editor import BandSelectionEditor, NanMaskEditor, CoordNormEditor, NanDictEditor, RadUnitEditor, ToTensorEditor, StackDictEditor, MeanStdNormEditor, MinMaxNormEditor, Rotate180Editor
@@ -69,6 +70,7 @@ msg_path = data_config['A_path']
 goes_path = data_config['B_path']
 msg_patch_size = ast.literal_eval(data_config['A_patch_size']) if data_config['A_patch_size'] is not None else None
 goes_patch_size = ast.literal_eval(data_config['B_patch_size']) if data_config['B_patch_size'] is not None else None
+fov_radius = data_config['fov_radius'] if 'fov_radius' in data_config else 0.5
 
 splits_dict = { 
     "train": {
@@ -110,7 +112,6 @@ msg_editors = [
     MinMaxNormEditor(norm_dict=msg_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
-    # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
 ]
 
 goes_bands = config['data']['B_bands']
@@ -120,7 +121,6 @@ goes_editors = [
     MinMaxNormEditor(norm_dict=goes_norm, key="data"),
     StackDictEditor(allowed_keys = ['data']),
     ToTensorEditor(),
-    # RandomPatchEditor(patch_shape=(256, 256)), # NOTE: This is now already taken care of in the GeoDataset
 ]
 
 logger.info(f"Instantiating datasets.")
@@ -129,36 +129,60 @@ msg_dataset = GeoDataset(
     data_dir=msg_path,
     editors=msg_editors,
     splits_dict=splits_dict['train'],
+    fov_radius=fov_radius,
     load_coords=False,
     load_cloudmask=False,
     patch_size=msg_patch_size,
+)
+msg_dataset = StorageDataset(
+    dataset=msg_dataset,
+    store_dir=config['data']['converted_A_path'],
+    ext_editors=[RandomPatchEditor(patch_shape=(256, 256))]
 )
 
 msg_valid = GeoDataset(
     data_dir=msg_path,
     editors=msg_editors,
     splits_dict=splits_dict['val'],
+    fov_radius=fov_radius,
     load_coords=False,
     load_cloudmask=False,
     patch_size=msg_patch_size,
+)
+msg_valid = StorageDataset(
+    dataset=msg_valid,
+    store_dir=config['data']['converted_A_path'],
+    ext_editors=[RandomPatchEditor(patch_shape=(256, 256))]
 )
 
 goes_dataset = GeoDataset(
     data_dir=goes_path,
     editors=goes_editors,
     splits_dict=splits_dict['train'],
+    fov_radius=fov_radius,
     load_coords=False,
     load_cloudmask=False,
     patch_size=goes_patch_size,
+)
+goes_dataset = StorageDataset(
+    dataset=goes_dataset,
+    store_dir=config['data']['converted_B_path'],
+    ext_editors=[RandomPatchEditor(patch_shape=(256, 256))]
 )
 
 goes_valid = GeoDataset(
     data_dir=goes_path,
     editors=goes_editors,
     splits_dict=splits_dict['val'],
+    fov_radius=fov_radius, 
     load_coords=False,
     load_cloudmask=False,
     patch_size=goes_patch_size,
+)
+goes_valid = StorageDataset(
+    dataset=goes_valid,
+    store_dir=config['data']['converted_B_path'],
+    ext_editors=[RandomPatchEditor(patch_shape=(256, 256))]
 )
 
 data_module = ITIDataModule(msg_dataset, goes_dataset, msg_valid, goes_valid, **config['data'])

@@ -29,6 +29,7 @@ class GeoDataset(BaseDataset):
         editors: List[Editor]=None,
         ext: str="nc",
         limit: int=None,
+        fov_radius: float=0.6, 
         load_coords: bool=True,
         load_cloudmask: bool=True, 
         patch_size: tuple[int, int] = (256, 256),
@@ -43,6 +44,7 @@ class GeoDataset(BaseDataset):
             splits_dict (Dict, optional): A dictionary specifying the splits for the dataset. Defaults to None.
             ext (str, optional): The file extension of the data files. Defaults to "nc".
             limit (int, optional): The maximum number of files to load. Defaults to None.
+            fov_radius (float, optional): The radius of the field of view. Defaults to 0.6.
             load_coords (bool, optional): Whether to load the coordinates. Defaults to True.
             load_cloudmask (bool, optional): Whether to load the cloud mask. Defaults to True.
             patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to (256, 256).
@@ -54,13 +56,14 @@ class GeoDataset(BaseDataset):
         self.splits_dict = splits_dict
         self.ext = ext
         self.limit = limit
+        self.fov_radius = fov_radius
         self.load_coords = load_coords
         self.load_cloudmask = load_cloudmask
         self.patch_size = patch_size
 
         self.files = self.get_files()
 
-        self.crop = CenterWeightedCropDatasetEditor(patch_shape=self.patch_size)
+        self.crop = CenterWeightedCropDatasetEditor(patch_shape=self.patch_size, fov_radius=self.fov_radius)
 
         super().__init__(
             data=self.files,
