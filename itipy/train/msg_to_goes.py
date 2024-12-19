@@ -40,7 +40,7 @@ import xarray as xr
 
 parser = argparse.ArgumentParser(description='Train MSG to GOES translations')
 parser.add_argument('--config', 
-                    default='/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes_miniset.yaml',
+                    default='/home/anna.jungbluth/InstrumentToInstrument/config/msg_to_goes.yaml',
                     type=str, 
                     help='path to the config file.')
 

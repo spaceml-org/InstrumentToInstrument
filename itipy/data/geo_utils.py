@@ -213,7 +213,7 @@ def get_dict_norm(norm_df, column):
     norm_df = norm_df.reset_index(drop=True)
     if column not in ['mean', 'std', 'min', 'max']:
         raise ValueError("Column must be either 'mean', 'std', 'min' or 'max'.")
-    wavelengths = sorted(ast.literal_eval(norm_df['wavelengths'][0]))
+    wavelengths = ast.literal_eval(norm_df['wavelengths'][0]) # No sorting to preserve order
     wavelengths = [round(wvl, 2) for wvl in wavelengths]
 
     dict_norm = {}

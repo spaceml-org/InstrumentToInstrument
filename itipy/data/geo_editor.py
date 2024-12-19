@@ -373,7 +373,7 @@ class MinMaxNormEditor(Editor):
             ]
         )
         # normalise each band using min and max
-        data = (data - mins[:, None, None]) / (maxs - mins)[:, None, None]*2 - 1
+        data = ((data - mins[:, None, None]) / (maxs - mins)[:, None, None])*2 - 1
         # update dictionary
         data_dict[self.key] = data
         return data_dict

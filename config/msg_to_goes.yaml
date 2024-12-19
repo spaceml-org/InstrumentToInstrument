@@ -14,12 +14,12 @@ model:
   upsampling: 0
   discriminator_mode: SINGLE
   lambda_diversity: 0
-  norm: 'in_rs_aff'
+  norm: 'in_aff'
   use_batch_statistic: False
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: MSG_to_GOES-infrared
+  wandb_name: MSG_to_GOES-infrared (10.8 um) ["in_aff" norm]
 training:
   epochs: 200
   limit_train_batches: null
