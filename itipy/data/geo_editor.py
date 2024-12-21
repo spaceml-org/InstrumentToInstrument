@@ -89,10 +89,8 @@ class RandomCropDatasetEditor():
         
         max_attempts = 20
         while True:
-            # xmin = randint(0, ds[self.x].shape[0] - self.patch_shape[0])
-            # ymin = randint(0, ds[self.y].shape[0] - self.patch_shape[1])
-            xmin = randint(1200, 2400)
-            ymin = randint(1200, 2400)
+            xmin = randint(0, ds[self.x].shape[0] - self.patch_shape[0])
+            ymin = randint(0, ds[self.y].shape[0] - self.patch_shape[1])
             patch_ds = ds.sel({self.x: slice(ds[self.x][xmin], ds[self.x][xmin + self.patch_shape[0] - 1]), # 0-based index
                                 self.y: slice(ds[self.y][ymin], ds[self.y][ymin + self.patch_shape[1] - 1])}) # 0-based index
             if _patch_valid(patch_ds):
