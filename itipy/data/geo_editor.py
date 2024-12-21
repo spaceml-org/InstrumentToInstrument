@@ -73,7 +73,7 @@ class CenterWeightedCropDatasetEditor():
             if not np.any(np.nanstd(ds.Rad.values, axis=(1, 2)) == 0):
                 return patch_ds, xmin, ymin
             attempts += 1
-        logger.info('Could not find valid patch after 5 cropping attempts')
+        logger.info('Could not find patch without constant channels after 5 cropping attempts')
         return patch_ds, xmin, ymin
         
 
