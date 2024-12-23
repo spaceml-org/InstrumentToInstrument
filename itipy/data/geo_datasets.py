@@ -136,7 +136,6 @@ class GeoDataset(BaseDataset):
                 print(f"Patch x/y: {xmin}/{ymin}")
             return data
         else:
-            # Return data dictionary directly. Needed when calling StorageDataset.
             return data_dict
 
 
