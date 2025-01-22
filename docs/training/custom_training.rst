@@ -4,7 +4,7 @@
 Training example configuration
 ===============================
 
-The training scripts for the individual case studies are stored in the ``iti.train`` directory.
+The training scripts for the individual case studies are stored in the ``itipy.train`` directory.
 In the example we intercalibrate Solar Orbiter Full Sun Imager (FSI) observations to SDO (AIA) observations. For both instruments we use 2 channels (``input_dim_a/b=2``).
 We do not increase the resolution, corresponding to a ``upsampling=0``. We expect mostly instrumental characteristics that cause degradations and set the diversity
 factor to 0 (``lambda_diversity=0``). For the discriminator we provide three settings:
@@ -20,7 +20,7 @@ the months 1-10 for training and 11-12 for validation.
 Images are automatically saved during training, but note that they will only provide information about the quality of the translation when the
 InstanceNormalization weights are fixed (after *100 000 iterations*). The use of learned parameters of the InstanceNormalization is required for the training with image patches.
 We additionally store the ``.fits`` files as a ``.npy`` file in the ``converted_path`` directory. This allows to load the data faster and consequently accelerates the training process.
-To initialize the training we use ``.yaml`` configuration files, that are stored in the ``iti.train.configs`` directory. An example is shown here:
+To initialize the training we use ``.yaml`` configuration files, that are stored in the ``itipy.train.configs`` directory. An example is shown here:
 
 .. code-block:: yaml
 
@@ -50,7 +50,7 @@ To initialize the training we use ``.yaml`` configuration files, that are stored
 
 The following command can then be used to run the training::
 
-    python3 -m iti.train.FSI_to_SDO --config 'path to config file'.
+    python3 -m itipy.train.FSI_to_SDO --config 'path to config file'.
 
 Running the training script will create a new directory in the workspace directory where the training results will be stored. The progress
 of the training is monitored in real time using the weights and biases logging system. For more information see `weights and biases <https://wandb.ai/site>`__.

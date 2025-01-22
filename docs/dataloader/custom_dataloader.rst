@@ -18,13 +18,13 @@ HMI magnetograms that:
 6. Scales the data to [-1, 1]
 7. Reshapes the array to channel first notation
 
-The editors are listed in ``iti.data.editor``. Custom editor (e.g., preprocessing) can be implement by using ``iti.data.editor``
-Editor as base class and implementing the call function. Minor functionalities can be added by using ``iti.data.editor.LambdaEditor`` (e.g., ``LambdaEditor(lambda x: x * 2``).
+The editors are listed in ``itipy.data.editor``. Custom editor (e.g., preprocessing) can be implement by using ``itipy.data.editor``
+Editor as base class and implementing the call function. Minor functionalities can be added by using ``itipy.data.editor.LambdaEditor`` (e.g., ``LambdaEditor(lambda x: x * 2``).
 
 .. code-block:: python
 
-    from iti.data.dataset import BaseDataset
-    from iti.data.editor import LoadMapEditor, NormalizeRadiusEditor, RemoveOffLimbEditor, MapToDataEditor, NanEditor, \
+    from itipy.data.dataset import BaseDataset
+    from itipy.data.editor import LoadMapEditor, NormalizeRadiusEditor, RemoveOffLimbEditor, MapToDataEditor, NanEditor, \
         NormalizeEditor, ReshapeEditor
     from astropy.visualization import ImageNormalize, LinearStretch
 
