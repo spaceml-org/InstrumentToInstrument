@@ -1,10 +1,10 @@
-# """
-# =================================================
-# Translation of STEREO/EIT-to-SDO/AIA observations
-# =================================================
-# This example shows how to intercalibrate `STEREO/EUVI <https://stereo.gsfc.nasa.gov/classroom/EUVsun.shtml>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
-# """
-#
+"""
+=================================================
+Translation of STEREO/EIT-to-SDO/AIA observations
+=================================================
+This example shows how to intercalibrate `STEREO/EUVI <https://stereo.gsfc.nasa.gov/classroom/EUVsun.shtml>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
+"""
+
 # from itipy.evaluation.util import *
 # import glob
 # from itipy.translate import *

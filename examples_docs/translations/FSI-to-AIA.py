@@ -1,10 +1,10 @@
-# """
-# ===============================================
-# Translation of Solar Orbiter/EUI/FSI to SDO/AIA
-# ===============================================
-# This example shows how to intercalibrate `Solar Orbiter/EUI/FSI <https://sci.esa.int/web/solar-orbiter/-/51217-instruments>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
-# """
-#
+"""
+===============================================
+Translation of Solar Orbiter/EUI/FSI to SDO/AIA
+===============================================
+This example shows how to intercalibrate `Solar Orbiter/EUI/FSI <https://sci.esa.int/web/solar-orbiter/-/51217-instruments>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
+"""
+
 # from itipy.evaluation.util import *
 # from itipy.data.editor import solo_norm
 # from itipy.translate import *

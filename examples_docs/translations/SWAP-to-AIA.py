@@ -1,33 +1,33 @@
-# """
-# ==========================
-# Translation of SWAP to AIA
-# ==========================
-# This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWAP>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
-# """
-#
+"""
+==========================
+Translation of SWAP to AIA
+==========================
+This example shows how to enhance `PROBA2/SWAP <https://proba2.sidc.be/about/SWAP>`__ observations to `SDO/AIA <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
+"""
+
 # from itipy.evaluation.util import *
-# import glob
+import glob
 # from itipy.download.download_proba2 import PROBA2Downloader
 # from itipy.download.download_sdo import SDODownloader
 # from itipy.data.editor import proba2_norm
 # from itipy.translate import *
 # from datetime import timedelta, datetime
+
+#base_path = os.getcwd()
 #
-# base_path = os.getcwd()
+############################################################################################################################################################################
+# We provide a publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
 #
-# ############################################################################################################################################################################
-# # We provide a publicly available dataset which allows the users to play around with a subset of the data available without downloading the entire database.
-# #
-# # This dataset contains `.fits` files from **PROBA2/SWAP**, **SDO/AIA** and **Solar Orbiter/EUI (FSI and HRI)**.
-# #
-# # In addition 3 trained models are stored with:
-# # 1. PROBA2/SWAP to SDO/AIA
-# # 2. Solar Orbiter/EUI FSI to SDO/AIA and
-# # 3. SDO/AIA to Solar Orbiter/EUI HRI
-# #
-# # to perform the translation.
+# This dataset contains `.fits` files from **PROBA2/SWAP**, **SDO/AIA** and **Solar Orbiter/EUI (FSI and HRI)**.
 #
-# download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
+# In addition 3 trained models are stored with:
+# 1. PROBA2/SWAP to SDO/AIA
+# 2. Solar Orbiter/EUI FSI to SDO/AIA and
+# 3. SDO/AIA to Solar Orbiter/EUI HRI
+#
+# to perform the translation.
+
+#download_gcp_bucket('iti-dataset', base_path+'/iti-testset/')
 #
 # # If you wish to translate different time periods that are not included in the test dataset, we provide download routines for the instruments used for ITI.
 # # In order to download data from JSOC (SDO) you need to register your email at `JSOC <http://jsoc.stanford.edu/ajax/register_email.html>`__. If you are registered you can set the environment variable ``JSOC_EMAIL`` to your email address.

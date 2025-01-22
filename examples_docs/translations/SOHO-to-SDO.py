@@ -1,9 +1,10 @@
-# """
-# ===============================================
-# Translation of SOHO/EIT-to-SDO/AIA observations
-# ===============================================
-# This example shows how to intercalibrate `SOHO <https://umbra.nascom.nasa.gov/eit/>`__ observations to `SDO <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
-# """
+"""
+===============================================
+Translation of SOHO/EIT-to-SDO/AIA observations
+===============================================
+This example shows how to intercalibrate `SOHO <https://umbra.nascom.nasa.gov/eit/>`__ observations to `SDO <https://sdo.gsfc.nasa.gov/mission/instruments.php>`__ observations.
+"""
+
 # from itipy.evaluation.util import *
 # import glob
 # from itipy.translate import *
