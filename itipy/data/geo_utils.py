@@ -350,3 +350,14 @@ def normalize(
     ds = xr.combine_by_coords([ds_mean, ds_std])
     return ds
 
+def unnormalize(norm_dict, bands, data):
+    """
+    Unnormalize the data using the provided normalization dictionary.
+    """
+    for i, band in enumerate(bands):
+        if len(data.shape) == 3:
+            data[i] = (data[i] + 1) * 0.5 * (norm_dict[band]['max'] - norm_dict[band]['min']) + norm_dict[band]['min']
+        elif len(data.shape) == 4:
+            data[:, i] = (data[:, i] + 1) * 0.5 * (norm_dict[band]['max'] - norm_dict[band]['min']) + norm_dict[band]['min']
+    return data
+

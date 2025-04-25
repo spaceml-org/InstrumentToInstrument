@@ -32,7 +32,7 @@ class GeoDataset(BaseDataset):
         fov_radius: float=0.6, 
         load_coords: bool=True,
         load_cloudmask: bool=True, 
-        patch_size: tuple[int, int] = (256, 256),
+        patch_size: tuple[int, int] = None, # (256, 256),
         **kwargs
     ):
         """
@@ -47,7 +47,7 @@ class GeoDataset(BaseDataset):
             fov_radius (float, optional): The radius of the field of view. Defaults to 0.6.
             load_coords (bool, optional): Whether to load the coordinates. Defaults to True.
             load_cloudmask (bool, optional): Whether to load the cloud mask. Defaults to True.
-            patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to (256, 256).
+            patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to None.
             **kwargs: Additional keyword arguments.
 
         """
@@ -63,7 +63,8 @@ class GeoDataset(BaseDataset):
 
         self.files = self.get_files()
 
-        self.crop = CenterWeightedCropDatasetEditor(patch_shape=self.patch_size, fov_radius=self.fov_radius)
+        if self.patch_size is not None:
+            self.crop = CenterWeightedCropDatasetEditor(patch_shape=self.patch_size, fov_radius=self.fov_radius)
 
         super().__init__(
             data=self.files,

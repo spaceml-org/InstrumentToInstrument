@@ -39,8 +39,8 @@ class CenterWeightedCropDatasetEditor():
         self.fov_radius = fov_radius
         self.max_attempts = 5
     def __call__(self, ds):
-        assert ds['x'].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(dataset[self.x].shape)
-        assert ds['y'].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(dataset[self.y].shape)
+        assert ds['x'].shape[0] >= self.patch_shape[0], 'Invalid dataset shape: %s' % str(ds['x'].shape)
+        assert ds['y'].shape[0] >= self.patch_shape[1], 'Invalid dataset shape: %s' % str(ds['y'].shape)
 
         # get x/y grid
         x_grid, y_grid = np.meshgrid(np.arange(0, ds.x.shape[0], 1), np.arange(0, ds.y.shape[0], 1))
@@ -375,6 +375,3 @@ class MinMaxNormEditor(Editor):
         # update dictionary
         data_dict[self.key] = data
         return data_dict
-
-
-
