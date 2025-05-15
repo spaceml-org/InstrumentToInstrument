@@ -38,7 +38,7 @@ class ITIModule(LightningModule):
         lambda_reconstruction_id (float): Weight for the reconstruction identity loss.
         lambda_content (float): Weight for the content loss.
         lambda_content_id (float): Weight for the content identity loss.
-        lambda_diversity (float): Weight for the diversity loss.
+        f
         lambda_noise (float): Weight for the noise loss.
         learning_rate (float): Learning rate.
         **kwargs: Additional keyword arguments.

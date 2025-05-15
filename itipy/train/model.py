@@ -148,6 +148,7 @@ class GeneratorBA(nn.Module):
             x, skip = down(x)
             skip_connections.append(skip)
         # noise
+        # TODO: Allow noise to be set to None. Don't initialize noise model.
         y = self.noise_blocks(noise)
         # core
         x = torch.cat([x, y], dim=1)

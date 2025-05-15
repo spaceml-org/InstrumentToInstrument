@@ -18,10 +18,13 @@ model:
   lambda_diversity: 0
   norm: 'in_rs_aff'
   use_batch_statistic: False
+  # Set the identity loss to 0
+  lambda_reconstruction_id: 0
+  lambda_content_id: 0
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: MSG_to_GOES-infrared-5bands (8.7 - 13.4 um)
+  wandb_name: MSG_to_GOES-infrared-5bands (8.7 - 13.4 um) [no identity loss]
 training:
   epochs: 1000
   limit_train_batches: null
