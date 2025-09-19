@@ -1,0 +1,80 @@
+# MSG wavelengths in nanometers
+MSG_WAVELENGTHS = {
+    "IR_016": {
+        "reso_og": 3000,
+        "band_type": "TOA Reflectance",
+        "min_wavelength": 1578.4,
+        "center_wavelength": 1640.0,
+        "max_wavelength": 1696.0,
+    },  # 1.64
+    "IR_039": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 3638.4,
+        "center_wavelength": 3920.0,
+        "max_wavelength": 4201.6,
+    },  # 3.92,
+    "IR_087": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 8540.0,
+        "center_wavelength": 8700.0,
+        "max_wavelength": 8892.0,
+    },  # 8.70,
+    "IR_097": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 9548.0,
+        "center_wavelength": 9660.0,
+        "max_wavelength": 9783.2,
+    },  # 9.66,
+    "IR_108": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 10280.0,
+        "center_wavelength": 10800.0,
+        "max_wavelength": 11280.0,
+    },
+    "IR_120": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 11520.0,
+        "center_wavelength": 12000.0,
+        "max_wavelength": 12440.0,
+    },
+    "IR_134": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 12680.0,
+        "center_wavelength": 13400.0,
+        "max_wavelength": 14000.0,
+    },
+    "VIS006": {
+        "reso_og": 3000,
+        "band_type": "TOA Reflectance",
+        "min_wavelength": 602.0,
+        "center_wavelength": 640.0,
+        "max_wavelength": 677.0,
+    },
+    "VIS008": {
+        "reso_og": 3000,
+        "band_type": "TOA Reflectance",
+        "min_wavelength": 782.0,
+        "center_wavelength": 810.0,
+        "max_wavelength": 838.0,
+    },
+    "WV_062": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 5854.0,
+        "center_wavelength": 6250.0,
+        "max_wavelength": 6718.0,
+    },
+    "WV_073": {
+        "reso_og": 3000,
+        "band_type": "TOA Normalised Brightness Temperature",
+        "min_wavelength": 7150.0,
+        "center_wavelength": 7350.0,
+        "max_wavelength": 7590.0,
+    },
+}
