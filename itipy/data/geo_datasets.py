@@ -159,8 +159,8 @@ class GeoDataset(BaseDataset):
         # Apply transformations
         if self.editors is not None:
             # Apply editors
-            data, _ = self.getIndex(data_dict, idx)
-            return data
+            data_dict, _ = self.getIndex(data_dict, idx)
+            return data_dict["data"]
         else:
             return data_dict
 

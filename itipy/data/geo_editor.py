@@ -510,6 +510,13 @@ class ToTensorEditor(Editor):
         return tensor
 
 
+# TODO: Implement resample editor
+class ResampleEditor(Editor):
+    """
+    Resample data to a new spatial resolution using nearest neighbor interpolation.
+    """
+
+
 class PrecomputedMinMaxNormEditor(Editor):
     """
     Normalises data to have values between -1 and 1 from precomputed min and max values.
