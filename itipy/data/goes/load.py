@@ -14,11 +14,21 @@ from itipy.data.geo_utils import (
 from itipy.data.goes.utils import GOES_WAVELENGTHS
 
 
+def scale_reflectance(data_dict):
+    """
+    Scale the reflectance data to the range [0, 100].
+    """
+    for i, band_name in enumerate(data_dict["band_names"]):
+        if "Reflectance" in data_dict["sensor_info"][band_name]["band_type"]:
+            # Scale reflectance data to [0, 100] range
+            data_dict["data"][i] = data_dict["data"][i] * 100
+    return data_dict
+
+
 def load_goes_file(
     file: str,
     load_zenith: bool = True,
     load_solar: bool = True,
-    load_overpass_mask: bool = False,  # Needs to be false by default, because pre-training patches don't have overpass mask
     patch_size: list
     | None = None,  # Whether to crop the data to a smaller patch size (e.g. [128, 128] for pre-training
     center_crop: bool = False,  # If True, will crop to the center of the image
@@ -95,9 +105,6 @@ def load_goes_file(
         if "data" not in ds.data_vars:
             # Scale reflectance data to [0, 100] range
             data_dict = scale_reflectance(data_dict)
-
-        if load_overpass_mask:
-            raise NotImplementedError
 
         # calculate the zenith angle
         if load_zenith:

@@ -18,7 +18,6 @@ def load_himawari_file(
     file: str,
     load_zenith: bool = True,
     load_solar: bool = True,
-    load_overpass_mask: bool = False,  # Needs to be false by default, because pre-training patches don't have overpass mask
     patch_size: list
     | None = None,  # Whether to crop the data to a smaller patch size (e.g. [128, 128] for pre-training)
     center_crop: bool = False,  # If True, will crop to the center of the image
@@ -83,9 +82,6 @@ def load_himawari_file(
             val.get("center_wavelength") for val in HIMAWARI_WAVELENGTHS.values()
         ]
         data_dict["sensor_info"] = HIMAWARI_WAVELENGTHS
-
-        if load_overpass_mask:
-            raise NotImplementedError
 
         # calculate the zenith angle
         if load_zenith:

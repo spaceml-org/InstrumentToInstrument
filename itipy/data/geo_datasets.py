@@ -10,13 +10,11 @@ collections.MutableSet = collections.abc.MutableSet
 collections.MutableMapping = collections.abc.MutableMapping
 
 import logging
-from typing import Callable
 
 import autoroot  # required for imports from src
 import numpy as np
 import xarray as xr
 from loguru import logger
-from torch.utils.data import Dataset
 
 from itipy.data.dataset import BaseDataset
 from itipy.data.editor import Editor
@@ -26,8 +24,148 @@ from itipy.data.goes.load import load_goes_file
 from itipy.data.himawari.load import load_himawari_file
 from itipy.data.msg.load import load_msg_file
 
+load_functions = {
+    "goes": load_goes_file,
+    "himawari": load_himawari_file,
+    "msg": load_msg_file,
+}
+
 
 class GeoDataset(BaseDataset):
+    """
+    Class to load geostationary satellite data (GOES, HIMAWARI, MSG).
+
+    Args:
+        satellite (str): The satellite name. Options are "goes", "himawari", "msg".
+        data_dir (List[str]): A list of directories containing the data files.
+        editors (List[Editor]): A list of editors for data preprocessing.
+        splits_dict (Dict, optional): A dictionary specifying the splits for the dataset. Defaults to None.
+        ext (str, optional): The file extension of the data files. Defaults to "nc".
+        limit (int, optional): The maximum number of files to load. Defaults to None.
+        load_zenith (bool, optional): Whether to load the zenith angle. Defaults to True.
+        load_solar (bool, optional): Whether to load the solar angle. Defaults to True.
+        patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to None.
+        center_crop (bool, optional): Whether to crop the data to the center. Defaults to False.
+        radius (int, optional): The radius for cropping, if center_crop is True. Defaults to 0.
+        **kwargs: Additional keyword arguments.
+    """
+
+    def __init__(
+        self,
+        satellite: str,
+        data_dir: list[str],
+        splits_dict: dict,
+        editors: list[Editor] = None,
+        ext: str = "nc",
+        limit: int = None,
+        load_zenith: bool = True,
+        load_solar: bool = True,
+        patch_size: list[int] | None = None,  # Patch size for cropping the data
+        center_crop: bool = False,  # If True, will crop to the center of the image
+        radius: int = 0,  # Radius for cropping, if center_crop is True
+        **kwargs,
+    ):
+        if satellite.lower() not in ["goes", "himawari", "msg"]:
+            raise ValueError(
+                f"Satellite {satellite} not recognized. Options are 'goes', 'himawari', 'msg'."
+            )
+        self.satellite = satellite.lower()
+        self.data_dir = data_dir
+        self.splits_dict = splits_dict
+        self.editors = editors
+        self.ext = ext
+        self.limit = limit
+        self.patch_size = patch_size
+        self.load_zenith = load_zenith
+        self.load_solar = load_solar
+        self.patch_size = patch_size  # Patch size for cropping the data
+        self.center_crop = center_crop  # If True, will crop to the center of the image
+        self.radius = radius
+        self.max_attempts = 20  # Maximum number of attempts to load valid data
+
+        self.files = self.get_files()
+
+        super().__init__(
+            data=self.files,
+            editors=self.editors,
+            ext=self.ext,
+            limit=self.limit,
+            **kwargs,
+        )
+
+    def setup(self, stage):
+        pass
+
+    def prepare_data(self):
+        pass
+
+    def get_files(self):
+        # Get filenames from data_dir
+        files = get_list_filenames(data_path=self.data_dir, ext=self.ext)
+        # split files based on split criteria
+        files = get_split(files=files, split_dict=self.splits_dict)
+        return files
+
+    def getIndex(self, data_dict, idx):
+        # Attempt applying editors
+        try:
+            return self.convertData(data_dict)
+        except Exception as ex:
+            logging.error(f"Unable to convert {self.files[idx]}: {ex}")
+            raise ex
+
+    def __len__(self):
+        return len(self.files)
+
+    def __getitem__(self, idx):  # can output array or dict depending on transforms
+        attempts_remaining = self.max_attempts  # Local copy for this call
+        while attempts_remaining > 0:
+            try:  # Check that there are no errors loading the file
+                file_path = self.files[idx]
+
+                data_dict = load_functions[self.satellite](
+                    file=file_path,
+                    load_zenith=self.load_zenith,
+                    load_solar=self.load_solar,
+                    patch_size=self.patch_size,
+                    center_crop=self.center_crop,
+                    radius=self.radius,
+                )
+
+                break  # If the file is successfully loaded, break the loop
+
+            except Exception as e:
+                # If we have no attempts left, raise an error
+                if attempts_remaining <= 0:
+                    raise ValueError(
+                        f"Could not load valid file after {self.max_attempts} attempts. "
+                        f"Error: {e}"
+                    )
+
+                # KeyErrors can arise if any of the variables are missing
+                logger.warning(
+                    f"Error loading {self.files[idx]}. "
+                    f"Attempting with other files. "
+                    f"Error: {e}"
+                )
+
+                # If there is an error, try to load another file
+                idx = np.random.randint(0, len(self.files))
+                attempts_remaining -= 1
+                continue
+
+        data_dict["satellite"] = self.satellite
+
+        # Apply transformations
+        if self.editors is not None:
+            # Apply editors
+            data, _ = self.getIndex(data_dict, idx)
+            return data
+        else:
+            return data_dict
+
+
+class GeoDataset_FullDisk(BaseDataset):
     def __init__(
         self,
         data_dir: list[str],
@@ -42,7 +180,7 @@ class GeoDataset(BaseDataset):
         **kwargs,
     ):
         """
-        Initialize the GeoDataset class.
+        Initializes the GeoDataset_FullDisk class. Designed to load full-disk satellite data as processed via rs_tools.
 
         Args:
             data_dir (List[str]): A list of directories containing the data files.
@@ -146,282 +284,3 @@ class GeoDataset(BaseDataset):
             return data
         else:
             return data_dict
-
-
-class MSGDataset(Dataset):
-    """
-    Class to load MSG data.
-    """
-
-    def __init__(
-        self,
-        data_filenames: list[str],
-        transforms: Callable | None = None,
-        return_overpass_mask: bool = False,
-        load_zenith: bool = True,
-        load_solar: bool = True,
-        patch_size: list[int] | None = None,  # Patch size for cropping the data
-        center_crop: bool = False,  # If True, will crop to the center of the image
-        radius: int = 0,  # Radius for cropping, if center_crop is True
-    ):
-        self.data_filenames = data_filenames
-        self.transforms = transforms
-        self.return_overpass_mask = return_overpass_mask
-        self.patch_size = patch_size
-        self.load_zenith = load_zenith
-        self.load_solar = load_solar
-        self.patch_size = patch_size  # Patch size for cropping the data
-        self.center_crop = center_crop  # If True, will crop to the center of the image
-        self.radius = radius
-        self.max_attempts = 20  # Maximum number of attempts to load valid data
-
-    def setup(self, stage):
-        pass
-
-    def prepare_data(self):
-        pass
-
-    def __getitem__(self, ind):  # can output array or dict depending on transforms
-        attempts_remaining = self.max_attempts  # Local copy for this call
-        while attempts_remaining > 0:
-            try:  # Check that there are no errors loading the file
-                file_path = self.data_filenames[ind]
-
-                data_dict = load_msg_file(
-                    file=file_path,
-                    load_zenith=self.load_zenith,
-                    load_solar=self.load_solar,
-                    load_overpass_mask=self.return_overpass_mask,
-                    patch_size=self.patch_size,
-                    center_crop=self.center_crop,
-                    radius=self.radius,
-                )
-                break  # If the file is successfully loaded, break the loop
-
-            except Exception as e:
-                # If we have no attempts left, raise an error
-                if attempts_remaining <= 0:
-                    raise ValueError(
-                        f"Could not load valid file after {self.max_attempts} attempts. "
-                        f"Error: {e}"
-                    )
-
-                # KeyErrors can arise if any of the variables are missing
-                logger.warning(
-                    f"Error loading {self.data_filenames[ind]}. "
-                    f"Attempting with other files. "
-                    f"Error: {e}"
-                )
-
-                # If there is an error, try to load another file
-                ind = np.random.randint(0, len(self.data_filenames))
-                attempts_remaining -= 1
-                continue
-
-        # Apply transformations
-        if self.transforms is not None:
-            data_dict = self.transforms(data_dict)
-
-        # Add center coordinates and angles
-        data_dict["center_coords"] = np.nanmedian(data_dict["coords"], axis=[1, 2])
-        if self.load_zenith:
-            data_dict["center_sat_angle"] = np.nanmedian(
-                data_dict["sat_angle"], axis=[1, 2]
-            )
-        if self.load_solar:
-            data_dict["center_solar_angle"] = np.nanmedian(
-                data_dict["solar_angle"], axis=[1, 2]
-            )
-
-        data_dict["satellite"] = "msg"
-
-        return data_dict
-
-    def __len__(self):
-        return len(self.data_filenames)
-
-
-class GOESDataset(Dataset):
-    """
-    Class to load GOES data.
-    """
-
-    def __init__(
-        self,
-        data_filenames: list[str],
-        transforms: Callable | None = None,
-        return_overpass_mask: bool = False,
-        load_zenith: bool = True,
-        load_solar: bool = True,
-        patch_size: list[int] | None = None,  # Patch size for cropping the data
-        center_crop: bool = False,  # If True, will crop to the center of the image
-        radius: int = 0,  # Radius for cropping, if center_crop is True
-    ):
-        self.data_filenames = data_filenames
-        self.transforms = transforms
-        self.return_overpass_mask = return_overpass_mask
-        self.patch_size = patch_size
-        self.load_zenith = load_zenith
-        self.load_solar = load_solar
-        self.patch_size = patch_size
-        self.center_crop = center_crop  # If True, will crop to the center of the image
-        self.radius = radius  # Radius for cropping, if center_crop is True
-        self.max_attempts = 20  # Maximum number of attempts to load valid data
-
-    def setup(self, stage):
-        pass
-
-    def prepare_data(self):
-        pass
-
-    def __getitem__(self, ind):
-        attempts_remaining = self.max_attempts  # Local copy for this call
-        while attempts_remaining > 0:
-            try:
-                # Check that there are no errors loading the file
-                file_path = self.data_filenames[ind]
-                data_dict = load_goes_file(
-                    file=file_path,
-                    load_zenith=self.load_zenith,
-                    load_solar=self.load_solar,
-                    load_overpass_mask=self.return_overpass_mask,
-                    patch_size=self.patch_size,
-                    center_crop=self.center_crop,  # If True, will crop to the center of the image
-                    radius=self.radius,  # Radius for cropping, if center_crop is True
-                )
-                break  # If the file is successfully loaded, break the loop
-
-            except Exception as e:
-                # If we have no attempts left, raise an error
-                if attempts_remaining <= 0:
-                    raise ValueError(
-                        f"Could not load valid file after {self.max_attempts} attempts. "
-                        f"Error: {e}"
-                    )
-
-                # KeyErrors can arise if any of the variables are missing
-                logger.warning(
-                    f"Error loading {self.data_filenames[ind]}. "
-                    f"Attempting with other files. "
-                    f"Error: {e}"
-                )
-
-                # If there is an error, try to load another file
-                ind = np.random.randint(0, len(self.data_filenames))
-                attempts_remaining -= 1
-                continue
-
-        # Apply transformations
-        if self.transforms is not None:
-            data_dict = self.transforms(data_dict)
-
-        # Add center coordinates and angles
-        data_dict["center_coords"] = np.nanmedian(data_dict["coords"], axis=[1, 2])
-        if self.load_zenith:
-            data_dict["center_sat_angle"] = np.nanmedian(
-                data_dict["sat_angle"], axis=[1, 2]
-            )
-        if self.load_solar:
-            data_dict["center_solar_angle"] = np.nanmedian(
-                data_dict["solar_angle"], axis=[1, 2]
-            )
-
-        data_dict["satellite"] = "goes"
-
-        return data_dict
-
-    def __len__(self):
-        return len(self.data_filenames)
-
-
-class HIMAWARIDataset(Dataset):
-    """
-    Class to load HIMAWARI data.
-    """
-
-    def __init__(
-        self,
-        data_filenames: list[str],
-        transforms: Callable | None = None,
-        return_overpass_mask: bool = False,
-        load_zenith: bool = True,
-        load_solar: bool = True,
-        patch_size: list[int] | None = None,  # Patch size for cropping the data
-        center_crop: bool = False,  # If True, will crop to the center of the image
-        radius: int = 0,  # Radius for cropping, if center_crop is True
-    ):
-        self.data_filenames = data_filenames
-        self.transforms = transforms
-        self.return_overpass_mask = return_overpass_mask
-        self.patch_size = patch_size
-        self.load_zenith = load_zenith
-        self.load_solar = load_solar
-        self.patch_size = patch_size
-        self.max_attempts = 20  # Maximum number of attempts to load valid data
-        self.center_crop = center_crop  # If True, will crop to the center of the image
-        self.radius = radius  # Radius for cropping, if center_crop is True
-
-    def setup(self, stage):
-        pass
-
-    def prepare_data(self):
-        pass
-
-    def __getitem__(self, ind):
-        attempts_remaining = self.max_attempts  # Local copy for this call
-        while attempts_remaining > 0:
-            try:
-                # Check that there are no errors loading the file
-                file_path = self.data_filenames[ind]
-                data_dict = load_himawari_file(
-                    file=file_path,
-                    load_zenith=self.load_zenith,
-                    load_solar=self.load_solar,
-                    load_overpass_mask=self.return_overpass_mask,
-                    patch_size=self.patch_size,
-                    center_crop=self.center_crop,
-                    radius=self.radius,
-                )
-                break  # If the file is successfully loaded, break the loop
-
-            except Exception as e:
-                # If we have no attempts left, raise an error
-                if attempts_remaining <= 0:
-                    raise ValueError(
-                        f"Could not load valid file after {self.max_attempts} attempts. "
-                        f"Error: {e}"
-                    )
-
-                # KeyErrors can arise if any of the variables are missing
-                logger.warning(
-                    f"Error loading {self.data_filenames[ind]}. "
-                    f"Attempting with other files. "
-                    f"Error: {e}"
-                )
-
-                # If there is an error, try to load another file
-                ind = np.random.randint(0, len(self.data_filenames))
-                attempts_remaining -= 1
-                continue
-
-        # Apply transformations
-        if self.transforms is not None:
-            data_dict = self.transforms(data_dict)
-
-        # Add center coordinates and angles
-        data_dict["center_coords"] = np.nanmedian(data_dict["coords"], axis=[1, 2])
-        if self.load_zenith:
-            data_dict["center_sat_angle"] = np.nanmedian(
-                data_dict["sat_angle"], axis=[1, 2]
-            )
-        if self.load_solar:
-            data_dict["center_solar_angle"] = np.nanmedian(
-                data_dict["solar_angle"], axis=[1, 2]
-            )
-
-        data_dict["satellite"] = "himawari"
-
-        return data_dict
-
-    def __len__(self):
-        return len(self.data_filenames)
