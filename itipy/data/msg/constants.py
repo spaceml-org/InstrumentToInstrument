@@ -1,3 +1,5 @@
+SEVIRI_PROJ4 = "+proj=geos +lon_0=0 +h=35785831 +x_0=0 +y_0=0 +sweep=x +datum=WGS84 +units=m +no_defs"
+
 # MSG wavelengths in nanometers
 MSG_WAVELENGTHS = {
     "IR_016": {

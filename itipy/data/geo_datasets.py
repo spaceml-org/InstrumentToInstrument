@@ -61,6 +61,8 @@ class GeoDataset(BaseDataset):
         load_zenith: bool = True,
         load_solar: bool = True,
         patch_size: list[int] | None = None,  # Patch size for cropping the data
+        resolution: float | None = None,  # Desired resolution in meters
+        method: str = "bilinear",  # Resampling method for rioxarray
         center_crop: bool = False,  # If True, will crop to the center of the image
         radius: int = 0,  # Radius for cropping, if center_crop is True
         **kwargs,
@@ -79,6 +81,8 @@ class GeoDataset(BaseDataset):
         self.load_zenith = load_zenith
         self.load_solar = load_solar
         self.patch_size = patch_size  # Patch size for cropping the data
+        self.resolution = resolution  # Desired resolution in meters
+        self.method = method  # Resampling method for rioxarray
         self.center_crop = center_crop  # If True, will crop to the center of the image
         self.radius = radius
         self.max_attempts = 20  # Maximum number of attempts to load valid data
@@ -128,6 +132,8 @@ class GeoDataset(BaseDataset):
                     load_zenith=self.load_zenith,
                     load_solar=self.load_solar,
                     patch_size=self.patch_size,
+                    resolution=self.resolution,
+                    method=self.method,
                     center_crop=self.center_crop,
                     radius=self.radius,
                 )

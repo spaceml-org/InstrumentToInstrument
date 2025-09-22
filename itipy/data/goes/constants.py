@@ -1,3 +1,5 @@
+GOES_EAST_PROJ4 = "+proj=geos +lon_0=-75 +h=35786023 +x_0=0 +y_0=0 +sweep=x +datum=WGS84 +units=m +no_defs"
+
 # GOES wavelengths in nanometers
 GOES_WAVELENGTHS = {
     "CMI_C01": {

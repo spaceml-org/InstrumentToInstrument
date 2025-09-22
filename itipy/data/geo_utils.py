@@ -12,6 +12,86 @@ import xarray as xr
 from loguru import logger
 from omegaconf import DictConfig
 
+import rioxarray
+import xarray as xr
+from rasterio.enums import Resampling
+from typing import Tuple
+
+rioxarray_samplers = {
+    "bilinear": Resampling.bilinear,
+    "cubic": Resampling.cubic,
+    "cubic_spline": Resampling.cubic_spline,
+    "nearest": Resampling.nearest,
+}
+
+def resample_rioxarray(ds: xr.Dataset, resolution: Tuple[int, int], method: str="bilinear") -> xr.Dataset:
+    """
+    Resamples a raster dataset using rasterio-xarray.
+
+    Parameters:
+        ds (xr.Dataset): The input dataset to be resampled.
+        resolution (int): The desired resolution of the resampled dataset. Default is 1_000.
+        method (str): The resampling method to be used. Default is "bilinear".
+
+    Returns:
+        xr.Dataset: The resampled dataset.
+    """
+
+    ds = ds.rio.reproject(
+        ds.rio.crs,
+        resolution=resolution,
+        resample=rioxarray_samplers[method], 
+    )
+    return ds
+
+def convert_coordinates(ds: xr.Dataset, satellite_type: str) -> xr.Dataset:
+    """
+    Convert satellite coordinates from radians to meters for geostationary projections.
+    
+    Parameters:
+        ds (xr.Dataset): Input dataset with coordinates in radians
+        satellite_type (str): Type of satellite ("goes", "himawari", "msg")
+        
+    Returns:
+        xr.Dataset: Dataset with corrected coordinates in meters
+    """
+    # Satellite heights in meters
+    satellite_heights = {
+        "goes": 35786023,      # GOES-16/17
+        "himawari": 35785863,  # Himawari-8/9  
+        "msg": 35785831        # MSG/SEVIRI
+    }
+    
+    if satellite_type.lower() not in satellite_heights:
+        raise ValueError(f"Unknown satellite type: {satellite_type}")
+    
+    satellite_height = satellite_heights[satellite_type.lower()]
+    
+    # Check if coordinates are in radians
+    x_units = ds.x.attrs.get('units', '')
+    y_units = ds.y.attrs.get('units', '')
+    
+    if x_units == 'rad' and y_units == 'rad':
+        # print(f"Converting {satellite_type.upper()} coordinates from radians to meters...")
+        
+        # Convert coordinates
+        x_meters = ds.x.values * satellite_height
+        y_meters = ds.y.values * satellite_height
+        
+        # Update dataset
+        ds_corrected = ds.assign_coords(x=x_meters, y=y_meters)
+        ds_corrected.x.attrs['units'] = 'm'
+        ds_corrected.y.attrs['units'] = 'm'
+        
+        # print(f"Original resolution: {ds.rio.resolution()}")
+        # print(f"Corrected resolution: {ds_corrected.rio.resolution()}")
+        # print(f"Resolution in km: {abs(ds_corrected.rio.resolution()[0]/1000):.1f} km")
+        
+        return ds_corrected
+    else:
+        # print("Coordinates are already in proper units, no conversion needed.")
+        return ds
+
 
 def _check_any_constant_channels(data: np.array) -> bool:
     """

@@ -10,8 +10,10 @@ from itipy.data.geo_utils import (
     get_satellite_viewing_angles,
     get_sza_and_azi,
     parse_time,
+    resample_rioxarray,
+    convert_coordinates,
 )
-from itipy.data.msg.utils import MSG_WAVELENGTHS
+from itipy.data.msg.constants import MSG_WAVELENGTHS, SEVIRI_PROJ4
 
 
 def load_msg_file(
@@ -20,6 +22,8 @@ def load_msg_file(
     load_solar: bool = True,
     patch_size: list
     | None = None,  # Whether to crop the data to a smaller patch size (e.g. [128, 128] for pre-training)
+    resolution: float = None,  # Desired resolution in meters (e.g. 2000 for 2km)
+    method: str = "bilinear",  # Resampling method for rioxarray
     center_crop: bool = False,  # If True, will crop to the center of the image
     radius: int = 0,  # Radius for cropping, if center_crop is True
 ):
@@ -37,6 +41,10 @@ def load_msg_file(
                 radius=radius,
             )
             ds = crop_ds(ds)
+        if resolution is not None:
+            ds = ds.rio.write_crs(SEVIRI_PROJ4, inplace=True)
+            ds = convert_coordinates(ds, satellite_type="msg")
+            ds = resample_rioxarray(ds, resolution=(resolution, resolution), method=method)
 
         # extract data
         if "data" in ds.data_vars:
