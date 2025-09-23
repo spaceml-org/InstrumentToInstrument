@@ -77,7 +77,6 @@ class GeoDataset(BaseDataset):
         self.editors = editors
         self.ext = ext
         self.limit = limit
-        self.patch_size = patch_size
         self.load_zenith = load_zenith
         self.load_solar = load_solar
         self.patch_size = patch_size  # Patch size for cropping the data

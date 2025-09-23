@@ -8,10 +8,10 @@ data:
   iterations_per_epoch: 1000
   A_patch_size: (1024, 1024) # Larger patches are saved for accelerated training.
   B_patch_size: (1024, 1024) # Patches are further cropped to (256, 256) before training.
-  A_bands: [8.7] # [8.7, 9.66, 10.8, 12.0, 13.4] # [0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]
-  B_bands: [8.44] # [8.44, 9.61, 10.33, 11.19, 12.27, 13.27] # [0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]
+  A_bands: [9.66] # [8.7, 9.66, 10.8, 12.0, 13.4] # [0.64, 0.81, 1.64, 3.92, 6.25, 7.35, 8.7, 9.66, 10.8, 12.0, 13.4]
+  B_bands: [9.61] # [8.44, 9.61, 10.33, 11.19, 12.27, 13.27] # [0.47, 0.64, 0.87, 1.38, 1.61, 2.25, 3.89, 6.17, 6.93, 7.34, 8.44, 9.61, 10.33, 11.19, 12.27, 13.27]
 model:
-  input_dim_a: 1 
+  input_dim_a: 1
   input_dim_b: 1
   upsampling: 0
   discriminator_mode: CHANNELS
@@ -24,7 +24,7 @@ model:
 logging:
   wandb_entity: itieo
   wandb_project: msg-to-goes
-  wandb_name: MSG_to_GOES-infrared-1band (8.7 um)
+  wandb_name: MSG_to_GOES-infrared-1band (9.66 um)
 training:
   epochs: 200
   limit_train_batches: null
