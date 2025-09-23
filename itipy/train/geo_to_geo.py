@@ -48,8 +48,8 @@ from itipy.iti import ITIModule
 
 @hydra.main(
     version_base="1.3",
-    config_path="ADD-PATH-TO-CONFIG",
-    config_name="train.yaml",
+    config_path="../../config/geo-to-geo/",
+    config_name="himawari-to-goes.yaml",
 )
 def main(config: DictConfig):
     # ------- seeds -------
@@ -246,7 +246,7 @@ def main(config: DictConfig):
     # Start training
     logger.info(f"Initializing ITI model...")
 
-    module = ITIModule(**config["model"])
+    module = ITIModule(**config.model)
 
     logger.info(f"Initializing callbacks...")
     # setup save callbacks
