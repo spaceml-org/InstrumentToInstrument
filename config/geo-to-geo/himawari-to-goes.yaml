@@ -70,7 +70,7 @@ logging:
   wandb_name: HIM8-GOES16-1ch-[12.4um]
   tags: [himawari8, goes16]
 training:
-  epochs: 200
+  epochs: 100
   limit_train_batches: null
   limit_val_batches: 0.5
   num_workers: 6
