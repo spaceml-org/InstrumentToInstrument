@@ -266,10 +266,15 @@ def main(config: DictConfig):
     plot_settings_A = []
     plot_settings_B = []
 
+    # TODO: Update colormaps?
     for wvl in config.data.A_bands:
-        plot_settings_A.append({"cmap": "Blues", "title": f"MSG {wvl}"})
+        plot_settings_A.append(
+            {"cmap": "Blues", "title": f"{config.data.A_satellite} {wvl}"}
+        )
     for wvl in config.data.B_bands:
-        plot_settings_B.append({"cmap": "Greys", "title": f"GOES {wvl}"})
+        plot_settings_B.append(
+            {"cmap": "Greys", "title": f"{config.data.B_satellite} {wvl}"}
+        )
 
     plot_callbacks += [
         PlotBAB(
