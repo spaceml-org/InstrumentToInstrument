@@ -2,7 +2,7 @@ data:
   A_satellite: himawari
   A_path: /mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b
   A_patch_size: (256, 256) # Larger patches for storage.
-  converted_A_path: /home/anna.jungbluth/tmp-data/himawari
+  converted_A_path: /home/annajungbluth/tmp-data/himawari
   converted_A_patch_size: (256, 256) # Smaller patches for training.
   # A_resolution: null # If null, native resolution of the satellite is used.
   # A_center_crop: False # Crop always around the center with given radius.
@@ -29,7 +29,7 @@ data:
   B_satellite: goes
   B_path: /mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/goes/mcmip
   B_patch_size: (256, 256) # Larger patches for storage.
-  converted_B_path: /home/anna.jungbluth/tmp-data/goes
+  converted_B_path: /home/annajungbluth/tmp-data/goes
   converted_B_patch_size: (256, 256) # Smaller patches for training.
   # B_resolution: null # If null, native resolution of the satellite is used.
   # B_center_crop: False # Crop always around the center with given radius.

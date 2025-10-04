@@ -38,8 +38,8 @@ EPOCHS=100
 
 # 3-channel: Atmospheric windows + CO2
 # declare -A variables_and_bands_3ch=(
-#     ["3ch-10.3-12.4um"]="[10330.0,11190.0,12400.0]"  # 3 main windows - using parentheses
-#     # ["3ch-8.4-13.3um"]="[8440.0,11190.0,13270.0]"   # Wide spectral coverage - using parentheses
+#     # ["3ch-10.3-12.4um"]="[10330.0,11190.0,12400.0]"  # 3 main windows - using parentheses
+#     ["3ch-6.2-7.3um"]="[6170.0,6930.0,7340.0]" # Water vapor channels
 # )
 
 # INPUT_DIM_A=3
@@ -77,16 +77,17 @@ EPOCHS=100
 #         training.epochs=$EPOCHS
 # done
 
-# 9-channel: All infrared channels
-declare -A variables_and_bands_9ch=(
-    ["9ch-6.9-13.3um"]="[6170.0,6930.0,7340.0,8440.0,9610.0,10330.0,11190.0,12270.0,13270.0]"
+# 6-channel: All infrared channels 
+
+declare -A variables_and_bands_6ch=(
+    ["6ch-0.47-13.3um"]="[8440.0, 9610.0, 10330.0, 11190.0, 12270.0, 13270.0]"
 )
 
-INPUT_DIM_A=9
-INPUT_DIM_B=9
+INPUT_DIM_A=6
+INPUT_DIM_B=6
 
-for variable in "${!variables_and_bands_9ch[@]}"; do
-    bands=${variables_and_bands_9ch[$variable]}
+for variable in "${!variables_and_bands_6ch[@]}"; do
+    bands=${variables_and_bands_6ch[$variable]}
     wandb_name="HIM8-GOES16-${variable}"
     python itipy/train/geo_to_geo.py \
         data.A_bands="$bands" \
@@ -96,6 +97,47 @@ for variable in "${!variables_and_bands_9ch[@]}"; do
         logging.wandb_name="$wandb_name" \
         training.epochs=$EPOCHS
 done
+
+# 9-channel: All infrared channels
+# declare -A variables_and_bands_9ch=(
+#     ["9ch-6.9-13.3um"]="[6170.0,6930.0,7340.0,8440.0,9610.0,10330.0,11190.0,12270.0,13270.0]"
+# )
+
+# INPUT_DIM_A=9
+# INPUT_DIM_B=9
+
+# for variable in "${!variables_and_bands_9ch[@]}"; do
+#     bands=${variables_and_bands_9ch[$variable]}
+#     wandb_name="HIM8-GOES16-${variable}"
+#     python itipy/train/geo_to_geo.py \
+#         data.A_bands="$bands" \
+#         data.B_bands="$bands" \
+#         model.input_dim_a=$INPUT_DIM_A \
+#         model.input_dim_b=$INPUT_DIM_B \
+#         logging.wandb_name="$wandb_name" \
+#         training.epochs=$EPOCHS
+# done
+
+# 16-channel: All channels channels
+
+# declare -A variables_and_bands_16ch=(
+#     ["16ch-0.47-13.3um"]="[470.0, 640.0, 870.0, 1380.0, 1610.0, 2250.0, 3890.0, 6170.0, 6930.0, 7340.0, 8440.0, 9610.0, 10330.0, 11190.0, 12270.0, 13270.0]"
+# )
+
+# INPUT_DIM_A=16
+# INPUT_DIM_B=16
+
+# for variable in "${!variables_and_bands_16ch[@]}"; do
+#     bands=${variables_and_bands_16ch[$variable]}
+#     wandb_name="HIM8-GOES16-${variable}"
+#     python itipy/train/geo_to_geo.py \
+#         data.A_bands="$bands" \
+#         data.B_bands="$bands" \
+#         model.input_dim_a=$INPUT_DIM_A \
+#         model.input_dim_b=$INPUT_DIM_B \
+#         logging.wandb_name="$wandb_name" \
+#         training.epochs=$EPOCHS
+# done
 
 # # Delete the tmp-data folder
 # rm -rf /home/anna.jungbluth/tmp-data/himawari
