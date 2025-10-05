@@ -113,6 +113,7 @@ class GeoDataset(BaseDataset):
         if self.filter_daytime:
             if self.stats_filepath is None:
                 raise ValueError("stats_filepath must be provided when filter_daytime is True")
+            logger.info(f"Filtering files for daytime images using {self.stats_filepath}")
             stats_df = pd.read_csv(self.stats_filepath)
             # Empirically determined threshold to filter out nighttime images
             # A mean reflectance value of 5 in the visible channel works well

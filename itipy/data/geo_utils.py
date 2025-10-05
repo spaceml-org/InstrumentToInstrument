@@ -352,10 +352,11 @@ def filter_files_by_metric(files, stats_df, satellite, metric_column, threshold)
     """
     
     # Filter stats in one operation
+    stats_df['sensor'] = stats_df['sensor'].apply(lambda x: x.lower())
     stats_subset = (stats_df
                    .query(f'sensor == "{satellite}" and {metric_column} >= {threshold}')
                    .reset_index(drop=True))
-    
+
     logger.info(f"Filtering files for satellite {satellite} using metric '{metric_column}' with threshold {threshold}")
     
     # Convert to set for O(1) lookup instead of O(n) for each file
