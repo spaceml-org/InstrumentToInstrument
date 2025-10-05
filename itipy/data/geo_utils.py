@@ -338,6 +338,38 @@ def get_files(datasets_spec: DictConfig, ext=".nc"):
     return get_list_filenames(data_path=data_path, ext=ext)
 
 
+def filter_files_by_metric(files, stats_df, satellite, metric_column, threshold):
+    """
+    Filter files based on a metric threshold for a specific satellite.
+    Args:
+        files (List[str]): List of file paths to filter.
+        stats_df (pd.DataFrame): DataFrame containing statistics with columns 'file', 'sensor', and the metric column.
+        satellite (str): The satellite name to filter by (e.g., 'GOES', 'HIMAWARI').
+        metric_column (str): The name of the metric column in stats_df to apply the threshold on.
+        threshold (float): The threshold value for filtering.
+    Returns:
+        List[str]: Filtered list of file paths that meet the metric threshold.
+    """
+    
+    # Filter stats in one operation
+    stats_subset = (stats_df
+                   .query(f'sensor == "{satellite}" and {metric_column} >= {threshold}')
+                   .reset_index(drop=True))
+    
+    logger.info(f"Filtering files for satellite {satellite} using metric '{metric_column}' with threshold {threshold}")
+    
+    # Convert to set for O(1) lookup instead of O(n) for each file
+    valid_files = set(stats_subset['file'].values)
+    
+    # Use list comprehension with set lookup (much faster than checking pandas Series)
+    filtered_files = [file for file in files 
+                     if os.path.basename(file) in valid_files]
+    
+    logger.info(f"{len(filtered_files)} remain after applying threshold.")
+    
+    return filtered_files
+
+
 def convert_units(data: np.array, wavelengths: np.array) -> np.array:
     """
     Function to convert units from mW/m^2/sr/cm^-1 to W/m^2/sr/um in numpy array.

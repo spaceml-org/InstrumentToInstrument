@@ -52,7 +52,8 @@ data:
           12270.0, # IR
           # 13270.0, # IR
       ]
-
+  filter_daytime: False
+  stats_filepath: /data/2025-esl-3dclouds-extremes-datasets/pre-training-reprocessed/pretrain_stats.csv
 model:
   input_dim_a: 1
   input_dim_b: 1

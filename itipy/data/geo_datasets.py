@@ -14,22 +14,23 @@ import logging
 import autoroot  # required for imports from src
 import numpy as np
 import xarray as xr
+import pandas as pd
 from loguru import logger
 
 from itipy.data.dataset import BaseDataset
 from itipy.data.editor import Editor
 from itipy.data.geo_editor import CenterWeightedCropDatasetEditor
-from itipy.data.geo_utils import get_list_filenames, get_split
+from itipy.data.geo_utils import get_list_filenames, get_split, filter_files_by_metric
 from itipy.data.goes.load import load_goes_file
 from itipy.data.himawari.load import load_himawari_file
 from itipy.data.msg.load import load_msg_file
+from itipy.data.geo_constants import channels
 
 load_functions = {
     "goes": load_goes_file,
     "himawari": load_himawari_file,
     "msg": load_msg_file,
 }
-
 
 class GeoDataset(BaseDataset):
     """
@@ -65,6 +66,8 @@ class GeoDataset(BaseDataset):
         method: str = "bilinear",  # Resampling method for rioxarray
         center_crop: bool = False,  # If True, will crop to the center of the image
         radius: int = 0,  # Radius for cropping, if center_crop is True
+        filter_daytime: bool = False,  # If True, will filter out nighttime images
+        stats_filepath: str = None,  # CSV file with precomputed statistics for filtering
         **kwargs,
     ):
         if satellite.lower() not in ["goes", "himawari", "msg"]:
@@ -85,6 +88,8 @@ class GeoDataset(BaseDataset):
         self.center_crop = center_crop  # If True, will crop to the center of the image
         self.radius = radius
         self.max_attempts = 20  # Maximum number of attempts to load valid data
+        self.filter_daytime = filter_daytime
+        self.stats_filepath = stats_filepath
 
         self.files = self.get_files()
 
@@ -105,6 +110,19 @@ class GeoDataset(BaseDataset):
     def get_files(self):
         # Get filenames from data_dir
         files = get_list_filenames(data_path=self.data_dir, ext=self.ext)
+        if self.filter_daytime:
+            if self.stats_filepath is None:
+                raise ValueError("stats_filepath must be provided when filter_daytime is True")
+            stats_df = pd.read_csv(self.stats_filepath)
+            # Empirically determined threshold to filter out nighttime images
+            # A mean reflectance value of 5 in the visible channel works well
+            files = filter_files_by_metric(
+                files = files, 
+                stats_df = stats_df,
+                satellite = self.satellite,
+                metric_column=f'{channels[self.satellite][0]}_mean',
+                threshold = 5
+            )
         # split files based on split criteria
         files = get_split(files=files, split_dict=self.splits_dict)
         return files

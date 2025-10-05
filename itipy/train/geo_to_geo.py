@@ -145,6 +145,8 @@ def main(config: DictConfig):
         if "A_center_crop" in config.data
         else False,
         radius=config.data.A_radius if "A_radius" in config.data else 0,
+        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
+        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
     )
     A_valid_dataset = GeoDataset(
         satellite=config.data.A_satellite,
@@ -159,6 +161,8 @@ def main(config: DictConfig):
         if "A_center_crop" in config.data
         else False,
         radius=config.data.A_radius if "A_radius" in config.data else 0,
+        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,    
+        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
     )
 
     if "converted_A_path" in config.data:
@@ -193,6 +197,8 @@ def main(config: DictConfig):
         if "B_center_crop" in config.data
         else False,
         radius=config.data.B_radius if "B_radius" in config.data else 0,
+        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
+        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
     )
     B_valid_dataset = GeoDataset(
         satellite=config.data.B_satellite,
@@ -207,6 +213,8 @@ def main(config: DictConfig):
         if "B_center_crop" in config.data
         else False,
         radius=config.data.B_radius if "B_radius" in config.data else 0,
+        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
+        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
     )
 
     if "converted_B_path" in config.data:
@@ -238,7 +246,7 @@ def main(config: DictConfig):
         else 4,
         iterations_per_epoch=config.training.iterations_per_epoch
         if "iterations_per_epoch" in config.training
-        else 10000,
+        else 1000,
     )
 
     # ------- training -------
