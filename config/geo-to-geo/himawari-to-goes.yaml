@@ -1,4 +1,5 @@
 data:
+  load_from_numpy: False # If True, we don't need the converted_path or patch_sizes
   A_satellite: himawari
   A_path: /mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b
   A_patch_size: (256, 256) # Larger patches for storage.

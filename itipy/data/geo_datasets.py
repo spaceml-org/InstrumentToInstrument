@@ -13,24 +13,25 @@ import logging
 
 import autoroot  # required for imports from src
 import numpy as np
-import xarray as xr
 import pandas as pd
+import xarray as xr
 from loguru import logger
 
 from itipy.data.dataset import BaseDataset
 from itipy.data.editor import Editor
+from itipy.data.geo_constants import CHANNELS, WAVELENGTHS
 from itipy.data.geo_editor import CenterWeightedCropDatasetEditor
-from itipy.data.geo_utils import get_list_filenames, get_split, filter_files_by_metric
+from itipy.data.geo_utils import filter_files_by_metric, get_list_filenames, get_split
 from itipy.data.goes.load import load_goes_file
 from itipy.data.himawari.load import load_himawari_file
 from itipy.data.msg.load import load_msg_file
-from itipy.data.geo_constants import channels
 
 load_functions = {
     "goes": load_goes_file,
     "himawari": load_himawari_file,
     "msg": load_msg_file,
 }
+
 
 class GeoDataset(BaseDataset):
     """
@@ -48,6 +49,8 @@ class GeoDataset(BaseDataset):
         patch_size (tuple[int, int], optional): The size of the patches to crop. Defaults to None.
         center_crop (bool, optional): Whether to crop the data to the center. Defaults to False.
         radius (int, optional): The radius for cropping, if center_crop is True. Defaults to 0.
+        filter_daytime (bool, optional): Whether to load only daytime images. Defaults to False.
+        stats_filepath (str, optional): CSV file with precomputed statistics for filtering. Required if filter_daytime is True.
         **kwargs: Additional keyword arguments.
     """
 
@@ -112,17 +115,21 @@ class GeoDataset(BaseDataset):
         files = get_list_filenames(data_path=self.data_dir, ext=self.ext)
         if self.filter_daytime:
             if self.stats_filepath is None:
-                raise ValueError("stats_filepath must be provided when filter_daytime is True")
-            logger.info(f"Filtering files for daytime images using {self.stats_filepath}")
+                raise ValueError(
+                    "stats_filepath must be provided when filter_daytime is True"
+                )
+            logger.info(
+                f"Filtering files for daytime images using {self.stats_filepath}"
+            )
             stats_df = pd.read_csv(self.stats_filepath)
             # Empirically determined threshold to filter out nighttime images
             # A mean reflectance value of 5 in the visible channel works well
             files = filter_files_by_metric(
-                files = files, 
-                stats_df = stats_df,
-                satellite = self.satellite,
-                metric_column=f'{channels[self.satellite][0]}_mean',
-                threshold = 5
+                files=files,
+                stats_df=stats_df,
+                satellite=self.satellite,
+                metric_column=f"{CHANNELS[self.satellite][0]}_mean",
+                threshold=5,
             )
         # split files based on split criteria
         files = get_split(files=files, split_dict=self.splits_dict)
@@ -187,6 +194,121 @@ class GeoDataset(BaseDataset):
             return data_dict["data"]
         else:
             return data_dict
+
+
+class GeoDataset_Numpy(BaseDataset):
+    """
+    Class to load geostationary satellite data (GOES, HIMAWARI, MSG) after conversion to numpy arrays.
+
+    Args:
+        satellite (str): The satellite name. Options are "goes", "himawari", "msg".
+        data_dir (List[str]): A list of directories containing the data files.
+        target_wavelengths (List[float]): A list of target wavelengths to select.
+        editors (List[Editor]): A list of editors for data preprocessing.
+        splits_dict (Dict, optional): A dictionary specifying the splits for the dataset. Defaults to None.
+        ext (str, optional): The file extension of the data files. Defaults to "nc".
+        limit (int, optional): The maximum number of files to load. Defaults to None.
+        filter_daytime (bool, optional): Whether to load only daytime images. Defaults to False.
+        stats_filepath (str, optional): CSV file with precomputed statistics for filtering. Required if filter_daytime is True.
+        **kwargs: Additional keyword arguments.
+    """
+
+    def __init__(
+        self,
+        satellite: str,
+        data_dir: list[str],
+        target_wavelengths: list[float],
+        splits_dict: dict,
+        editors: list[Editor] = None,
+        ext: str = "npy",
+        limit: int = None,
+        filter_daytime: bool = False,  # If True, will filter out nighttime images
+        stats_filepath: str = None,  # CSV file with precomputed statistics for filtering
+        **kwargs,
+    ):
+        if satellite.lower() not in ["goes", "himawari", "msg"]:
+            raise ValueError(
+                f"Satellite {satellite} not recognized. Options are 'goes', 'himawari', 'msg'."
+            )
+        self.satellite = satellite.lower()
+        self.data_dir = data_dir
+        self.target_wavelengths = target_wavelengths
+        self.splits_dict = splits_dict
+        self.editors = editors
+        self.ext = ext
+        self.limit = limit
+        self.filter_daytime = filter_daytime
+        self.stats_filepath = stats_filepath
+
+        self.files = self.get_files()
+        self.indexes = self.get_indexes()
+
+        super().__init__(
+            data=self.files,
+            editors=self.editors,
+            ext=self.ext,
+            limit=self.limit,
+            **kwargs,
+        )
+
+    def setup(self, stage):
+        pass
+
+    def prepare_data(self):
+        pass
+
+    def get_indexes(self):
+        source_wavelengths = WAVELENGTHS[self.satellite]
+
+        distances = np.abs(
+            np.array(source_wavelengths)[:, None]
+            - np.array(self.target_wavelengths)[None, :]
+        )
+        # for each, find the index of the closest wavelength
+        indexes = np.argmin(distances, axis=0)
+
+        logger.info(f"Selecting channels for satellite {self.satellite}...")
+        logger.info(f"Source wavelengths: {source_wavelengths}")
+        logger.info(f"Target wavelengths: {self.target_wavelengths}")
+        logger.info(f"Indexes: {indexes}")
+        # print a warning if an index is duplicated
+        if len(set(indexes)) < len(indexes):
+            logger.warning(f"Duplicated indexes found when matching wavelengths.")
+
+        return indexes
+
+    def get_files(self):
+        # Get filenames from data_dir
+        files = get_list_filenames(data_path=self.data_dir, ext=self.ext)
+        if self.filter_daytime:
+            if self.stats_filepath is None:
+                raise ValueError(
+                    "stats_filepath must be provided when filter_daytime is True"
+                )
+            logger.info(
+                f"Filtering files for daytime images using {self.stats_filepath}"
+            )
+            stats_df = pd.read_csv(self.stats_filepath)
+            # Empirically determined threshold to filter out nighttime images
+            # A mean reflectance value of 5 in the visible channel works well
+            files = filter_files_by_metric(
+                files=files,
+                stats_df=stats_df,
+                satellite=self.satellite,
+                metric_column=f"{CHANNELS[self.satellite][0]}_mean",
+                threshold=5,
+            )
+        # split files based on split criteria
+        files = get_split(files=files, split_dict=self.splits_dict)
+        return files
+
+    def __len__(self):
+        return len(self.files)
+
+    def __getitem__(self, idx):  # can output array or dict depending on transforms
+        data = np.load(self.files[idx])  # shape (channels, height, width)
+        data = data[self.indexes, :, :]  # Select only the desired channels
+        return data
 
 
 class GeoDataset_FullDisk(BaseDataset):

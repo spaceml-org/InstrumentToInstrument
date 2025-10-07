@@ -11,11 +11,7 @@ import pandas as pd
 import xarray as xr
 from loguru import logger
 from omegaconf import DictConfig
-
-import rioxarray
-import xarray as xr
 from rasterio.enums import Resampling
-from typing import Tuple
 
 rioxarray_samplers = {
     "bilinear": Resampling.bilinear,
@@ -24,7 +20,10 @@ rioxarray_samplers = {
     "nearest": Resampling.nearest,
 }
 
-def resample_rioxarray(ds: xr.Dataset, resolution: Tuple[int, int], method: str="bilinear") -> xr.Dataset:
+
+def resample_rioxarray(
+    ds: xr.Dataset, resolution: Tuple[int, int], method: str = "bilinear"
+) -> xr.Dataset:
     """
     Resamples a raster dataset using rasterio-xarray.
 
@@ -40,53 +39,54 @@ def resample_rioxarray(ds: xr.Dataset, resolution: Tuple[int, int], method: str=
     ds = ds.rio.reproject(
         ds.rio.crs,
         resolution=resolution,
-        resample=rioxarray_samplers[method], 
+        resample=rioxarray_samplers[method],
     )
     return ds
+
 
 def convert_coordinates(ds: xr.Dataset, satellite_type: str) -> xr.Dataset:
     """
     Convert satellite coordinates from radians to meters for geostationary projections.
-    
+
     Parameters:
         ds (xr.Dataset): Input dataset with coordinates in radians
         satellite_type (str): Type of satellite ("goes", "himawari", "msg")
-        
+
     Returns:
         xr.Dataset: Dataset with corrected coordinates in meters
     """
     # Satellite heights in meters
     satellite_heights = {
-        "goes": 35786023,      # GOES-16/17
-        "himawari": 35785863,  # Himawari-8/9  
-        "msg": 35785831        # MSG/SEVIRI
+        "goes": 35786023,  # GOES-16/17
+        "himawari": 35785863,  # Himawari-8/9
+        "msg": 35785831,  # MSG/SEVIRI
     }
-    
+
     if satellite_type.lower() not in satellite_heights:
         raise ValueError(f"Unknown satellite type: {satellite_type}")
-    
+
     satellite_height = satellite_heights[satellite_type.lower()]
-    
+
     # Check if coordinates are in radians
-    x_units = ds.x.attrs.get('units', '')
-    y_units = ds.y.attrs.get('units', '')
-    
-    if x_units == 'rad' and y_units == 'rad':
+    x_units = ds.x.attrs.get("units", "")
+    y_units = ds.y.attrs.get("units", "")
+
+    if x_units == "rad" and y_units == "rad":
         # print(f"Converting {satellite_type.upper()} coordinates from radians to meters...")
-        
+
         # Convert coordinates
         x_meters = ds.x.values * satellite_height
         y_meters = ds.y.values * satellite_height
-        
+
         # Update dataset
         ds_corrected = ds.assign_coords(x=x_meters, y=y_meters)
-        ds_corrected.x.attrs['units'] = 'm'
-        ds_corrected.y.attrs['units'] = 'm'
-        
+        ds_corrected.x.attrs["units"] = "m"
+        ds_corrected.y.attrs["units"] = "m"
+
         # print(f"Original resolution: {ds.rio.resolution()}")
         # print(f"Corrected resolution: {ds_corrected.rio.resolution()}")
         # print(f"Resolution in km: {abs(ds_corrected.rio.resolution()[0]/1000):.1f} km")
-        
+
         return ds_corrected
     else:
         # print("Coordinates are already in proper units, no conversion needed.")
@@ -350,24 +350,29 @@ def filter_files_by_metric(files, stats_df, satellite, metric_column, threshold)
     Returns:
         List[str]: Filtered list of file paths that meet the metric threshold.
     """
-    
-    # Filter stats in one operation
-    stats_df['sensor'] = stats_df['sensor'].apply(lambda x: x.lower())
-    stats_subset = (stats_df
-                   .query(f'sensor == "{satellite}" and {metric_column} >= {threshold}')
-                   .reset_index(drop=True))
 
-    logger.info(f"Filtering files for satellite {satellite} using metric '{metric_column}' with threshold {threshold}")
-    
+    # Filter stats in one operation
+    stats_df["sensor"] = stats_df["sensor"].apply(lambda x: x.lower())
+    stats_subset = stats_df.query(
+        f'sensor == "{satellite}" and {metric_column} >= {threshold}'
+    ).reset_index(drop=True)
+
+    logger.info(
+        f"Filtering files for satellite {satellite} using metric '{metric_column}' with threshold {threshold}"
+    )
+
     # Convert to set for O(1) lookup instead of O(n) for each file
-    valid_files = set(stats_subset['file'].values)
-    
+    valid_files = set(stats_subset["file"].values)
+    # Remove file extensions for comparison
+    valid_files = [f.split(".")[0] for f in valid_files]
+
     # Use list comprehension with set lookup (much faster than checking pandas Series)
-    filtered_files = [file for file in files 
-                     if os.path.basename(file) in valid_files]
-    
+    filtered_files = [
+        file for file in files if os.path.basename(file).split(".")[0] in valid_files
+    ]
+
     logger.info(f"{len(filtered_files)} remain after applying threshold.")
-    
+
     return filtered_files
 
 

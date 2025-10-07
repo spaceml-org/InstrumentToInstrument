@@ -29,7 +29,7 @@ from omegaconf import DictConfig
 from itipy.data.dataset import StorageDataset
 from itipy.data.editor import RandomPatchEditor
 from itipy.data.geo_constants import SPLITS_DICT as splits_dict
-from itipy.data.geo_datasets import GeoDataset
+from itipy.data.geo_datasets import GeoDataset, GeoDataset_Numpy
 from itipy.data.geo_editor import (
     MinMaxNormEditor,
     NanDictEditor,
@@ -95,147 +95,234 @@ def main(config: DictConfig):
 
     # ------- dataloaders -------
 
-    # Parameters for satellite A (the one to be translated from)
-    A_patch_size = (
-        ast.literal_eval(config.data.A_patch_size)
-        if config.data.A_patch_size is not None
-        else None
-    )
-    A_bands = config.data.A_bands
-    # TODO: Make more modular using hydra config instantiation
-    A_editors = [
-        WavelengthSelectionEditor(
-            wavelengths=A_bands,
-        ),
-        MinMaxNormEditor(),
-        NanDictEditor(),
-    ]
+    load_from_numpy = config.load_from_numpy if "load_from_numpy" in config else False
 
-    # Parameters for satellite B (the one to be translated to)
-    config.data.B_path
-    B_patch_size = (
-        ast.literal_eval(config.data.B_patch_size)
-        if config.data.B_patch_size is not None
-        else None
-    )
-    B_bands = config.data.B_bands
-    # TODO: Make more modular using hydra config instantiation
-    B_editors = [
-        WavelengthSelectionEditor(
-            wavelengths=B_bands,
-        ),
-        MinMaxNormEditor(),
-        NanDictEditor(),
-    ]
-    # Instantiate datasets and dataloaders
+    if not load_from_numpy:
+        logger.info("Instantiating GeoDataset...")
 
-    logger.info("instantiating datasets...")
-
-    # Instantiating dataset for satellite A
-    A_train_dataset = GeoDataset(
-        satellite=config.data.A_satellite,
-        data_dir=config.data.A_path,
-        splits_dict=splits_dict["train"],
-        editors=A_editors,
-        load_zenith=False,
-        load_solar=False,
-        patch_size=A_patch_size,
-        resolution=config.data.A_resolution if "A_resolution" in config.data else None,
-        center_crop=config.data.A_center_crop
-        if "A_center_crop" in config.data
-        else False,
-        radius=config.data.A_radius if "A_radius" in config.data else 0,
-        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
-        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
-    )
-    A_valid_dataset = GeoDataset(
-        satellite=config.data.A_satellite,
-        data_dir=config.data.A_path,
-        splits_dict=splits_dict["val"],
-        editors=A_editors,
-        load_zenith=False,
-        load_solar=False,
-        patch_size=A_patch_size,
-        resolution=config.data.A_resolution if "A_resolution" in config.data else None,
-        center_crop=config.data.A_center_crop
-        if "A_center_crop" in config.data
-        else False,
-        radius=config.data.A_radius if "A_radius" in config.data else 0,
-        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,    
-        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
-    )
-
-    if "converted_A_path" in config.data:
-        converted_A_patch_size = (
-            ast.literal_eval(config.data.converted_A_patch_size)
-            if "converted_A_patch_size" in config.data
-            and config.data.converted_A_patch_size is not None
-            else (256, 256)
+        # Parameters for satellite A (the one to be translated from)
+        A_patch_size = (
+            ast.literal_eval(config.data.A_patch_size)
+            if config.data.A_patch_size is not None
+            else None
         )
-        A_train_dataset = StorageDataset(
-            dataset=A_train_dataset,
-            store_dir=config.data.converted_A_path,
-            ext_editors=[RandomPatchEditor(patch_shape=converted_A_patch_size)],
+        A_bands = config.data.A_bands
+        # TODO: Make more modular using hydra config instantiation
+        A_editors = [
+            WavelengthSelectionEditor(
+                wavelengths=A_bands,
+            ),
+            MinMaxNormEditor(),
+            NanDictEditor(),
+        ]
+
+        # Parameters for satellite B (the one to be translated to)
+        config.data.B_path
+        B_patch_size = (
+            ast.literal_eval(config.data.B_patch_size)
+            if config.data.B_patch_size is not None
+            else None
         )
-        A_valid_dataset = StorageDataset(
-            dataset=A_valid_dataset,
-            store_dir=config.data.converted_A_path,
-            ext_editors=[RandomPatchEditor(patch_shape=converted_A_patch_size)],
+        B_bands = config.data.B_bands
+        # TODO: Make more modular using hydra config instantiation
+        B_editors = [
+            WavelengthSelectionEditor(
+                wavelengths=B_bands,
+            ),
+            MinMaxNormEditor(),
+            NanDictEditor(),
+        ]
+        # Instantiate datasets and dataloaders
+
+        # Instantiating dataset for satellite A
+        A_train_dataset = GeoDataset(
+            satellite=config.data.A_satellite,
+            data_dir=config.data.A_path,
+            splits_dict=splits_dict["train"],
+            editors=A_editors,
+            load_zenith=False,
+            load_solar=False,
+            patch_size=A_patch_size,
+            resolution=config.data.A_resolution
+            if "A_resolution" in config.data
+            else None,
+            center_crop=config.data.A_center_crop
+            if "A_center_crop" in config.data
+            else False,
+            radius=config.data.A_radius if "A_radius" in config.data else 0,
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
+        )
+        A_valid_dataset = GeoDataset(
+            satellite=config.data.A_satellite,
+            data_dir=config.data.A_path,
+            splits_dict=splits_dict["val"],
+            editors=A_editors,
+            load_zenith=False,
+            load_solar=False,
+            patch_size=A_patch_size,
+            resolution=config.data.A_resolution
+            if "A_resolution" in config.data
+            else None,
+            center_crop=config.data.A_center_crop
+            if "A_center_crop" in config.data
+            else False,
+            radius=config.data.A_radius if "A_radius" in config.data else 0,
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
         )
 
-    # Instantiating dataset for satellite B
-    B_train_dataset = GeoDataset(
-        satellite=config.data.B_satellite,
-        data_dir=config.data.B_path,
-        splits_dict=splits_dict["train"],
-        editors=B_editors,
-        load_zenith=False,
-        load_solar=False,
-        patch_size=B_patch_size,
-        resolution=config.data.B_resolution if "B_resolution" in config.data else None,
-        center_crop=config.data.B_center_crop
-        if "B_center_crop" in config.data
-        else False,
-        radius=config.data.B_radius if "B_radius" in config.data else 0,
-        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
-        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
-    )
-    B_valid_dataset = GeoDataset(
-        satellite=config.data.B_satellite,
-        data_dir=config.data.B_path,
-        splits_dict=splits_dict["val"],
-        editors=B_editors,
-        load_zenith=False,
-        load_solar=False,
-        patch_size=B_patch_size,
-        resolution=config.data.B_resolution if "B_resolution" in config.data else None,
-        center_crop=config.data.B_center_crop
-        if "B_center_crop" in config.data
-        else False,
-        radius=config.data.B_radius if "B_radius" in config.data else 0,
-        filter_daytime=config.data.filter_daytime if "filter_daytime" in config.data else False,
-        stats_filepath=config.data.stats_filepath if "stats_filepath" in config.data else None,
-    )
+        if "converted_A_path" in config.data:
+            logger.info(
+                f"Instantiating StorageDataset for satellite {config.data.A_satellite}..."
+            )
+            converted_A_patch_size = (
+                ast.literal_eval(config.data.converted_A_patch_size)
+                if "converted_A_patch_size" in config.data
+                and config.data.converted_A_patch_size is not None
+                else (256, 256)
+            )
+            A_train_dataset = StorageDataset(
+                dataset=A_train_dataset,
+                store_dir=config.data.converted_A_path,
+                ext_editors=[RandomPatchEditor(patch_shape=converted_A_patch_size)],
+            )
+            A_valid_dataset = StorageDataset(
+                dataset=A_valid_dataset,
+                store_dir=config.data.converted_A_path,
+                ext_editors=[RandomPatchEditor(patch_shape=converted_A_patch_size)],
+            )
 
-    if "converted_B_path" in config.data:
-        converted_B_patch_size = (
-            ast.literal_eval(config.data.converted_B_patch_size)
-            if "converted_B_patch_size" in config.data
-            and config.data.converted_B_patch_size is not None
-            else (256, 256)
+        # Instantiating dataset for satellite B
+        B_train_dataset = GeoDataset(
+            satellite=config.data.B_satellite,
+            data_dir=config.data.B_path,
+            splits_dict=splits_dict["train"],
+            editors=B_editors,
+            load_zenith=False,
+            load_solar=False,
+            patch_size=B_patch_size,
+            resolution=config.data.B_resolution
+            if "B_resolution" in config.data
+            else None,
+            center_crop=config.data.B_center_crop
+            if "B_center_crop" in config.data
+            else False,
+            radius=config.data.B_radius if "B_radius" in config.data else 0,
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
         )
-        B_train_dataset = StorageDataset(
-            dataset=B_train_dataset,
-            store_dir=config.data.converted_B_path,
-            ext_editors=[RandomPatchEditor(patch_shape=converted_B_patch_size)],
-        )
-        B_valid_dataset = StorageDataset(
-            dataset=B_valid_dataset,
-            store_dir=config.data.converted_B_path,
-            ext_editors=[RandomPatchEditor(patch_shape=converted_B_patch_size)],
+        B_valid_dataset = GeoDataset(
+            satellite=config.data.B_satellite,
+            data_dir=config.data.B_path,
+            splits_dict=splits_dict["val"],
+            editors=B_editors,
+            load_zenith=False,
+            load_solar=False,
+            patch_size=B_patch_size,
+            resolution=config.data.B_resolution
+            if "B_resolution" in config.data
+            else None,
+            center_crop=config.data.B_center_crop
+            if "B_center_crop" in config.data
+            else False,
+            radius=config.data.B_radius if "B_radius" in config.data else 0,
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
         )
 
-    logger.info("instantiating ITI dataloader...")
+        if "converted_B_path" in config.data:
+            logger.info(
+                f"Instantiating StorageDataset for satellite {config.data.B_satellite}..."
+            )
+            converted_B_patch_size = (
+                ast.literal_eval(config.data.converted_B_patch_size)
+                if "converted_B_patch_size" in config.data
+                and config.data.converted_B_patch_size is not None
+                else (256, 256)
+            )
+            B_train_dataset = StorageDataset(
+                dataset=B_train_dataset,
+                store_dir=config.data.converted_B_path,
+                ext_editors=[RandomPatchEditor(patch_shape=converted_B_patch_size)],
+            )
+            B_valid_dataset = StorageDataset(
+                dataset=B_valid_dataset,
+                store_dir=config.data.converted_B_path,
+                ext_editors=[RandomPatchEditor(patch_shape=converted_B_patch_size)],
+            )
+    else:
+        logger.info("Instantiating GeoDataset to load from numpy...")
+
+        A_train_dataset = GeoDataset_Numpy(
+            satellite=config.data.A_satellite,
+            data_dir=config.data.A_path,
+            target_wavelengths=config.data.A_bands,
+            splits_dict=splits_dict["train"],
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
+        )
+
+        A_valid_dataset = GeoDataset_Numpy(
+            satellite=config.data.A_satellite,
+            data_dir=config.data.A_path,
+            target_wavelengths=config.data.A_bands,
+            splits_dict=splits_dict["val"],
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
+        )
+
+        B_train_dataset = GeoDataset_Numpy(
+            satellite=config.data.B_satellite,
+            data_dir=config.data.B_path,
+            target_wavelengths=config.data.B_bands,
+            splits_dict=splits_dict["train"],
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
+        )
+
+        B_valid_dataset = GeoDataset_Numpy(
+            satellite=config.data.B_satellite,
+            data_dir=config.data.B_path,
+            target_wavelengths=config.data.B_bands,
+            splits_dict=splits_dict["val"],
+            filter_daytime=config.data.filter_daytime
+            if "filter_daytime" in config.data
+            else False,
+            stats_filepath=config.data.stats_filepath
+            if "stats_filepath" in config.data
+            else None,
+        )
+
+    logger.info("Instantiating ITI dataloader...")
     data_module = ITIDataModule(
         A_train_ds=A_train_dataset,
         B_train_ds=B_train_dataset,
