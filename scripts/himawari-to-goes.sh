@@ -37,25 +37,34 @@ EPOCHS=100
 # done
 
 # 3-channel: Atmospheric windows + CO2
-# declare -A variables_and_bands_3ch=(
-#     # ["3ch-10.3-12.4um"]="[10330.0,11190.0,12400.0]"  # 3 main windows - using parentheses
-#     ["3ch-6.2-7.3um"]="[6170.0,6930.0,7340.0]" # Water vapor channels
-# )
+declare -A variables_and_bands_3ch=(
+    # ["3ch-10.3-12.4um"]="[10330.0,11190.0,12400.0]"  # 3 main windows - using parentheses
+    # ["3ch-6.2-7.3um"]="[6170.0,6930.0,7340.0]" # Water vapor channels
+    ["3ch-0.47-0.87um"]="[470.0,640.0,870.0]" # Visible channels
+)
 
-# INPUT_DIM_A=3
-# INPUT_DIM_B=3
+A_bands="[470.0,640.0,860.0]"
+B_bands="[470.0,640.0,870.0]"
 
-# for variable in "${!variables_and_bands_3ch[@]}"; do
-#     bands=${variables_and_bands_3ch[$variable]}
-#     wandb_name="HIM8-GOES16-${variable}"
-#     python itipy/train/geo_to_geo.py \
-#         data.A_bands="$bands" \
-#         data.B_bands="$bands" \
-#         model.input_dim_a=$INPUT_DIM_A \
-#         model.input_dim_b=$INPUT_DIM_B \
-#         logging.wandb_name="$wandb_name" \
-#         training.epochs=$EPOCHS
-# done
+INPUT_DIM_A=3
+INPUT_DIM_B=3
+
+FILTER_DAYTIME=True
+LIMIT_VAL_BATCHES=null # reset to full val set, since daytime filtering reduces val set size
+
+for variable in "${!variables_and_bands_3ch[@]}"; do
+    bands=${variables_and_bands_3ch[$variable]}
+    wandb_name="HIM8-GOES16-${variable}"
+    python itipy/train/geo_to_geo.py \
+        data.A_bands="$A_bands" \
+        data.B_bands="$B_bands" \
+        data.filter_daytime=$FILTER_DAYTIME \
+        model.input_dim_a=$INPUT_DIM_A \
+        model.input_dim_b=$INPUT_DIM_B \
+        logging.wandb_name="$wandb_name" \
+        training.epochs=$EPOCHS \
+        training.limit_val_batches=$LIMIT_VAL_BATCHES
+done
 
 # 5-channel: Atmospheric windows + CO2
 # declare -A variables_and_bands_5ch=(
@@ -77,7 +86,7 @@ EPOCHS=100
 #         training.epochs=$EPOCHS
 # done
 
-# 6-channel: All infrared channels 
+# 6-channel: All infrared channels
 # declare -A variables_and_bands_6ch=(
 #      ["6ch-8.4-13.3um"]="[8440.0, 9610.0, 10330.0, 11190.0, 12270.0, 13270.0]"
 # )
@@ -99,33 +108,61 @@ EPOCHS=100
 #         training.limit_val_batches=$LIMIT_VAL_BATCHES
 # done
 
+# 3/4-channel: All visible + near-IR channels (daytime only)
+# declare -A variables_and_bands_3ch=(
+#     ["4ch-0.47-0.87um"]="[470.0, 640.0, 870.0]"
+# )
+
+# A_bands="[470.0, 510.0, 640.0, 860.0]"
+# B_bands="[470.0, 640.0, 870.0]"
+
+# FILTER_DAYTIME=True
+# LIMIT_VAL_BATCHES=null # reset to full val set, since daytime filtering reduces val set size
+
+# INPUT_DIM_A=4
+# INPUT_DIM_B=3
+
+# for variable in "${!variables_and_bands_3ch[@]}"; do
+#     bands=${variables_and_bands_3ch[$variable]}
+#     wandb_name="HIM8-GOES16-${variable}"
+#     python itipy/train/geo_to_geo.py \
+#         data.A_bands="$A_bands" \
+#         data.B_bands="$B_bands" \
+#         data.filter_daytime=$FILTER_DAYTIME \
+#         model.input_dim_a=$INPUT_DIM_A \
+#         model.input_dim_b=$INPUT_DIM_B \
+#         logging.wandb_name="$wandb_name" \
+#         training.epochs=$EPOCHS \
+#         training.limit_val_batches=$LIMIT_VAL_BATCHES
+# done
+
 # 6-channel: All visible + near-IR channels (daytime only)
-declare -A variables_and_bands_6ch=(
-    ["6ch-0.47-3.9um"]="[470.0, 640.0, 870.0, 1380.0, 1610.0, 2250.0]"
-)
+# declare -A variables_and_bands_6ch=(
+#     ["6ch-0.47-3.9um"]="[470.0, 640.0, 870.0, 1380.0, 1610.0, 2250.0]"
+# )
 
-A_bands="[470.0, 510.0, 640.0, 860.0, 1600.0,2300.0]"
-B_bands="[470.0, 640.0, 870.0, 1380.0, 1610.0, 2250.0]"
+# A_bands="[470.0, 510.0, 640.0, 860.0, 1600.0,2300.0]"
+# B_bands="[470.0, 640.0, 870.0, 1380.0, 1610.0, 2250.0]"
 
-FILTER_DAYTIME=True
-LIMIT_VAL_BATCHES=null # reset to full val set, since daytime filtering reduces val set size
+# FILTER_DAYTIME=True
+# LIMIT_VAL_BATCHES=null # reset to full val set, since daytime filtering reduces val set size
 
-INPUT_DIM_A=6
-INPUT_DIM_B=6
+# INPUT_DIM_A=6
+# INPUT_DIM_B=6
 
-for variable in "${!variables_and_bands_6ch[@]}"; do
-    bands=${variables_and_bands_6ch[$variable]}
-    wandb_name="HIM8-GOES16-${variable}"
-    python itipy/train/geo_to_geo.py \
-        data.A_bands="$A_bands" \
-        data.B_bands="$B_bands" \
-        data.filter_daytime=$FILTER_DAYTIME \
-        model.input_dim_a=$INPUT_DIM_A \
-        model.input_dim_b=$INPUT_DIM_B \
-        logging.wandb_name="$wandb_name" \
-        training.epochs=$EPOCHS \
-        training.limit_val_batches=$LIMIT_VAL_BATCHES
-done
+# for variable in "${!variables_and_bands_6ch[@]}"; do
+#     bands=${variables_and_bands_6ch[$variable]}
+#     wandb_name="HIM8-GOES16-${variable}"
+#     python itipy/train/geo_to_geo.py \
+#         data.A_bands="$A_bands" \
+#         data.B_bands="$B_bands" \
+#         data.filter_daytime=$FILTER_DAYTIME \
+#         model.input_dim_a=$INPUT_DIM_A \
+#         model.input_dim_b=$INPUT_DIM_B \
+#         logging.wandb_name="$wandb_name" \
+#         training.epochs=$EPOCHS \
+#         training.limit_val_batches=$LIMIT_VAL_BATCHES
+# done
 
 # 7-channel: All visible + near-IR channels (daytime only)
 # declare -A variables_and_bands_7ch=(
