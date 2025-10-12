@@ -95,7 +95,9 @@ def main(config: DictConfig):
 
     # ------- dataloaders -------
 
-    load_from_numpy = config.load_from_numpy if "load_from_numpy" in config else False
+    load_from_numpy = (
+        config.data.load_from_numpy if "load_from_numpy" in config.data else False
+    )
 
     if not load_from_numpy:
         logger.info("Instantiating GeoDataset...")
@@ -269,7 +271,7 @@ def main(config: DictConfig):
             )
     else:
         logger.info("Instantiating GeoDataset to load from numpy...")
-
+        print(config.data.A_bands)
         A_train_dataset = GeoDataset_Numpy(
             satellite=config.data.A_satellite,
             data_dir=config.data.A_path,

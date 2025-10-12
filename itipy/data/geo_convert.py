@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 from loguru import logger
 
-SATELLITE = "himawari"
+SATELLITE = "goes"
 
 PATHS = {
     "himawari": "/mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b",

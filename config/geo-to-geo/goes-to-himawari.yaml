@@ -1,0 +1,66 @@
+data:
+  load_from_numpy: True # If True, we don't need the converted_path or patch_sizes
+  A_satellite: goes
+  A_path: /home/annajungbluth/converted/goes
+  A_bands: [
+          # 470.0, # VIS
+          # 640.0, # VIS
+          # 870.0, # NIR
+          # 1380.0, # NIR
+          # 1610.0, # NIR
+          # 2250.0, # NIR
+          # 3890.0, # IR (with relflected daytime component)
+          # 6170.0, # IR
+          # 6930.0, # IR
+          # 7340.0, # IR
+          # 8440.0, # IR
+          # 9610.0, # IR
+          # 10330.0, # IR
+          # 11190.0, # IR
+          12270.0, # IR
+          # 13270.0, # IR
+      ]
+  B_satellite: himawari
+  B_path: /home/annajungbluth/converted/himawari
+  B_bands: [
+        # 470.0,
+        # 510.0,
+        # 640.0,
+        # 860.0,
+        # 1600.0,
+        # 2300.0,
+        # 3900.0,
+        # 6200.0,
+        # 6900.0,
+        # 7300.0,
+        # 8600.0,
+        # 9600.0,
+        # 10400.0,
+        # 11200.0,
+        12400.0,
+        # 13300.0,
+      ]
+  filter_daytime: False
+  stats_filepath: /data/2025-esl-3dclouds-extremes-datasets/pre-training-reprocessed/pretrain_stats.csv
+model:
+  input_dim_a: 1
+  input_dim_b: 1
+  upsampling: 0
+  discriminator_mode: CHANNELS
+  lambda_diversity: 0
+  norm: 'in_rs_aff'
+  use_batch_statistic: False
+  # Set the identity loss to 0
+  # lambda_reconstruction_id: 0
+  # lambda_content_id: 0
+logging:
+  wandb_entity: itieo
+  wandb_project: GOES16-to-HIMAWARI8
+  wandb_name: null
+  tags: [himawari8, goes16]
+training:
+  epochs: 100
+  limit_train_batches: null
+  limit_val_batches: 0.5
+  num_workers: 8
+  iterations_per_epoch: 1000
