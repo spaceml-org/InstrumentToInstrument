@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 from loguru import logger
 
-SATELLITE = "goes"
+SATELLITE = "msg"
 
 PATHS = {
     "himawari": "/mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b",
@@ -98,6 +98,7 @@ converted_data_path = f"/home/annajungbluth/converted/{SATELLITE}"
 patch_size = (256, 256)
 converted_patch_size = (256, 256)
 bands = CHANNELS[SATELLITE]
+resolution = None
 
 
 # default split configuration for the datamodule
@@ -136,7 +137,7 @@ train_dataset = GeoDataset(
     load_zenith=False,
     load_solar=False,
     patch_size=patch_size,
-    resolution=None,
+    resolution=resolution,
     center_crop=False,
     radius=0,
     filter_daytime=False,
@@ -158,7 +159,7 @@ valid_dataset = GeoDataset(
     load_zenith=False,
     load_solar=False,
     patch_size=patch_size,
-    resolution=None,
+    resolution=resolution,
     center_crop=False,
     radius=0,
     filter_daytime=False,
@@ -180,7 +181,7 @@ test_dataset = GeoDataset(
     load_zenith=False,
     load_solar=False,
     patch_size=patch_size,
-    resolution=None,
+    resolution=resolution,
     center_crop=False,
     radius=0,
     filter_daytime=False,

@@ -49,7 +49,7 @@ from itipy.iti import ITIModule
 @hydra.main(
     version_base="1.3",
     config_path="../../config/geo-to-geo/",
-    config_name="himawari-to-goes.yaml",
+    config_name=None,
 )
 def main(config: DictConfig):
     # ------- seeds -------

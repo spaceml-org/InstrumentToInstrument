@@ -21,6 +21,7 @@ for variable in "${!variables_and_bands_3ch[@]}"; do
     bands=${variables_and_bands_3ch[$variable]}
     wandb_name="GOES16-HIM8-${variable}"
     python itipy/train/geo_to_geo.py \
+        --config-name goes-to-himawari.yaml \
         data.A_bands="$A_bands" \
         data.B_bands="$B_bands" \
         data.filter_daytime=$FILTER_DAYTIME \
@@ -47,6 +48,7 @@ for variable in "${!variables_and_bands_2ch[@]}"; do
     bands=${variables_and_bands_2ch[$variable]}
     wandb_name="GOES16-HIM8-${variable}"
     python itipy/train/geo_to_geo.py \
+        --config-name goes-to-himawari.yaml \
         data.A_bands="$A_bands" \
         data.B_bands="$B_bands" \
         data.filter_daytime=$FILTER_DAYTIME \
@@ -73,6 +75,7 @@ for variable in "${!variables_and_bands_1ch[@]}"; do
     bands=${variables_and_bands_1ch[$variable]}
     wandb_name="GOES16-HIM8-${variable}"
     python itipy/train/geo_to_geo.py \
+        --config-name goes-to-himawari.yaml \
         data.A_bands="$A_bands" \
         data.B_bands="$B_bands" \
         data.filter_daytime=$FILTER_DAYTIME \
@@ -99,6 +102,7 @@ for variable in "${!variables_and_bands_3ch[@]}"; do
     bands=${variables_and_bands_3ch[$variable]}
     wandb_name="GOES16-HIM8-${variable}"
     python itipy/train/geo_to_geo.py \
+        --config-name goes-to-himawari.yaml \
         data.A_bands="$A_bands" \
         data.B_bands="$B_bands" \
         data.filter_daytime=$FILTER_DAYTIME \
@@ -126,6 +130,7 @@ for variable in "${!variables_and_bands_6ch[@]}"; do
     bands=${variables_and_bands_6ch[$variable]}
     wandb_name="GOES16-HIM8-${variable}"
     python itipy/train/geo_to_geo.py \
+        --config-name goes-to-himawari.yaml \
         data.A_bands="$A_bands" \
         data.B_bands="$B_bands" \
         data.filter_daytime=$FILTER_DAYTIME \
