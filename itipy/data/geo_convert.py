@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 from loguru import logger
 
-SATELLITE = "msg"
+SATELLITE = "goes"
 
 PATHS = {
     "himawari": "/mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b",
@@ -93,13 +93,12 @@ CHANNELS = {
 }
 
 # Define paths and parameters
+resolution = 3000.40  # Resolution of MSG data, set to None if no resolution change
 data_path = PATHS[SATELLITE]
-converted_data_path = f"/home/annajungbluth/converted/{SATELLITE}"
+converted_data_path = f"/home/annajungbluth/converted/{SATELLITE}-{int(resolution)}m"
 patch_size = (256, 256)
 converted_patch_size = (256, 256)
 bands = CHANNELS[SATELLITE]
-resolution = None
-
 
 # default split configuration for the datamodule
 SPLITS_DICT = {

@@ -6,14 +6,14 @@ import xarray as xr
 
 from itipy.data.geo_utils import (
     CropDataset,
+    convert_coordinates,
     convert_to_datetime,
     get_satellite_viewing_angles,
     get_sza_and_azi,
     parse_time,
     resample_rioxarray,
-    convert_coordinates,
 )
-from itipy.data.goes.constants import GOES_WAVELENGTHS, GOES_EAST_PROJ4
+from itipy.data.goes.constants import GOES_EAST_PROJ4, GOES_WAVELENGTHS
 
 
 def scale_reflectance(data_dict):
@@ -45,6 +45,12 @@ def load_goes_file(
     data_dict = {}
     # open file
     with xr.open_dataset(file) as ds:
+        if resolution is not None:
+            ds = ds.rio.write_crs(GOES_EAST_PROJ4, inplace=True)
+            ds = convert_coordinates(ds, satellite_type="goes")
+            ds = resample_rioxarray(
+                ds, resolution=(resolution, resolution), method=method
+            )
         if patch_size is not None:
             crop_ds = CropDataset(
                 patch_size=patch_size,
@@ -52,11 +58,7 @@ def load_goes_file(
                 radius=radius,
             )
             ds = crop_ds(ds)
-        if resolution is not None:
-            ds = ds.rio.write_crs(GOES_EAST_PROJ4, inplace=True)
-            ds = convert_coordinates(ds, satellite_type="goes")
-            ds = resample_rioxarray(ds, resolution=(resolution, resolution), method=method)
-            
+
         # extract data
         if "data" in ds.data_vars:
             data_dict["data"] = ds.data.values.astype(np.float32)
