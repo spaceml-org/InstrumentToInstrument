@@ -19,7 +19,7 @@ FILTER_DAYTIME=True
 
 for variable in "${!variables_and_bands_2ch[@]}"; do
     bands=${variables_and_bands_2ch[$variable]}
-    wandb_name="MSG-GOES16-${variable}"
+    wandb_name="MSG-GOES16-3000m-${variable}"
     python itipy/train/geo_to_geo.py \
         --config-name msg-to-goes.yaml \
         data.A_bands="$A_bands" \
@@ -46,7 +46,7 @@ INPUT_DIM_B=1
 
 for variable in "${!variables_and_bands_1ch[@]}"; do
     bands=${variables_and_bands_1ch[$variable]}
-    wandb_name="MSG-GOES16-${variable}"
+    wandb_name="MSG-GOES16-3000m-${variable}"
     python itipy/train/geo_to_geo.py \
         --config-name msg-to-goes.yaml \
         data.A_bands="$A_bands" \
@@ -73,7 +73,7 @@ FILTER_DAYTIME=False
 
 for variable in "${!variables_and_bands_1ch[@]}"; do
     bands=${variables_and_bands_1ch[$variable]}
-    wandb_name="MSG-GOES16-${variable}"
+    wandb_name="MSG-GOES16-3000m-${variable}"
     python itipy/train/geo_to_geo.py \
         --config-name msg-to-goes.yaml \
         data.A_bands="$A_bands" \
@@ -100,7 +100,7 @@ FILTER_DAYTIME=False
 
 for variable in "${!variables_and_bands_2ch[@]}"; do
     bands=${variables_and_bands_2ch[$variable]}
-    wandb_name="MSG-GOES16-${variable}"
+    wandb_name="MSG-GOES16-3000m-${variable}"
     python itipy/train/geo_to_geo.py \
         --config-name msg-to-goes.yaml \
         data.A_bands="$A_bands" \
@@ -128,7 +128,7 @@ FILTER_DAYTIME=False
 
 for variable in "${!variables_and_bands_5ch[@]}"; do
     bands=${variables_and_bands_5ch[$variable]}
-    wandb_name="MSG-GOES16-${variable}"
+    wandb_name="MSG-GOES16-3000m-${variable}"
     python itipy/train/geo_to_geo.py \
         --config-name msg-to-goes.yaml \
         data.A_bands="$A_bands" \
