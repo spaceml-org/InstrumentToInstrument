@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 from loguru import logger
 
-SATELLITE = "goes"
+SATELLITE = "himawari"
 
 PATHS = {
     "himawari": "/mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b",
@@ -203,10 +203,10 @@ logger.info("Converting train dataset")
 for _ in tqdm(range(len(train_dataset))):
     _ = train_dataset[_]
 
-logger.info("Converting valid dataset")
-for _ in tqdm(range(len(valid_dataset))):
-    _ = valid_dataset[_]
+# logger.info("Converting valid dataset")
+# for _ in tqdm(range(len(valid_dataset))):
+#     _ = valid_dataset[_]
 
-logger.info("Converting test dataset")
-for _ in tqdm(range(len(test_dataset))):
-    _ = test_dataset[_]
+# logger.info("Converting test dataset")
+# for _ in tqdm(range(len(test_dataset))):
+#     _ = test_dataset[_]
