@@ -74,3 +74,4 @@ training:
   limit_val_batches: 0.5
   num_workers: 8
   iterations_per_epoch: 1000
+seed: 42
