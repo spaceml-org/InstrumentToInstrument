@@ -42,7 +42,7 @@ B_bands="[1640.0]"
 
 FILTER_DAYTIME=True
 
-INPUT_DIM_A=1
+InstrumentToInstrument/imagesINPUT_DIM_A=1
 INPUT_DIM_B=1
 
 for variable in "${!variables_and_bands_1ch[@]}"; do
