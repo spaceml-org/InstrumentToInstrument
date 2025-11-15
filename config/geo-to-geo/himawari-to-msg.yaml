@@ -1,7 +1,7 @@
 data:
   load_from_numpy: True # If True, we don't need the converted_path or patch_sizes
   B_satellite: msg
-  B_path: /home/annajungbluth/converted/msg
+  B_path: /mnt/disks/data/iti-converted/msg
   B_bands: [
             640.0,
             810.0,
@@ -17,7 +17,7 @@ data:
         ]
 
   A_satellite: himawari
-  A_path: /home/annajungbluth/converted/himawari-3000m
+  A_path: /mnt/disks/data/iti-converted/himawari-3000m
   A_bands: [
             470.0,
             510.0,

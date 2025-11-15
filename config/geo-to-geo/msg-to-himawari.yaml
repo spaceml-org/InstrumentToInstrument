@@ -2,7 +2,7 @@ data:
   load_from_numpy: True # If True, we don't need the converted_path or patch_sizes
   A_satellite: msg
   # A_path: /mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/himawari/l1b
-  A_path: /home/annajungbluth/converted/msg
+  A_path: /mnt/disks/data/iti-converted/msg
   # A_patch_size: (256, 256) # Larger patches for storage.
   # converted_A_path: /home/annajungbluth/tmp-data/himawari
   # converted_A_patch_size: (256, 256) # Smaller patches for training.
@@ -25,7 +25,7 @@ data:
 
   B_satellite: himawari
   # B_path: /mnt/disks/pretraining/2025-esl-3dclouds-extremes-datasets/pre-training/goes/mcmip
-  B_path: /home/annajungbluth/converted/himawari-3000m
+  B_path: /mnt/disks/data/iti-converted/himawari-3000m
   # B_patch_size: (256, 256) # Larger patches for storage.
   # converted_B_path: /home/annajungbluth/tmp-data/goes
   # converted_B_patch_size: (256, 256) # Smaller patches for training.
