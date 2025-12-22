@@ -78,3 +78,8 @@ fabric.properties
 /scripts/
 /result/
 /result_v2/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

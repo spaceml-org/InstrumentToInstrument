@@ -1,0 +1,72 @@
+data:
+  A_satellite: SATELLITE-A
+  A_path: PATH-TO-DATA
+  A_patch_size: (1024, 1024) # Larger patches for storage.
+  converted_A_path: PATH-TO-STORAGE-FOLDER
+  converted_A_patch_size: (256, 256) # Smaller patches for training.
+  A_resolution: null # If null, native resolution of the satellite is used.
+  A_center_crop: False # Crop always around the center with given radius.
+  A_radius: 0
+  A_bands: [
+            # 640.0,
+            # 810.0,
+            # 1640.0,
+            # 3920.0,
+            # 6250.0,
+            # 7350.0,
+            # 8700.0,
+            # 9660.0,
+            # 10800.0,
+            # 12000.0,
+            13400.0,
+        ]
+
+  B_satellite: SATELLITE-B
+  B_path: PATH-TO-DATA
+  B_patch_size: (1024, 1024) # Patches are further cropped to (256, 256) before training.
+  converted_B_path: PATH-TO-STORAGE-FOLDER
+  converted_B_patch_size: (256, 256) # Smaller patches for training.
+  B_resolution: null # If null, native resolution of the satellite is used.
+  B_center_crop: False # Crop always around the center with given radius.
+  B_radius: 0
+  B_bands: [
+          # 470.0,
+          # 640.0,
+          # 870.0,
+          # 1380.0,
+          # 1610.0,
+          # 2250.0,
+          # 3890.0,
+          # 6170.0,
+          # 6930.0,
+          # 7340.0,
+          # 8440.0,
+          # 9610.0,
+          # 10330.0,
+          # 11190.0,
+          # 12270.0,
+          13270.0,
+      ]
+
+model:
+  input_dim_a: 1
+  input_dim_b: 1
+  upsampling: 0
+  discriminator_mode: CHANNELS
+  lambda_diversity: 0
+  norm: 'in_rs_aff'
+  use_batch_statistic: False
+  # Set the identity loss to 0
+  # lambda_reconstruction_id: 0
+  # lambda_content_id: 0
+logging:
+  wandb_entity: itieo
+  wandb_project: ADD-WANDB-PROJECT
+  wandb_name: ADD-EXPERIMENT-NAME
+  tags: [tag1, tag2]
+training:
+  epochs: 200
+  limit_train_batches: null
+  limit_val_batches: null
+  num_workers: 4
+  iterations_per_epoch: 10

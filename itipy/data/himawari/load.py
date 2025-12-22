@@ -1,0 +1,126 @@
+from __future__ import annotations
+
+import autoroot  # required for imports from src
+import numpy as np
+import xarray as xr
+
+from itipy.data.geo_utils import (
+    CropDataset,
+    convert_coordinates,
+    convert_to_datetime,
+    get_satellite_viewing_angles,
+    get_sza_and_azi,
+    parse_time,
+    resample_rioxarray,
+)
+from itipy.data.himawari.constants import HIMAWARI_PROJ4, HIMAWARI_WAVELENGTHS
+
+
+def load_himawari_file(
+    file: str,
+    load_zenith: bool = True,
+    load_solar: bool = True,
+    patch_size: list
+    | None = None,  # Whether to crop the data to a smaller patch size (e.g. [128, 128] for pre-training)
+    resolution: float = None,  # Desired resolution in meters (e.g. 2000 for 2km)
+    method: str = "bilinear",  # Resampling method for rioxarray
+    center_crop: bool = False,  # If True, will crop to the center of the image
+    radius: int = 0,  # Radius for cropping, if center_crop is True
+):
+    if not file.endswith(".nc"):
+        raise NotImplementedError("Unsupported file format.")
+
+    # define an empty dictionary
+    data_dict = {}
+    # open file
+    with xr.open_dataset(file) as ds:
+        if resolution is not None:
+            ds = ds.rio.write_crs(HIMAWARI_PROJ4, inplace=True)
+            ds = convert_coordinates(ds, satellite_type="himawari")
+            ds = resample_rioxarray(
+                ds, resolution=(resolution, resolution), method=method
+            )
+        if patch_size is not None:
+            crop_ds = CropDataset(
+                patch_size=patch_size,
+                center_crop=center_crop,  # If True, will crop to the center of the image
+                radius=radius,
+            )
+            ds = crop_ds(ds)
+
+        # extract data
+        if "data" in ds.data_vars:
+            data_dict["data"] = ds.data.values.astype(np.float32)
+        else:
+            data_dict["data"] = (
+                ds[list(HIMAWARI_WAVELENGTHS.keys())]
+                .to_array()
+                .values.astype(np.float32)
+            )
+
+        # extract coordinates
+        lat_offset = (
+            (ds.latitude.encoding["scale_factor"] + ds.latitude.encoding["add_offset"])
+            * 2
+            if ds.latitude.encoding["add_offset"] > 0
+            else 0
+        )
+        lon_offset = (
+            (
+                ds.longitude.encoding["scale_factor"]
+                + ds.longitude.encoding["add_offset"]
+            )
+            * 2
+            if ds.longitude.encoding["add_offset"] > 0
+            else 0
+        )
+        latitudes = (ds.latitude - lat_offset).fillna(
+            ds.latitude.encoding["add_offset"]
+        )
+        longitudes = (ds.longitude - lon_offset).fillna(
+            ds.longitude.encoding["add_offset"]
+        )
+
+        data_dict["coords"] = np.stack([latitudes.values, longitudes.values], axis=0)
+
+        # get time from file name
+        data_dict["time"] = parse_time(file)
+
+        # add band names and wavelengths
+        data_dict["band_names"] = list(HIMAWARI_WAVELENGTHS.keys())
+        data_dict["wavelengths"] = [
+            val.get("center_wavelength") for val in HIMAWARI_WAVELENGTHS.values()
+        ]
+        data_dict["sensor_info"] = HIMAWARI_WAVELENGTHS
+
+        # calculate the zenith angle
+        if load_zenith:
+            if "sat_angle" in ds.data_vars:
+                data_dict["sat_angle"] = ds.sat_angle.values
+            else:
+                zenith, azimuth = get_satellite_viewing_angles(
+                    lat=ds["latitude"].values,
+                    lon=ds["longitude"].values,
+                    sat_lat=ast.literal_eval(ds.B01.orbital_parameters)[
+                        "projection_latitude"
+                    ],
+                    sat_lon=ast.literal_eval(ds.B01.orbital_parameters)[
+                        "projection_longitude"
+                    ],
+                    sat_alt=ast.literal_eval(ds.B01.orbital_parameters)[
+                        "projection_altitude"
+                    ]
+                    / 1e3,  # convert to km
+                )
+                data_dict["sat_angle"] = np.stack([zenith, azimuth], axis=0)
+        if load_solar:
+            if "solar_angle" in ds.data_vars:
+                data_dict["solar_angle"] = ds.solar_angle.values
+            else:
+                time = convert_to_datetime(data_dict["time"])
+                zenith, azimuth = get_sza_and_azi(
+                    date=time, lat=data_dict["coords"][0], lon=data_dict["coords"][1]
+                )
+                data_dict["solar_angle"] = np.stack([zenith, azimuth], axis=0)
+
+    return data_dict
